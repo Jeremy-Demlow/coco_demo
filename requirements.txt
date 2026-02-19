@@ -1,0 +1,11 @@
+# Snowflake
+snowflake-snowpark-python[pandas]
+snowflake-ml-python
+
+# ML Training
+scikit-learn
+pandas
+numpy
+
+# Agent Testing
+requests
