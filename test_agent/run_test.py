@@ -13,8 +13,10 @@ import json
 import sys
 from pathlib import Path
 
-# Add parent directories to path
 sys.path.insert(0, str(Path(__file__).parent.parent / "model"))
+
+from agent_client import CortexAgentClient
+
 
 def load_config(config_path: str) -> dict:
     """Load YAML configuration file."""
@@ -29,7 +31,7 @@ def load_config(config_path: str) -> dict:
 
 
 def get_session():
-    """Get Snowpark session."""
+    """Get Snowpark session for component tests."""
     from snowpark_session import create_snowpark_session
     return create_snowpark_session()
 
@@ -51,14 +53,12 @@ def run_component_tests(session, config: dict, verbose: bool = False) -> dict:
         try:
             result = session.sql(query).collect()
             
-            # Check expected columns
             if "expected_columns" in test_config:
                 columns = [r.as_dict().keys() for r in result[:1]][0] if result else []
                 for col in test_config["expected_columns"]:
                     if col not in columns:
                         raise ValueError(f"Missing column: {col}")
             
-            # Check expected keys (for JSON results like procedures)
             if "expected_keys" in test_config and result:
                 json_result = json.loads(str(result[0][0]))
                 for key in test_config["expected_keys"]:
@@ -71,10 +71,7 @@ def run_component_tests(session, config: dict, verbose: bool = False) -> dict:
             
             if verbose and result:
                 for row in result[:3]:
-                    if hasattr(row, 'as_dict'):
-                        print(f"     {row.as_dict()}")
-                    else:
-                        print(f"     {row}")
+                    print(f"     {row.as_dict() if hasattr(row, 'as_dict') else row}")
                         
         except Exception as e:
             print(f"   ✗ FAILED: {e}")
@@ -120,39 +117,80 @@ def check_agent_exists(session, config: dict) -> bool:
         return False
 
 
-def print_agent_questions(config: dict):
-    """Print sample questions for testing in Snowsight."""
-    print("\n" + "=" * 60)
-    print("Sample Questions for Snowsight Testing")
+def test_agent_invocation(config: dict, verbose: bool = False) -> bool:
+    """Actually invoke the agent with a test question via REST API."""
+    agent_config = config.get("agent", {})
+    auth_config = config.get("auth", {})
+    
+    print(f"\n" + "=" * 60)
+    print("Agent Invocation Test (REST API)")
     print("=" * 60)
     
-    questions = config.get("agent_questions", {})
+    test_question = config.get("agent_test_question", "What was our total cloud spend last month?")
+    print(f"\nQuestion: {test_question}")
     
-    for category, q_list in questions.items():
+    try:
+        client = CortexAgentClient(
+            account=auth_config.get("account", "trb65519"),
+            user=auth_config.get("user", "jd_service_account_admin"),
+            private_key_path=auth_config.get("private_key_path", "/Users/jdemlow/.snowflake/keys/snowflake_tf_key.p8"),
+            database=agent_config.get("database", "WORKSHOP_DB"),
+            schema=agent_config.get("schema", "DEMO"),
+            agent_name=agent_config.get("name", "DEMO_AGENT_CLOUD_COST"),
+        )
+        
+        result = client.ask(test_question, verbose=verbose)
+        
+        if result.get("error"):
+            print(f"   ✗ Error: {result['error']}")
+            return False
+        
+        if result.get("answer"):
+            print(f"   ✓ Agent responded in {result.get('duration', 0):.1f}s")
+            print(f"   Tools: {', '.join(result.get('tools_used', [])) or 'none'}")
+            if verbose:
+                preview = result['answer'][:300].replace('\n', '\n   ')
+                print(f"\n   {preview}...")
+            return True
+        else:
+            print(f"   ✗ No answer returned")
+            return False
+            
+    except Exception as e:
+        print(f"   ✗ Error: {e}")
+        return False
+
+
+def print_sample_questions(config: dict):
+    """Print sample questions for manual testing."""
+    print("\n" + "=" * 60)
+    print("Sample Questions")
+    print("=" * 60)
+    
+    for category, questions in config.get("agent_questions", {}).items():
         print(f"\n{category.replace('_', ' ').title()}:")
-        for q in q_list[:3]:
+        for q in questions[:3]:
             print(f"  • {q}")
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Test Cortex Agent components")
-    parser.add_argument("--config", default="test_config.yaml", help="Config file path")
+    parser = argparse.ArgumentParser(description="Test Cortex Agent")
+    parser.add_argument("--config", default="test_config.yaml", help="Config file")
     parser.add_argument("--verbose", "-v", action="store_true", help="Verbose output")
+    parser.add_argument("--skip-invoke", action="store_true", help="Skip agent invocation test")
     args = parser.parse_args()
     
-    # Find config file
     config_path = Path(args.config)
     if not config_path.is_absolute():
         config_path = Path(__file__).parent / args.config
     
     if not config_path.exists():
-        print(f"ERROR: Config file not found: {config_path}")
+        print(f"ERROR: Config not found: {config_path}")
         sys.exit(1)
     
-    print(f"Loading config: {config_path}")
+    print(f"Loading: {config_path}")
     config = load_config(config_path)
     
-    # Get session
     print("Connecting to Snowflake...")
     session = get_session()
     
@@ -160,33 +198,30 @@ def main():
     session.sql(f"USE DATABASE {agent_config.get('database', 'WORKSHOP_DB')}").collect()
     session.sql(f"USE SCHEMA {agent_config.get('schema', 'DEMO')}").collect()
     
-    # Check agent
+    # Check agent spec
     agent_ok = check_agent_exists(session, config)
     
     # Run component tests
     results = run_component_tests(session, config, args.verbose)
     
-    # Print summary
+    # Invoke agent via REST API
+    invoke_ok = True
+    if not args.skip_invoke:
+        invoke_ok = test_agent_invocation(config, args.verbose)
+    
+    # Summary
     print("\n" + "=" * 60)
     print("Summary")
     print("=" * 60)
-    print(f"Agent: {'✓ OK' if agent_ok else '✗ NEEDS FIX'}")
-    print(f"Components: {results['passed']} passed, {results['failed']} failed")
+    print(f"Agent Spec: {'✓ OK' if agent_ok else '✗ FAILED'}")
+    print(f"Components: {results['passed']}/{results['passed'] + results['failed']} passed")
+    if not args.skip_invoke:
+        print(f"Invocation: {'✓ OK' if invoke_ok else '✗ FAILED'}")
     
-    # Print sample questions
-    print_agent_questions(config)
-    
-    print("\n" + "=" * 60)
-    print("Next Steps")
-    print("=" * 60)
-    print("1. Go to Snowsight → AI & ML → Cortex Agents")
-    print(f"2. Select {agent_config.get('name', 'DEMO_AGENT_CLOUD_COST')}")
-    print("3. Try the sample questions above")
+    print_sample_questions(config)
     
     session.close()
-    
-    # Exit with error if any tests failed
-    sys.exit(0 if results['failed'] == 0 and agent_ok else 1)
+    sys.exit(0 if results['failed'] == 0 and agent_ok and invoke_ok else 1)
 
 
 if __name__ == "__main__":

@@ -6,6 +6,15 @@ agent:
   schema: DEMO
   name: DEMO_AGENT_CLOUD_COST
 
+# Authentication for REST API invocation
+auth:
+  account: trb65519
+  user: jd_service_account_admin
+  private_key_path: /Users/jdemlow/.snowflake/keys/snowflake_tf_key.p8
+
+# Test question for agent invocation
+agent_test_question: "What was our total cloud spend last month?"
+
 # Component tests - verify backend resources work
 component_tests:
   analyst:

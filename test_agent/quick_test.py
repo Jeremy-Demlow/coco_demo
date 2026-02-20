@@ -1,44 +1,21 @@
-"""
-Quick test script for the Cost Analytics Agent.
-"""
+#!/usr/bin/env python3
+"""Quick test of the Cost Analytics Agent."""
 
-import requests
-import json
+from agent_client import CortexAgentClient
 
-# Snowflake REST API endpoint (update with your account)
-ACCOUNT_URL = "https://<your-account>.snowflakecomputing.com"
-AGENT_ENDPOINT = f"{ACCOUNT_URL}/api/v2/cortex/agent/run"
+CONFIG = {
+    "account": "trb65519",
+    "user": "jd_service_account_admin",
+    "private_key_path": "/Users/jdemlow/.snowflake/keys/snowflake_tf_key.p8",
+    "database": "WORKSHOP_DB",
+    "schema": "DEMO",
+    "agent_name": "DEMO_AGENT_CLOUD_COST",
+}
 
-def test_agent(question: str):
-    """Send a question to the agent and print the response."""
-    print(f"\n{'='*60}")
-    print(f"Question: {question}")
-    print('='*60)
-    
-    # In production, use proper authentication
-    # This is a placeholder for testing
-    print("Note: Update ACCOUNT_URL and authentication before running")
-    print(f"Would send: {question}")
+client = CortexAgentClient(**CONFIG)
 
-def main():
-    """Run sample queries against the Cost Analytics Agent."""
-    
-    test_questions = [
-        # Analytics questions
-        "What was our total cloud spend last month?",
-        "Show me the top 5 most expensive services",
-        "Compare costs by department",
-        
-        # Recommendation questions  
-        "How can we reduce our EC2 costs?",
-        "Find high-priority optimization recommendations",
-        
-        # Forecasting questions
-        "Forecast EC2 costs for Engineering for the next 30 days",
-    ]
-    
-    for question in test_questions:
-        test_agent(question)
+question = "What was our total cloud spend last month? Break it down by provider."
 
-if __name__ == "__main__":
-    main()
+print(f"Question: {question}\n")
+result = client.ask(question, verbose=False)
+print(client.format_result(result))

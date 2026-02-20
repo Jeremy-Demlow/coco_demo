@@ -1,6 +1,8 @@
 -- ============================================================
 -- 07_create_prediction_procedure.sql
--- Creates stored procedure for cost forecasting
+-- Creates stored procedure for cost forecasting using Snowflake ML
+-- 
+-- Prerequisites: Run 08_create_ml_forecast_model.sql first
 -- ============================================================
 
 USE ROLE SYSADMIN;
@@ -9,53 +11,73 @@ USE DATABASE WORKSHOP_DB;
 USE SCHEMA DEMO;
 
 -- ============================================================
--- Procedure: FORECAST_COST
--- Forecasts cost for a specific service/department combination
+-- Procedure: FORECAST_COST (uses Snowflake ML FORECAST model)
+-- Forecasts cost for a specific service and department
 -- ============================================================
 CREATE OR REPLACE PROCEDURE FORECAST_COST(
     TARGET_SERVICE VARCHAR,
     TARGET_DEPARTMENT VARCHAR,
-    FORECAST_DAYS INT DEFAULT 30
+    FORECAST_DAYS INTEGER
 )
 RETURNS VARIANT
-LANGUAGE SQL
+LANGUAGE PYTHON
+RUNTIME_VERSION = '3.11'
+PACKAGES = ('snowflake-snowpark-python')
+HANDLER = 'forecast_cost'
 AS
 $$
-DECLARE
-    result VARIANT;
-BEGIN
-    -- Get the latest available date and calculate forecast period
-    LET latest_date DATE := (SELECT MAX(BILLING_DATE) FROM BILLING_DATA);
+from datetime import datetime
+
+def forecast_cost(session, target_service, target_department, forecast_days):
+    """Generate cost forecast using Snowflake ML FORECAST model."""
     
-    -- Calculate historical averages for the service/department
-    SELECT OBJECT_CONSTRUCT(
-        'service', :TARGET_SERVICE,
-        'department', :TARGET_DEPARTMENT,
-        'forecast_days', :FORECAST_DAYS,
-        'forecast_start', DATEADD('day', 1, :latest_date),
-        'forecast_end', DATEADD('day', :FORECAST_DAYS, :latest_date),
-        'historical_avg_daily_cost', ROUND(AVG(COST), 2),
-        'historical_total_30d', ROUND(SUM(CASE WHEN BILLING_DATE > DATEADD('day', -30, :latest_date) THEN COST ELSE 0 END), 2),
-        'forecasted_total', ROUND(AVG(COST) * :FORECAST_DAYS * 1.05, 2),  -- 5% growth factor
-        'confidence_interval', OBJECT_CONSTRUCT(
-            'low', ROUND(AVG(COST) * :FORECAST_DAYS * 0.9, 2),
-            'high', ROUND(AVG(COST) * :FORECAST_DAYS * 1.2, 2)
-        ),
-        'trend', CASE 
-            WHEN AVG(CASE WHEN BILLING_DATE > DATEADD('day', -7, :latest_date) THEN COST END) >
-                 AVG(CASE WHEN BILLING_DATE <= DATEADD('day', -7, :latest_date) AND BILLING_DATE > DATEADD('day', -30, :latest_date) THEN COST END)
-            THEN 'INCREASING'
-            ELSE 'STABLE'
-        END,
-        'analysis', 'Forecast based on historical patterns with 5% growth adjustment. Consider seasonality and planned infrastructure changes.'
-    ) INTO :result
-    FROM BILLING_DATA
-    WHERE SERVICE = :TARGET_SERVICE 
-      AND DEPARTMENT = :TARGET_DEPARTMENT
-      AND BILLING_DATE > DATEADD('day', -90, :latest_date);
+    # Get forecast from ML model (max 30 days, slice to requested)
+    forecast_periods = min(forecast_days, 30)
     
-    RETURN result;
-END;
+    forecast_df = session.sql(f"""
+        SELECT 
+            SERIES AS SERVICE,
+            TS::DATE AS FORECAST_DATE,
+            ROUND(FORECAST, 2) AS DAILY_COST,
+            ROUND(LOWER_BOUND, 2) AS LOWER_BOUND,
+            ROUND(UPPER_BOUND, 2) AS UPPER_BOUND
+        FROM TABLE(WORKSHOP_DB.DEMO.COST_FORECAST_MODEL!FORECAST(
+            FORECASTING_PERIODS => 30
+        ))
+        WHERE SERIES = '{target_service}'
+        ORDER BY TS
+        LIMIT {forecast_periods}
+    """).collect()
+    
+    if not forecast_df:
+        return {
+            "error": f"No forecast data for service: {target_service}",
+            "service": target_service,
+            "department": target_department
+        }
+    
+    # Calculate aggregates
+    daily_costs = [float(row['DAILY_COST']) for row in forecast_df]
+    lower_bounds = [float(row['LOWER_BOUND']) for row in forecast_df]
+    upper_bounds = [float(row['UPPER_BOUND']) for row in forecast_df]
+    
+    total_forecast = sum(daily_costs)
+    avg_daily = total_forecast / len(daily_costs)
+    
+    return {
+        "service": target_service,
+        "department": target_department,
+        "forecast_days": forecast_days,
+        "forecasted_total": round(total_forecast, 2),
+        "daily_average": round(avg_daily, 2),
+        "confidence_interval": {
+            "low": round(sum(lower_bounds), 2),
+            "high": round(sum(upper_bounds), 2)
+        },
+        "model_type": "Snowflake ML FORECAST",
+        "generated_at": datetime.now().isoformat(),
+        "note": "95% confidence interval based on historical patterns"
+    }
 $$;
 
 -- ============================================================
