@@ -14,12 +14,32 @@ USE DATABASE WORKSHOP_DB;
 USE SCHEMA DEMO;
 
 -- ============================================================
--- Step 1: Create Prediction Log with Historical Timestamps
+-- Step 1: Create Prediction Log Table with Change Tracking
+-- ============================================================
+-- IMPORTANT: Change tracking must be enabled BEFORE inserting data
+-- for the Model Monitor to work properly
+
+DROP TABLE IF EXISTS PREDICTION_LOG;
+
+CREATE TABLE PREDICTION_LOG (
+    TRANSACTION_ID VARCHAR,
+    AMOUNT NUMBER(38,2),
+    TRANSACTION_TYPE VARCHAR,
+    CHANNEL VARCHAR,
+    LOCATION VARCHAR,
+    MERCHANT VARCHAR,
+    ACTUAL_FRAUD INT,
+    PREDICTION_TIMESTAMP TIMESTAMP_NTZ,
+    PREDICTED_FRAUD INT
+) CHANGE_TRACKING = TRUE;
+
+-- ============================================================
+-- Step 2: Run Batch Inference with Historical Timestamps
 -- ============================================================
 -- Spreads timestamps across last 30 days for meaningful time-series monitoring
 -- In production, this would be run periodically (e.g., daily) with actual timestamps
 
-CREATE OR REPLACE TABLE PREDICTION_LOG AS
+INSERT INTO PREDICTION_LOG
 SELECT 
     t.TRANSACTION_ID,
     t.AMOUNT,
@@ -52,12 +72,14 @@ SELECT
 FROM PREDICTION_LOG;
 
 -- ============================================================
--- Step 2: Create Baseline Table for Drift Detection
+-- Step 3: Create Baseline Table for Drift Detection
 -- ============================================================
 -- Uses first week of predictions as baseline
 -- Monitor will compare recent predictions against this baseline
 
-CREATE OR REPLACE TABLE PREDICTION_BASELINE AS
+DROP TABLE IF EXISTS PREDICTION_BASELINE;
+
+CREATE TABLE PREDICTION_BASELINE CHANGE_TRACKING = TRUE AS
 SELECT * FROM PREDICTION_LOG
 WHERE PREDICTION_TIMESTAMP < DATEADD('day', -23, CURRENT_TIMESTAMP());
 
