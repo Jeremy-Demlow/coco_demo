@@ -1,10 +1,6 @@
 -- ============================================================
 -- 07_create_prediction_procedure.sql
--- Creates stored procedure for ML fraud prediction
--- 
--- Prerequisites:
--- - FRAUD_DETECTION_MODEL must exist in WORKSHOP_DB.DEMO
--- - Model trained via notebooks/fraud_model.py
+-- Creates stored procedure for cost forecasting
 -- ============================================================
 
 USE ROLE SYSADMIN;
@@ -12,48 +8,119 @@ USE WAREHOUSE WORKSHOP_WH;
 USE DATABASE WORKSHOP_DB;
 USE SCHEMA DEMO;
 
--- Create stored procedure that calls the ML model
-CREATE OR REPLACE PROCEDURE PREDICT_FRAUD(TRANSACTION_ID VARCHAR)
+-- ============================================================
+-- Procedure: FORECAST_COST
+-- Forecasts cost for a specific service/department combination
+-- ============================================================
+CREATE OR REPLACE PROCEDURE FORECAST_COST(
+    TARGET_SERVICE VARCHAR,
+    TARGET_DEPARTMENT VARCHAR,
+    FORECAST_DAYS INT DEFAULT 30
+)
 RETURNS VARIANT
 LANGUAGE SQL
-COMMENT = 'Predicts fraud risk for a transaction using the FRAUD_DETECTION_MODEL'
 AS
 $$
 DECLARE
     result VARIANT;
 BEGIN
+    -- Get the latest available date and calculate forecast period
+    LET latest_date DATE := (SELECT MAX(BILLING_DATE) FROM BILLING_DATA);
+    
+    -- Calculate historical averages for the service/department
     SELECT OBJECT_CONSTRUCT(
-        'transaction_id', t.TRANSACTION_ID,
-        'amount', t.AMOUNT,
-        'transaction_type', t.TRANSACTION_TYPE,
-        'channel', t.CHANNEL,
-        'merchant', t.MERCHANT,
-        'location', t.LOCATION,
-        'predicted_fraud', CASE 
-            WHEN FRAUD_DETECTION_MODEL!PREDICT(
-                t.AMOUNT, t.TRANSACTION_TYPE, t.CHANNEL, t.LOCATION, t.MERCHANT
-            ):IS_FRAUD::INT = 1 THEN TRUE
-            ELSE FALSE
+        'service', :TARGET_SERVICE,
+        'department', :TARGET_DEPARTMENT,
+        'forecast_days', :FORECAST_DAYS,
+        'forecast_start', DATEADD('day', 1, :latest_date),
+        'forecast_end', DATEADD('day', :FORECAST_DAYS, :latest_date),
+        'historical_avg_daily_cost', ROUND(AVG(COST), 2),
+        'historical_total_30d', ROUND(SUM(CASE WHEN BILLING_DATE > DATEADD('day', -30, :latest_date) THEN COST ELSE 0 END), 2),
+        'forecasted_total', ROUND(AVG(COST) * :FORECAST_DAYS * 1.05, 2),  -- 5% growth factor
+        'confidence_interval', OBJECT_CONSTRUCT(
+            'low', ROUND(AVG(COST) * :FORECAST_DAYS * 0.9, 2),
+            'high', ROUND(AVG(COST) * :FORECAST_DAYS * 1.2, 2)
+        ),
+        'trend', CASE 
+            WHEN AVG(CASE WHEN BILLING_DATE > DATEADD('day', -7, :latest_date) THEN COST END) >
+                 AVG(CASE WHEN BILLING_DATE <= DATEADD('day', -7, :latest_date) AND BILLING_DATE > DATEADD('day', -30, :latest_date) THEN COST END)
+            THEN 'INCREASING'
+            ELSE 'STABLE'
         END,
-        'actual_fraud', t.IS_FRAUD,
-        'risk_assessment', CASE 
-            WHEN FRAUD_DETECTION_MODEL!PREDICT(
-                t.AMOUNT, t.TRANSACTION_TYPE, t.CHANNEL, t.LOCATION, t.MERCHANT
-            ):IS_FRAUD::INT = 1 THEN 'HIGH RISK - Model predicts fraud'
-            WHEN t.AMOUNT > 5000 THEN 'ELEVATED - High value transaction'
-            WHEN t.CHANNEL = 'Online' AND t.TRANSACTION_TYPE = 'Wire' THEN 'ELEVATED - Online wire transfer'
-            ELSE 'NORMAL - No fraud indicators detected'
-        END
+        'analysis', 'Forecast based on historical patterns with 5% growth adjustment. Consider seasonality and planned infrastructure changes.'
     ) INTO :result
-    FROM TRANSACTIONS t
-    WHERE t.TRANSACTION_ID = :TRANSACTION_ID;
+    FROM BILLING_DATA
+    WHERE SERVICE = :TARGET_SERVICE 
+      AND DEPARTMENT = :TARGET_DEPARTMENT
+      AND BILLING_DATE > DATEADD('day', -90, :latest_date);
     
     RETURN result;
 END;
 $$;
 
--- Test the procedure
-CALL PREDICT_FRAUD('TXN_0000001');
+-- ============================================================
+-- Procedure: FORECAST_TOTAL_COST
+-- Forecasts total cost across all services
+-- ============================================================
+CREATE OR REPLACE PROCEDURE FORECAST_TOTAL_COST(
+    FORECAST_DAYS INT DEFAULT 30
+)
+RETURNS VARIANT
+LANGUAGE SQL
+AS
+$$
+DECLARE
+    result VARIANT;
+BEGIN
+    LET latest_date DATE := (SELECT MAX(BILLING_DATE) FROM BILLING_DATA);
+    
+    SELECT OBJECT_CONSTRUCT(
+        'forecast_period', OBJECT_CONSTRUCT(
+            'start', DATEADD('day', 1, :latest_date),
+            'end', DATEADD('day', :FORECAST_DAYS, :latest_date),
+            'days', :FORECAST_DAYS
+        ),
+        'current_daily_average', ROUND(
+            (SELECT AVG(daily_total) FROM (
+                SELECT BILLING_DATE, SUM(COST) as daily_total 
+                FROM BILLING_DATA 
+                WHERE BILLING_DATE > DATEADD('day', -30, :latest_date)
+                GROUP BY BILLING_DATE
+            ))
+        , 2),
+        'forecasted_total', ROUND(
+            (SELECT AVG(daily_total) * :FORECAST_DAYS * 1.03 FROM (
+                SELECT BILLING_DATE, SUM(COST) as daily_total 
+                FROM BILLING_DATA 
+                WHERE BILLING_DATE > DATEADD('day', -30, :latest_date)
+                GROUP BY BILLING_DATE
+            ))
+        , 2),
+        'by_cloud_provider', (
+            SELECT ARRAY_AGG(OBJECT_CONSTRUCT(
+                'provider', CLOUD_PROVIDER,
+                'forecasted_cost', ROUND(AVG(COST) * :FORECAST_DAYS * 1.03, 2)
+            ))
+            FROM BILLING_DATA
+            WHERE BILLING_DATE > DATEADD('day', -30, :latest_date)
+            GROUP BY CLOUD_PROVIDER
+        ),
+        'by_department', (
+            SELECT ARRAY_AGG(OBJECT_CONSTRUCT(
+                'department', DEPARTMENT,
+                'forecasted_cost', ROUND(AVG(COST) * :FORECAST_DAYS * 1.03, 2)
+            ))
+            FROM BILLING_DATA
+            WHERE BILLING_DATE > DATEADD('day', -30, :latest_date)
+            GROUP BY DEPARTMENT
+        )
+    ) INTO :result
+    FROM DUAL;
+    
+    RETURN result;
+END;
+$$;
 
--- Show procedures
-SHOW PROCEDURES LIKE 'PREDICT_FRAUD' IN SCHEMA WORKSHOP_DB.DEMO;
+-- Test the procedures
+CALL FORECAST_COST('EC2', 'Engineering', 30);
+CALL FORECAST_TOTAL_COST(30);

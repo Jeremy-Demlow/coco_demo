@@ -1,13 +1,13 @@
 -- ============================================================
 -- 02_load_from_stage.sql
--- Creates stage, file format, and loads transaction data
+-- Creates stage, file format, and loads billing data
 -- 
 -- Prerequisites:
 -- 1. Generate data (if not already done):
 --    cd data && python generate_data.py
 --
 -- 2. Upload CSV to Snowflake stage:
---    snow stage copy data/transactions_100k.csv @WORKSHOP_DB.DEMO.DATA_STAGE --connection myconnection
+--    snow stage copy data/billing_data.csv @WORKSHOP_DB.DEMO.DATA_STAGE --connection myconnection
 -- ============================================================
 
 USE ROLE SYSADMIN;
@@ -27,10 +27,16 @@ CREATE OR REPLACE FILE FORMAT CSVFORMAT
     NULL_IF = ('NULL', 'null', '');
 
 -- Load data from stage
-COPY INTO TRANSACTIONS
-FROM @DATA_STAGE/transactions_100k.csv
+COPY INTO BILLING_DATA
+FROM @DATA_STAGE/billing_data.csv
 FILE_FORMAT = CSVFORMAT
 ON_ERROR = 'CONTINUE';
 
 -- Verify data loaded
-SELECT COUNT(*) AS row_count FROM TRANSACTIONS;
+SELECT 
+    COUNT(*) AS total_records,
+    COUNT(DISTINCT BILLING_DATE) AS unique_days,
+    MIN(BILLING_DATE) AS earliest_date,
+    MAX(BILLING_DATE) AS latest_date,
+    SUM(COST) AS total_cost
+FROM BILLING_DATA;

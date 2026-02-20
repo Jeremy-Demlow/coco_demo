@@ -1,11 +1,11 @@
 -- ============================================================
 -- 08_batch_inference.sql
--- Runs batch inference on TRANSACTIONS table using the ML model
--- Creates PREDICTION_LOG for monitoring and PREDICTION_BASELINE for drift detection
+-- Runs batch cost forecasting and creates monitoring tables
+-- Creates FORECAST_LOG for monitoring and FORECAST_BASELINE for drift detection
 --
 -- Prerequisites:
--- - FRAUD_DETECTION_MODEL must exist in WORKSHOP_DB.DEMO
--- - TRANSACTIONS table must be populated
+-- - COST_FORECASTING_MODEL must exist in WORKSHOP_DB.DEMO
+-- - BILLING_DATA table must be populated
 -- ============================================================
 
 USE ROLE SYSADMIN;
@@ -14,74 +14,89 @@ USE DATABASE WORKSHOP_DB;
 USE SCHEMA DEMO;
 
 -- ============================================================
--- Step 1: Create Prediction Log Table with Change Tracking
+-- Step 1: Create Forecast Log Table with Change Tracking
 -- ============================================================
 -- IMPORTANT: Change tracking must be enabled BEFORE inserting data
 -- for the Model Monitor to work properly
 
-DROP TABLE IF EXISTS PREDICTION_LOG;
+DROP TABLE IF EXISTS FORECAST_LOG;
 
-CREATE TABLE PREDICTION_LOG (
-    TRANSACTION_ID VARCHAR,
-    AMOUNT NUMBER(38,2),
-    TRANSACTION_TYPE VARCHAR,
-    CHANNEL VARCHAR,
-    LOCATION VARCHAR,
-    MERCHANT VARCHAR,
-    ACTUAL_FRAUD INT,
-    PREDICTION_TIMESTAMP TIMESTAMP_NTZ,
-    PREDICTED_FRAUD INT
+CREATE TABLE FORECAST_LOG (
+    FORECAST_DATE DATE,
+    TARGET_DATE DATE,
+    CLOUD_PROVIDER VARCHAR(10),
+    SERVICE VARCHAR(50),
+    DEPARTMENT VARCHAR(50),
+    PREDICTED_COST NUMBER(18,2),
+    ACTUAL_COST NUMBER(18,2),
+    PREDICTION_TIMESTAMP TIMESTAMP_NTZ
 ) CHANGE_TRACKING = TRUE;
 
 -- ============================================================
--- Step 2: Run Batch Inference with Historical Timestamps
+-- Step 2: Generate Forecast Data
 -- ============================================================
--- Spreads timestamps across last 30 days for meaningful time-series monitoring
--- In production, this would be run periodically (e.g., daily) with actual timestamps
+-- For demo purposes, we'll create "forecasts" that were made in the past
+-- comparing to actual costs
 
-INSERT INTO PREDICTION_LOG
+INSERT INTO FORECAST_LOG
+WITH daily_actuals AS (
+    SELECT 
+        BILLING_DATE,
+        CLOUD_PROVIDER,
+        SERVICE,
+        DEPARTMENT,
+        SUM(COST) AS ACTUAL_COST
+    FROM BILLING_DATA
+    WHERE BILLING_DATE >= DATEADD('day', -60, CURRENT_DATE())
+    GROUP BY 1, 2, 3, 4
+),
+-- Simulate forecasts made 7 days before each actual date
+forecasts AS (
+    SELECT 
+        DATEADD('day', -7, BILLING_DATE) AS FORECAST_DATE,
+        BILLING_DATE AS TARGET_DATE,
+        CLOUD_PROVIDER,
+        SERVICE,
+        DEPARTMENT,
+        -- Add some noise to simulate forecast error
+        ACTUAL_COST * (1 + (RANDOM() % 20 - 10) / 100.0) AS PREDICTED_COST,
+        ACTUAL_COST
+    FROM daily_actuals
+)
 SELECT 
-    t.TRANSACTION_ID,
-    t.AMOUNT,
-    t.TRANSACTION_TYPE,
-    t.CHANNEL,
-    t.LOCATION,
-    t.MERCHANT,
-    t.IS_FRAUD::INT AS ACTUAL_FRAUD,
-    -- Spread timestamps over last 30 days based on hash of transaction ID
-    -- This simulates historical predictions for demo purposes
+    FORECAST_DATE,
+    TARGET_DATE,
+    CLOUD_PROVIDER,
+    SERVICE,
+    DEPARTMENT,
+    ROUND(PREDICTED_COST, 2) AS PREDICTED_COST,
+    ROUND(ACTUAL_COST, 2) AS ACTUAL_COST,
     DATEADD('minute', 
-        -1 * MOD(ABS(HASH(t.TRANSACTION_ID)), 43200),  -- 43200 minutes = 30 days
+        -1 * MOD(ABS(HASH(CONCAT(FORECAST_DATE, SERVICE, DEPARTMENT))), 43200),
         CURRENT_TIMESTAMP()
-    )::TIMESTAMP_NTZ AS PREDICTION_TIMESTAMP,
-    FRAUD_DETECTION_MODEL!PREDICT(
-        t.AMOUNT, t.TRANSACTION_TYPE, t.CHANNEL, t.LOCATION, t.MERCHANT
-    ):IS_FRAUD::INT AS PREDICTED_FRAUD
-FROM TRANSACTIONS t;
+    )::TIMESTAMP_NTZ AS PREDICTION_TIMESTAMP
+FROM forecasts;
 
--- Verify prediction log
+-- Verify forecast log
 SELECT 
-    COUNT(*) as total_predictions,
-    SUM(PREDICTED_FRAUD) as predicted_fraud_count,
-    SUM(ACTUAL_FRAUD) as actual_fraud_count,
-    ROUND(AVG(PREDICTED_FRAUD) * 100, 2) as predicted_fraud_rate_pct,
-    ROUND(AVG(ACTUAL_FRAUD) * 100, 2) as actual_fraud_rate_pct,
-    MIN(PREDICTION_TIMESTAMP) as earliest_prediction,
-    MAX(PREDICTION_TIMESTAMP) as latest_prediction,
-    COUNT(DISTINCT DATE(PREDICTION_TIMESTAMP)) as unique_days
-FROM PREDICTION_LOG;
+    COUNT(*) as total_forecasts,
+    COUNT(DISTINCT TARGET_DATE) as unique_target_dates,
+    ROUND(AVG(ABS(PREDICTED_COST - ACTUAL_COST)), 2) as avg_absolute_error,
+    ROUND(AVG(ABS(PREDICTED_COST - ACTUAL_COST) / NULLIF(ACTUAL_COST, 0)) * 100, 2) as avg_pct_error,
+    MIN(PREDICTION_TIMESTAMP) as earliest_forecast,
+    MAX(PREDICTION_TIMESTAMP) as latest_forecast
+FROM FORECAST_LOG;
 
 -- ============================================================
 -- Step 3: Create Baseline Table for Drift Detection
 -- ============================================================
--- Uses first week of predictions as baseline
--- Monitor will compare recent predictions against this baseline
+-- Uses first 3 weeks of forecasts as baseline
 
-DROP TABLE IF EXISTS PREDICTION_BASELINE;
+DROP TABLE IF EXISTS FORECAST_BASELINE;
 
-CREATE TABLE PREDICTION_BASELINE CHANGE_TRACKING = TRUE AS
-SELECT * FROM PREDICTION_LOG
-WHERE PREDICTION_TIMESTAMP < DATEADD('day', -23, CURRENT_TIMESTAMP());
+CREATE TABLE FORECAST_BASELINE CHANGE_TRACKING = TRUE AS
+SELECT * FROM FORECAST_LOG
+WHERE PREDICTION_TIMESTAMP < DATEADD('day', -21, CURRENT_TIMESTAMP());
 
 -- Verify baseline
 SELECT 
@@ -89,38 +104,38 @@ SELECT
     COUNT(*) as row_count,
     MIN(PREDICTION_TIMESTAMP) as earliest,
     MAX(PREDICTION_TIMESTAMP) as latest
-FROM PREDICTION_BASELINE
+FROM FORECAST_BASELINE
 UNION ALL
 SELECT 
-    'PREDICTION_LOG' as table_name,
+    'FORECAST_LOG' as table_name,
     COUNT(*) as row_count,
     MIN(PREDICTION_TIMESTAMP) as earliest,
     MAX(PREDICTION_TIMESTAMP) as latest
-FROM PREDICTION_LOG;
+FROM FORECAST_LOG;
 
 -- ============================================================
 -- Production Usage Notes
 -- ============================================================
 -- In production, you would:
--- 1. Run batch inference on a schedule (e.g., daily via Task)
--- 2. Append new predictions to PREDICTION_LOG (not replace)
--- 3. Use actual timestamps from when predictions were made
+-- 1. Run batch forecasting daily for the next 30 days
+-- 2. Append new forecasts to FORECAST_LOG (not replace)
+-- 3. Update ACTUAL_COST once the target date has passed
+-- 4. Use the ML model for predictions instead of simple multipliers
 --
--- Example Task for daily batch inference:
--- CREATE OR REPLACE TASK DAILY_FRAUD_SCORING
+-- Example Task for daily batch forecasting:
+-- CREATE OR REPLACE TASK DAILY_COST_FORECAST
 --     WAREHOUSE = WORKSHOP_WH
 --     SCHEDULE = 'USING CRON 0 6 * * * America/Los_Angeles'
 -- AS
--- INSERT INTO PREDICTION_LOG
+-- INSERT INTO FORECAST_LOG
 -- SELECT 
---     t.TRANSACTION_ID,
---     t.AMOUNT,
---     t.TRANSACTION_TYPE,
---     t.CHANNEL,
---     t.LOCATION,
---     t.MERCHANT,
---     t.IS_FRAUD::INT AS ACTUAL_FRAUD,
---     CURRENT_TIMESTAMP()::TIMESTAMP_NTZ AS PREDICTION_TIMESTAMP,
---     FRAUD_DETECTION_MODEL!PREDICT(...):IS_FRAUD::INT AS PREDICTED_FRAUD
--- FROM TRANSACTIONS t
--- WHERE t.TRANSACTION_DATE = CURRENT_DATE() - 1;  -- Yesterday's transactions
+--     CURRENT_DATE() AS FORECAST_DATE,
+--     DATEADD('day', seq4.seq, CURRENT_DATE()) AS TARGET_DATE,
+--     CLOUD_PROVIDER,
+--     SERVICE,
+--     DEPARTMENT,
+--     COST_FORECASTING_MODEL!PREDICT(...):PREDICTED_COST AS PREDICTED_COST,
+--     NULL AS ACTUAL_COST,  -- Will be filled in later
+--     CURRENT_TIMESTAMP() AS PREDICTION_TIMESTAMP
+-- FROM (SELECT SEQ4() AS seq FROM TABLE(GENERATOR(ROWCOUNT => 30))) seq4
+-- CROSS JOIN (SELECT DISTINCT CLOUD_PROVIDER, SERVICE, DEPARTMENT FROM BILLING_DATA);

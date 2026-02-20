@@ -1,193 +1,162 @@
-# Blackline Cortex Agent Demo
+# Cloud Cost Analytics Agent - Implementation TODO
 
 ## Overview
 
-A complete Cortex Agent demo for transaction fraud analysis, combining:
-- **Cortex Analyst** (text-to-SQL) for structured transaction data
-- **Cortex Search** for unstructured investigation notes
-- **ML Predictions** for fraud risk scoring
+A Cortex Agent for cloud cost analytics and forecasting, combining:
+- **Cortex Analyst** (text-to-SQL) for billing data queries
+- **Cortex Search** for FinOps recommendations
+- **ML Forecasting** for cost predictions
 
 ---
 
-## Phase 1: Agent with Analytics ✅ COMPLETE
+## Phase 1: Data Foundation ✅ COMPLETE
 
-### Directory Structure
+### Synthetic Data Generator
+- [x] AWS services: EC2, S3, RDS, Lambda, EKS, CloudWatch, DynamoDB, ElastiCache
+- [x] Azure services: VMs, Blob Storage, SQL Database, Functions, AKS, Cosmos DB
+- [x] Realistic patterns: weekday/weekend, monthly seasonality, end-of-month spikes
+- [x] Cost anomalies (3% probability)
+- [x] Growth trends over time
+- [x] Multiple accounts, departments, environments
+
+### Files
 ```
-coco_demo/
-├── setup/                        # SQL scripts (run in order)
-├── data/                         # Source data + data generator
-├── model/                        # ML training scripts
-├── test_agent/                   # Python test client
-└── WORKSHOP_DB_DEMO_DEMO_AGENT/  # Agent workspace
-```
-
-### Snowflake Objects
-| Object | Type | Status |
-|--------|------|--------|
-| `WORKSHOP_DB.DEMO.TRANSACTIONS` | Table | ✅ 100 rows |
-| `WORKSHOP_DB.DEMO.TEXT_SEARCH` | Cortex Search Service | ✅ |
-| `WORKSHOP_DB.DEMO.DEMO_SEMANTIC_VIEW` | Semantic View | ✅ |
-| `WORKSHOP_DB.DEMO.DEMO_AGENT` | Cortex Agent | ✅ Working |
-
-### Test Results
-| Question | Result |
-|----------|--------|
-| Top 5 fraud transactions | ✅ Returns IDs, amounts, risk drivers |
-| Fraud patterns | ✅ Geographic hotspots, channel risks |
-| Executive summary | ✅ 23% fraud rate, recommendations |
-
----
-
-## Phase 2: ML Fraud Prediction ✅ COMPLETE
-
-### Goal
-Add predictive capability: Intelligence (what happened) → Data Science (what may happen)
-
-### Completed Tasks
-
-#### 2.1 Validate Target Column ✅
-- [x] Verified IS_FRAUD exists and has signal
-- [x] Class distribution: 30% fraud rate (30/100) - good balance for demo
-- [x] Reviewed example fraud cases - high amounts, suspicious keywords
-
-#### 2.2 Feature Engineering ✅
-Created 18 features:
-- **Numeric**: AMOUNT_SCALED, AMOUNT_LOG
-- **Boolean**: IS_FLAGGED
-- **Categorical** (one-hot): TRANSACTION_TYPE (5), CHANNEL (4)
-- **Text-derived** (5): NOTE_FLAGGED, NOTE_SUSPICIOUS, NOTE_DISPUTE, NOTE_BLOCKED, NOTE_INVESTIGATION
-
-#### 2.3 Train Model ✅
-- [x] Created training script: `notebooks/train_fraud_model.py`
-- [x] Used machine-learning skill for best practices
-- [x] Proper train/test split (80/20, stratified)
-- [x] Trained GradientBoostingClassifier
-- [x] **ROC-AUC: 0.810**
-- [x] **Accuracy: 85%**
-- [x] Feature importance analysis saved to `model_evaluation.png`
-
-#### 2.4 Model Registry ✅
-- [x] Registered to Snowflake Model Registry
-- [x] Model: `WORKSHOP_DB.DEMO.FRAUD_DETECTION_MODEL` (v1)
-- [x] Tested inference via `mv.run()` - working
-
-#### 2.5 Agent Integration ✅ COMPLETE
-- [x] Create stored procedure for inference (`PREDICT_FRAUD`)
-- [x] Add prediction tool to agent (type: generic, name: FraudPredictor)
-- [x] Update agent spec with tool_resources
-- [x] Test: "What's the fraud risk for transaction X?" - Working!
-
-### Model Artifacts
-```
-model/
-├── fraud_model.py            # Training script (Pipeline + GridSearchCV + Experiment Tracking)
-├── snowpark_session.py       # Snowflake connection helper
-├── fraud_pipeline.pkl        # Local sklearn Pipeline backup (includes scaler/encoder)
-
 data/
-├── generate_data.py          # Generates 100k synthetic fraud transactions
-├── transactions_100k.csv     # Generated data (if run locally)
+└── generate_data.py    # Generates 365 days × 15 accounts × services
 ```
-
-**Note:** Feature names and scaler are embedded in the sklearn Pipeline. Confusion matrix and 
-feature importance charts are logged to Snowflake Experiment Tracking, not stored locally.
-
-### Model Performance
-| Metric | Value |
-|--------|-------|
-| ROC-AUC | 0.810 |
-| Accuracy | 85% |
-| Precision (Fraud) | 80% |
-| Recall (Fraud) | 67% |
-| F1 (Fraud) | 73% |
 
 ---
 
-## Phase 2.6: ML Monitoring ✅ COMPLETE
+## Phase 2: Analytics Layer ✅ COMPLETE
 
-### Goal
-Track model performance and detect drift over time using Snowflake ML Observability.
+### Semantic View
+- [x] Dimensions: date, cloud_provider, account, service, region, department, environment
+- [x] Time dimensions: month, quarter, year
+- [x] Measures: total_cost, average_daily_cost, usage, record_count
+- [x] Verified queries for common patterns
 
-### Architecture
-```
-┌─────────────────┐     ┌─────────────────┐     ┌──────────────────────┐
-│ Batch Inference │ ──▶ │ PREDICTION_LOG  │ ◀── │ FRAUD_MODEL_MONITOR  │
-│ (08_batch...)   │     │ (100k rows)     │     │ - Drift (PSI)        │
-└─────────────────┘     │ - 31 days data  │     │ - Accuracy metrics   │
-                        └─────────────────┘     └──────────────────────┘
-                               ▲
-                        ┌──────┴──────┐
-                        │ PREDICTION_ │
-                        │ BASELINE    │ (first week snapshot)
-                        └─────────────┘
-```
-
-### Completed Tasks
-- [x] Create batch inference script (`setup/08_batch_inference.sql`)
-- [x] Create PREDICTION_LOG table with 100k predictions
-- [x] Create PREDICTION_BASELINE table for drift comparison
-- [x] Create Model Monitor (`setup/09_create_monitor.sql`)
-- [x] Configure drift detection (PSI, KL divergence)
-- [x] Configure accuracy tracking (actual vs predicted)
-- [x] Set refresh interval to 1 hour for demo
-
-### Monitor Configuration
-| Setting | Value |
-|---------|-------|
-| Refresh Interval | 1 hour |
-| Aggregation Window | 1 day |
-| Baseline | First week of predictions |
-| Tracked Metrics | Drift (PSI), Accuracy, Precision, Recall, F1 |
-
-### Viewing Metrics
-- **Snowsight**: AI & ML → Models → FRAUD_DETECTION_MODEL → Monitors
-- **SQL**: Query `FRAUD_MODEL_MONITOR!MODEL_MONITOR_*` functions
+### Search Service
+- [x] 15 FinOps recommendations
+- [x] Categories: Rightsizing, Reserved Instances, Storage, Spot, etc.
+- [x] AWS and Azure coverage
+- [x] Priority levels and potential savings
 
 ---
 
-## Phase 3: Git Integration (Future)
-- [ ] Push notebooks to Git repo
-- [ ] Connect Snowsight to Git
-- [ ] Run notebooks in Snowsight
-- [ ] Full platform demo
+## Phase 3: ML Forecasting ✅ COMPLETE
+
+### Model Architecture
+- [x] XGBoost Regressor
+- [x] Time-series features: day_of_week, day_of_month, month, quarter
+- [x] Categorical features: cloud_provider, service, department
+- [x] Usage quantity as feature
+
+### Training Pipeline
+- [x] Feature engineering in Snowpark
+- [x] Train/test split (last 30 days for test)
+- [x] Experiment tracking
+- [x] Model Registry integration
+
+### Monitoring
+- [x] Batch inference for historical forecasts
+- [x] Change tracking enabled
+- [x] Model Monitor with regression metrics (MAE, RMSE, MAPE)
+- [x] Baseline for drift detection
+
+---
+
+## Phase 4: Agent Integration ✅ COMPLETE
+
+### Tools
+| Tool | Type | Purpose |
+|------|------|---------|
+| Analyst1 | cortex_analyst | SQL queries on billing data |
+| Search1 | cortex_search | FinOps recommendations |
+| CostForecaster | generic | ML-based cost predictions |
+
+### Procedures
+- [x] `FORECAST_COST(service, department, days)` - Service-level forecast
+- [x] `FORECAST_TOTAL_COST(days)` - Total cost forecast
+
+---
+
+## Phase 5: Documentation ✅ COMPLETE
+
+- [x] README.md - Quick start guide
+- [x] TODO.md - Detailed implementation notes
+- [x] SQL scripts with comments
+- [x] requirements.txt
+
+---
+
+## Snowflake Objects Summary
+
+| Object | Type | Purpose |
+|--------|------|---------|
+| `WORKSHOP_DB.DEMO.BILLING_DATA` | Table | Cloud billing records |
+| `WORKSHOP_DB.DEMO.COST_RECOMMENDATIONS` | Table | FinOps recommendations |
+| `WORKSHOP_DB.DEMO.DEMO_SEMANTIC_VIEW` | Semantic View | Text-to-SQL |
+| `WORKSHOP_DB.DEMO.TEXT_SEARCH` | Cortex Search | Recommendation search |
+| `WORKSHOP_DB.DEMO.DEMO_AGENT` | Cortex Agent | Multi-tool agent |
+| `WORKSHOP_DB.DEMO.FORECAST_COST` | Procedure | Cost forecasting |
+| `WORKSHOP_DB.DEMO.FORECAST_LOG` | Table | Forecast history |
+| `WORKSHOP_DB.DEMO.FORECAST_BASELINE` | Table | Baseline for monitoring |
+| `WORKSHOP_DB.DEMO.COST_MODEL_MONITOR` | Model Monitor | Track accuracy |
 
 ---
 
 ## Quick Commands
 
 ```bash
-# Test the agent (Phase 1)
-cd test_agent && python3 quick_test.py
-
-# Train ML model (Phase 2)
-cd model && python fraud_model.py
-
-# Generate synthetic data (if needed)
+# Generate data
 cd data && python generate_data.py
+
+# Upload to Snowflake
+snow stage copy data/billing_data.csv @WORKSHOP_DB.DEMO.DATA_STAGE --connection myconnection
+
+# Train model (optional)
+cd model && python cost_forecast_model.py
+
+# Test agent
+cd test_agent && python quick_test.py
 ```
 
-## Snowflake Objects Summary
+---
 
-| Object | Type | Purpose |
-|--------|------|---------|
-| `WORKSHOP_DB.DEMO.TRANSACTIONS` | Table | Source transaction data (100k rows) |
-| `WORKSHOP_DB.DEMO.TEXT_SEARCH` | Cortex Search | Search notes text |
-| `WORKSHOP_DB.DEMO.DEMO_SEMANTIC_VIEW` | Semantic View | Text-to-SQL for analytics |
-| `WORKSHOP_DB.DEMO.DEMO_AGENT` | Cortex Agent | Multi-tool orchestration (3 tools) |
-| `WORKSHOP_DB.DEMO.FRAUD_DETECTION_MODEL` | ML Model | Fraud prediction (LogisticRegression) |
-| `WORKSHOP_DB.DEMO.PREDICT_FRAUD` | Procedure | Calls model for single transaction scoring |
-| `WORKSHOP_DB.DEMO.PREDICTION_LOG` | Table | Batch predictions for monitoring |
-| `WORKSHOP_DB.DEMO.PREDICTION_BASELINE` | Table | Baseline for drift detection |
-| `WORKSHOP_DB.DEMO.FRAUD_MODEL_MONITOR` | Model Monitor | Tracks drift & accuracy |
+## Sample Agent Queries
+
+### Cost Analytics
+- "What was our total cloud spend last month?"
+- "Show me the top 5 most expensive services by cloud provider"
+- "Compare Engineering vs Data Science department costs"
+- "What's the cost trend for EC2 over the past 6 months?"
+
+### Recommendations
+- "How can we reduce our AWS costs?"
+- "Find rightsizing recommendations"
+- "What reserved instance opportunities do we have?"
+- "Show high-priority optimization recommendations"
+
+### Forecasting
+- "Forecast EC2 costs for Engineering for the next 30 days"
+- "What will our total Azure spend be next month?"
+- "Predict S3 storage costs for Data Science"
+
+---
 
 ## Key Learnings
 
-### Agent Configuration
-- `execution_environment` required in tool_resources
-- WHEN TO USE / WHEN NOT TO USE in tool descriptions
+### Data Generation
+- Realistic seasonality patterns are critical for meaningful forecasting
+- Include anomalies to test model robustness
+- Multiple dimensions enable rich analytics
 
-### ML Best Practices (from machine-learning skill)
-- Proper train/test splits (stratified for imbalanced data)
-- SQL-compatible feature names (no hyphens/spaces)
-- Model registry for production deployment
-- Feature importance for explainability
+### Model Monitoring
+- Change tracking must be enabled BEFORE data insertion
+- Regression metrics: MAE, RMSE, MAPE (not classification metrics)
+- Baseline table essential for drift detection
+
+### Agent Design
+- Clear tool descriptions with WHEN TO USE / WHEN NOT TO USE
+- Semantic view verified queries improve SQL accuracy
+- Generic tools need explicit input_schema

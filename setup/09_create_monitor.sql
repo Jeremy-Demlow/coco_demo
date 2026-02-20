@@ -1,12 +1,11 @@
 -- ============================================================
 -- 09_create_monitor.sql
--- Creates Model Monitor for ML Observability
--- Tracks drift, accuracy, and statistics over time
+-- Creates a Model Monitor to track cost forecasting performance
+-- Monitors for drift, accuracy degradation, and data quality issues
 --
 -- Prerequisites:
--- - FRAUD_DETECTION_MODEL must exist in Model Registry
--- - PREDICTION_LOG table must exist (run 08_batch_inference.sql first)
--- - PREDICTION_BASELINE table must exist
+-- - COST_FORECASTING_MODEL registered in WORKSHOP_DB.DEMO
+-- - FORECAST_LOG and FORECAST_BASELINE tables exist with change tracking
 -- ============================================================
 
 USE ROLE SYSADMIN;
@@ -15,79 +14,100 @@ USE DATABASE WORKSHOP_DB;
 USE SCHEMA DEMO;
 
 -- ============================================================
--- Step 1: Create Model Monitor
+-- Step 1: Verify Prerequisites
 -- ============================================================
--- Monitor watches PREDICTION_LOG table and compares against PREDICTION_BASELINE
+-- Check model exists
+SHOW MODELS IN SCHEMA DEMO;
 
-CREATE OR REPLACE MODEL MONITOR FRAUD_MODEL_MONITOR WITH
-    MODEL = FRAUD_DETECTION_MODEL
-    VERSION = 'WITTY_CHICKEN_3'           -- Update if model version changes
+-- Check tables have change tracking
+SELECT 
+    TABLE_NAME,
+    CHANGE_TRACKING
+FROM INFORMATION_SCHEMA.TABLES 
+WHERE TABLE_SCHEMA = 'DEMO' 
+  AND TABLE_NAME IN ('FORECAST_LOG', 'FORECAST_BASELINE');
+
+-- ============================================================
+-- Step 2: Create Model Monitor
+-- ============================================================
+-- Note: You may need to get the exact version name from SHOW MODELS
+-- Replace 'V1' with the actual version name
+
+CREATE OR REPLACE MODEL MONITOR COST_MODEL_MONITOR WITH
+    MODEL = COST_FORECASTING_MODEL
+    VERSION = 'V1'  -- Update this to match your model version
     FUNCTION = 'PREDICT'
-    SOURCE = PREDICTION_LOG
+    SOURCE = FORECAST_LOG
     WAREHOUSE = WORKSHOP_WH
-    REFRESH_INTERVAL = '1 hour'           -- How often to refresh metrics
-    AGGREGATION_WINDOW = '1 day'          -- Aggregate metrics by day
+    REFRESH_INTERVAL = '1 hour'
+    AGGREGATION_WINDOW = '1 day'
     TIMESTAMP_COLUMN = PREDICTION_TIMESTAMP
-    PREDICTION_CLASS_COLUMNS = ('PREDICTED_FRAUD')
-    ACTUAL_CLASS_COLUMNS = ('ACTUAL_FRAUD')
-    BASELINE = PREDICTION_BASELINE;
+    PREDICTION_SCORE_COLUMNS = ('PREDICTED_COST')
+    ACTUAL_SCORE_COLUMNS = ('ACTUAL_COST')
+    BASELINE = FORECAST_BASELINE;
 
 -- ============================================================
--- Step 2: Verify Monitor Status
+-- Step 3: Verify Monitor Created
 -- ============================================================
-
--- Check monitor is active
-DESC MODEL MONITOR FRAUD_MODEL_MONITOR;
-
--- List all monitors in schema
-SHOW MODEL MONITORS IN SCHEMA WORKSHOP_DB.DEMO;
+SHOW MODEL MONITORS;
+DESCRIBE MODEL MONITOR COST_MODEL_MONITOR;
 
 -- ============================================================
--- Step 3: Query Metrics (after first refresh)
+-- Step 4: Query Monitor Metrics
 -- ============================================================
--- Note: Metrics will be empty until the first refresh runs
+-- Note: Metrics will populate after the first refresh (up to 1 hour)
 
--- Performance metrics (accuracy, precision, recall, F1)
--- SELECT * FROM TABLE(FRAUD_MODEL_MONITOR!MODEL_MONITOR_PERFORMANCE_METRIC(
---     'ACCURACY',
---     'DAY',
+-- MAE (Mean Absolute Error)
+-- SELECT *
+-- FROM TABLE(MODEL_MONITOR_PERFORMANCE_METRIC(
+--     'COST_MODEL_MONITOR',
+--     'MAE',
+--     '1 DAY',
 --     DATEADD('day', -30, CURRENT_TIMESTAMP())::TIMESTAMP_NTZ,
 --     CURRENT_TIMESTAMP()::TIMESTAMP_NTZ
 -- ));
 
--- Drift metrics (PSI - Population Stability Index)
--- SELECT * FROM TABLE(FRAUD_MODEL_MONITOR!MODEL_MONITOR_DRIFT_METRIC(
---     'PSI',
---     'AMOUNT',
---     'DAY',
+-- RMSE (Root Mean Square Error)
+-- SELECT *
+-- FROM TABLE(MODEL_MONITOR_PERFORMANCE_METRIC(
+--     'COST_MODEL_MONITOR',
+--     'RMSE',
+--     '1 DAY',
+--     DATEADD('day', -30, CURRENT_TIMESTAMP())::TIMESTAMP_NTZ,
+--     CURRENT_TIMESTAMP()::TIMESTAMP_NTZ
+-- ));
+
+-- MAPE (Mean Absolute Percentage Error)
+-- SELECT *
+-- FROM TABLE(MODEL_MONITOR_PERFORMANCE_METRIC(
+--     'COST_MODEL_MONITOR',
+--     'MAPE',
+--     '1 DAY',
+--     DATEADD('day', -30, CURRENT_TIMESTAMP())::TIMESTAMP_NTZ,
+--     CURRENT_TIMESTAMP()::TIMESTAMP_NTZ
+-- ));
+
+-- Drift on predicted costs
+-- SELECT *
+-- FROM TABLE(MODEL_MONITOR_DRIFT_METRIC(
+--     'COST_MODEL_MONITOR',
+--     'WASSERSTEIN',
+--     'PREDICTED_COST',
+--     '1 DAY',
 --     DATEADD('day', -30, CURRENT_TIMESTAMP())::TIMESTAMP_NTZ,
 --     CURRENT_TIMESTAMP()::TIMESTAMP_NTZ
 -- ));
 
 -- ============================================================
--- Monitor Management Commands
+-- Useful Commands
 -- ============================================================
+-- Suspend monitoring:
+-- ALTER MODEL MONITOR COST_MODEL_MONITOR SUSPEND;
 
--- Suspend monitoring
--- ALTER MODEL MONITOR FRAUD_MODEL_MONITOR SUSPEND;
+-- Resume monitoring:
+-- ALTER MODEL MONITOR COST_MODEL_MONITOR RESUME;
 
--- Resume monitoring  
--- ALTER MODEL MONITOR FRAUD_MODEL_MONITOR RESUME;
+-- Update baseline after retraining:
+-- ALTER MODEL MONITOR COST_MODEL_MONITOR SET BASELINE = FORECAST_BASELINE;
 
--- Change refresh interval
--- ALTER MODEL MONITOR FRAUD_MODEL_MONITOR SET REFRESH_INTERVAL = '6 hours';
-
--- Update baseline
--- ALTER MODEL MONITOR FRAUD_MODEL_MONITOR SET BASELINE = NEW_BASELINE_TABLE;
-
--- Drop monitor (careful - loses all history)
--- DROP MODEL MONITOR FRAUD_MODEL_MONITOR;
-
--- ============================================================
--- Viewing in Snowsight
--- ============================================================
--- Navigate to: AI & ML -> Models -> FRAUD_DETECTION_MODEL -> Monitors
--- You'll see:
---   - Drift charts (PSI over time for each feature)
---   - Performance charts (accuracy, precision, recall over time)
---   - Distribution comparisons (baseline vs current)
+-- View in Snowsight: AI & ML → Models → COST_FORECASTING_MODEL → Monitors
