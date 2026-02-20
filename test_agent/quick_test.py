@@ -1,6 +1,12 @@
 #!/usr/bin/env python3
-"""Quick test of the Cost Analytics Agent."""
+"""Quick test of the Cost Analytics Agent.
 
+Usage:
+    python quick_test.py                           # Uses default question
+    python quick_test.py "Your question here"     # Custom question
+"""
+
+import sys
 from agent_client import CortexAgentClient
 
 CONFIG = {
@@ -14,7 +20,8 @@ CONFIG = {
 
 client = CortexAgentClient(**CONFIG)
 
-question = "What was our total cloud spend last month? Break it down by provider."
+# Use command-line argument if provided, otherwise use default
+question = sys.argv[1] if len(sys.argv) > 1 else "What was our total cloud spend last month? Break it down by provider."
 
 print(f"Question: {question}\n")
 result = client.ask(question, verbose=False)
