@@ -1,149 +1,193 @@
 #!/usr/bin/env python3
 """
-Test the DEMO_AGENT_CLOUD_COST agent.
-Uses the same credentials as Cortex Code (from ~/.snowflake/connections.toml)
+Agent Test Runner - YAML-configurable test framework for Cortex Agents.
+
+Usage:
+    python run_test.py                          # Use default config
+    python run_test.py --config my_config.yaml  # Use custom config
+    python run_test.py --verbose                # Show detailed output
 """
 
+import argparse
+import json
 import sys
-sys.path.insert(0, '/Users/jdemlow/Customers/Blackline/coco_demo/model')
-sys.path.insert(0, '/Users/jdemlow/Customers/Blackline/coco_demo/test_agent')
-
-from snowpark_session import create_snowpark_session
-from agent_client import CortexAgentClient
-import os
 from pathlib import Path
 
-def get_connection_config():
-    """Read connection config from ~/.snowflake/connections.toml"""
+# Add parent directories to path
+sys.path.insert(0, str(Path(__file__).parent.parent / "model"))
+
+def load_config(config_path: str) -> dict:
+    """Load YAML configuration file."""
     try:
-        import tomllib
+        import yaml
     except ImportError:
-        import tomli as tomllib
+        print("ERROR: PyYAML required. Install with: pip install pyyaml")
+        sys.exit(1)
     
-    config_path = Path.home() / ".snowflake" / "config.toml"
-    with open(config_path, "rb") as f:
-        data = tomllib.load(f)
-    
-    # Get the myconnection config
-    conn = data.get("myconnection", {})
-    return {
-        "account": conn.get("account", ""),
-        "user": conn.get("user", ""),
-        "private_key_path": conn.get("private_key_path", ""),
-    }
+    with open(config_path) as f:
+        return yaml.safe_load(f)
 
-def main():
-    # Get config
-    config = get_connection_config()
-    print(f"Account: {config['account']}")
-    print(f"User: {config['user']}")
-    print(f"Key path: {config['private_key_path']}")
+
+def get_session():
+    """Get Snowpark session."""
+    from snowpark_session import create_snowpark_session
+    return create_snowpark_session()
+
+
+def run_component_tests(session, config: dict, verbose: bool = False) -> dict:
+    """Run component tests to verify backend resources."""
+    results = {"passed": 0, "failed": 0, "tests": []}
     
-    if not config['private_key_path'] or not os.path.exists(os.path.expanduser(config['private_key_path'])):
-        print("\nWARNING: No private key found. Testing with Snowpark instead...")
-        test_with_snowpark()
-        return
+    print("\n" + "=" * 60)
+    print("Component Tests")
+    print("=" * 60)
     
-    # Create client
-    client = CortexAgentClient(
-        account=config['account'],
-        user=config['user'],
-        private_key_path=os.path.expanduser(config['private_key_path']),
-        database="WORKSHOP_DB",
-        schema="DEMO",
-        agent_name="DEMO_AGENT_CLOUD_COST"
-    )
-    
-    # Test questions
-    questions = [
-        "What was our total cloud spend last month?",
-        "How can we reduce EC2 costs?",
-        "Forecast EC2 costs for Engineering for 30 days",
-    ]
-    
-    for q in questions:
-        print(f"\n{'='*60}")
-        print(f"Question: {q}")
-        print('='*60)
+    for test_id, test_config in config.get("component_tests", {}).items():
+        name = test_config.get("name", test_id)
+        query = test_config.get("query", "").strip()
         
-        result = client.ask(q, verbose=True)
-        print(client.format_result(result))
+        print(f"\n{test_id}: {name}")
+        
+        try:
+            result = session.sql(query).collect()
+            
+            # Check expected columns
+            if "expected_columns" in test_config:
+                columns = [r.as_dict().keys() for r in result[:1]][0] if result else []
+                for col in test_config["expected_columns"]:
+                    if col not in columns:
+                        raise ValueError(f"Missing column: {col}")
+            
+            # Check expected keys (for JSON results like procedures)
+            if "expected_keys" in test_config and result:
+                json_result = json.loads(str(result[0][0]))
+                for key in test_config["expected_keys"]:
+                    if key not in json_result:
+                        raise ValueError(f"Missing key: {key}")
+            
+            print(f"   ✓ PASSED ({len(result)} rows)")
+            results["passed"] += 1
+            results["tests"].append({"name": name, "status": "passed", "rows": len(result)})
+            
+            if verbose and result:
+                for row in result[:3]:
+                    if hasattr(row, 'as_dict'):
+                        print(f"     {row.as_dict()}")
+                    else:
+                        print(f"     {row}")
+                        
+        except Exception as e:
+            print(f"   ✗ FAILED: {e}")
+            results["failed"] += 1
+            results["tests"].append({"name": name, "status": "failed", "error": str(e)})
+    
+    return results
 
-def test_with_snowpark():
-    """Alternative test using Snowpark to verify agent components work"""
-    session = create_snowpark_session()
-    session.sql("USE DATABASE WORKSHOP_DB").collect()
-    session.sql("USE SCHEMA DEMO").collect()
+
+def check_agent_exists(session, config: dict) -> bool:
+    """Check if the agent exists and has a valid spec."""
+    agent_config = config.get("agent", {})
+    database = agent_config.get("database", "WORKSHOP_DB")
+    schema = agent_config.get("schema", "DEMO")
+    name = agent_config.get("name", "DEMO_AGENT_CLOUD_COST")
     
-    print("\n" + "="*60)
-    print("Testing Agent Components via Snowpark")
-    print("="*60)
+    print(f"\nAgent: {database}.{schema}.{name}")
     
-    # Test 1: Semantic view works
-    print("\n1. Testing Semantic View (Analyst1 backend)...")
     try:
-        result = session.sql("""
-            SELECT CLOUD_PROVIDER, SUM(COST) as TOTAL_COST 
-            FROM BILLING_DATA 
-            WHERE BILLING_DATE >= DATEADD('month', -1, CURRENT_DATE())
-            GROUP BY CLOUD_PROVIDER
-        """).collect()
-        print(f"   ✓ Semantic view data accessible: {len(result)} rows")
-        for row in result:
-            print(f"     {row['CLOUD_PROVIDER']}: ${row['TOTAL_COST']:,.2f}")
-    except Exception as e:
-        print(f"   ✗ Error: {e}")
-    
-    # Test 2: Search service works
-    print("\n2. Testing Search Service (Search1 backend)...")
-    try:
-        result = session.sql("""
-            SELECT TITLE, CATEGORY, PRIORITY 
-            FROM COST_RECOMMENDATIONS 
-            WHERE CLOUD_PROVIDER = 'AWS' 
-            LIMIT 3
-        """).collect()
-        print(f"   ✓ Recommendations accessible: {len(result)} rows")
-        for row in result:
-            print(f"     [{row['PRIORITY']}] {row['TITLE']}")
-    except Exception as e:
-        print(f"   ✗ Error: {e}")
-    
-    # Test 3: Forecast procedure works
-    print("\n3. Testing Forecast Procedure (CostForecaster backend)...")
-    try:
-        result = session.sql("""
-            CALL FORECAST_COST('EC2', 'Engineering', 30)
-        """).collect()
-        print(f"   ✓ Forecast procedure works")
-        import json
-        forecast = json.loads(str(result[0][0]))
-        print(f"     Service: {forecast.get('service')}")
-        print(f"     Department: {forecast.get('department')}")
-        print(f"     Forecasted Total: ${forecast.get('forecasted_total', 0):,.2f}")
-    except Exception as e:
-        print(f"   ✗ Error: {e}")
-    
-    # Test 4: Agent exists
-    print("\n4. Checking Agent...")
-    try:
-        result = session.sql("SHOW AGENTS LIKE 'DEMO_AGENT_CLOUD_COST'").collect()
+        result = session.sql(f"DESCRIBE AGENT {database}.{schema}.{name}").collect()
         if result:
-            print(f"   ✓ Agent exists: {result[0]['name']}")
+            row = result[0].as_dict()
+            agent_spec = row.get("agent_spec", "")
+            
+            if agent_spec:
+                spec = json.loads(agent_spec)
+                tools = spec.get("tools", [])
+                print(f"   ✓ Agent exists with {len(tools)} tools")
+                for tool in tools:
+                    tool_name = tool.get("tool_spec", {}).get("name", "unknown")
+                    tool_type = tool.get("tool_spec", {}).get("type", "unknown")
+                    print(f"     - {tool_name} ({tool_type})")
+                return True
+            else:
+                print("   ✗ Agent exists but spec is EMPTY")
+                return False
         else:
             print("   ✗ Agent not found")
+            return False
+            
     except Exception as e:
         print(f"   ✗ Error: {e}")
+        return False
+
+
+def print_agent_questions(config: dict):
+    """Print sample questions for testing in Snowsight."""
+    print("\n" + "=" * 60)
+    print("Sample Questions for Snowsight Testing")
+    print("=" * 60)
     
-    print("\n" + "="*60)
-    print("Component Test Complete")
-    print("="*60)
-    print("\nTo fully test the agent, use Snowsight:")
-    print("1. Go to AI & ML → Cortex Agents")
-    print("2. Select DEMO_AGENT_CLOUD_COST")
-    print("3. Try: 'What was our total cloud spend last month?'")
+    questions = config.get("agent_questions", {})
+    
+    for category, q_list in questions.items():
+        print(f"\n{category.replace('_', ' ').title()}:")
+        for q in q_list[:3]:
+            print(f"  • {q}")
+
+
+def main():
+    parser = argparse.ArgumentParser(description="Test Cortex Agent components")
+    parser.add_argument("--config", default="test_config.yaml", help="Config file path")
+    parser.add_argument("--verbose", "-v", action="store_true", help="Verbose output")
+    args = parser.parse_args()
+    
+    # Find config file
+    config_path = Path(args.config)
+    if not config_path.is_absolute():
+        config_path = Path(__file__).parent / args.config
+    
+    if not config_path.exists():
+        print(f"ERROR: Config file not found: {config_path}")
+        sys.exit(1)
+    
+    print(f"Loading config: {config_path}")
+    config = load_config(config_path)
+    
+    # Get session
+    print("Connecting to Snowflake...")
+    session = get_session()
+    
+    agent_config = config.get("agent", {})
+    session.sql(f"USE DATABASE {agent_config.get('database', 'WORKSHOP_DB')}").collect()
+    session.sql(f"USE SCHEMA {agent_config.get('schema', 'DEMO')}").collect()
+    
+    # Check agent
+    agent_ok = check_agent_exists(session, config)
+    
+    # Run component tests
+    results = run_component_tests(session, config, args.verbose)
+    
+    # Print summary
+    print("\n" + "=" * 60)
+    print("Summary")
+    print("=" * 60)
+    print(f"Agent: {'✓ OK' if agent_ok else '✗ NEEDS FIX'}")
+    print(f"Components: {results['passed']} passed, {results['failed']} failed")
+    
+    # Print sample questions
+    print_agent_questions(config)
+    
+    print("\n" + "=" * 60)
+    print("Next Steps")
+    print("=" * 60)
+    print("1. Go to Snowsight → AI & ML → Cortex Agents")
+    print(f"2. Select {agent_config.get('name', 'DEMO_AGENT_CLOUD_COST')}")
+    print("3. Try the sample questions above")
     
     session.close()
+    
+    # Exit with error if any tests failed
+    sys.exit(0 if results['failed'] == 0 and agent_ok else 1)
+
 
 if __name__ == "__main__":
     main()

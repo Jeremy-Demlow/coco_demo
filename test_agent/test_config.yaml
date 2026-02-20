@@ -1,0 +1,50 @@
+# Agent Test Configuration
+# Use with: python run_test.py --config test_config.yaml
+
+agent:
+  database: WORKSHOP_DB
+  schema: DEMO
+  name: DEMO_AGENT_CLOUD_COST
+
+# Component tests - verify backend resources work
+component_tests:
+  analyst:
+    name: "Semantic View (Analyst1)"
+    query: |
+      SELECT CLOUD_PROVIDER, SUM(COST) as TOTAL_COST 
+      FROM BILLING_DATA 
+      WHERE BILLING_DATE >= DATEADD('month', -1, CURRENT_DATE())
+      GROUP BY CLOUD_PROVIDER
+    expected_columns: ["CLOUD_PROVIDER", "TOTAL_COST"]
+    
+  search:
+    name: "Search Service (Search1)"
+    query: |
+      SELECT TITLE, CATEGORY, PRIORITY 
+      FROM COST_RECOMMENDATIONS 
+      WHERE CLOUD_PROVIDER = 'AWS' 
+      LIMIT 3
+    expected_columns: ["TITLE", "CATEGORY", "PRIORITY"]
+    
+  forecaster:
+    name: "Forecast Procedure (CostForecaster)"
+    query: "CALL FORECAST_COST('EC2', 'Engineering', 30)"
+    expected_keys: ["service", "department", "forecasted_total"]
+
+# Agent questions - for full agent testing via REST API or Snowsight
+agent_questions:
+  analyst_questions:
+    - "What was our total cloud spend last month?"
+    - "Show me the top 5 most expensive services"
+    - "Compare costs by department"
+    - "What is the daily cost trend over the past 30 days?"
+    - "Which department has the highest AWS spend?"
+    
+  search_questions:
+    - "How can we reduce EC2 costs?"
+    - "Find high-priority optimization recommendations"
+    - "What reserved instance opportunities do we have?"
+    
+  forecaster_questions:
+    - "Forecast EC2 costs for Engineering for 30 days"
+    - "Predict S3 costs for Data Science for 60 days"
