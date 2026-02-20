@@ -1,0 +1,34 @@
+# Cortex Agent Test Configuration
+# Copy this file and update with your credentials
+
+snowflake:
+  account: "YOUR_ACCOUNT"           # e.g., "trb65519"
+  user: "YOUR_USER"                 # e.g., "jd_service_account_admin"
+  private_key_path: "~/.snowflake/keys/your_key.p8"
+  
+  # Database objects
+  database: "WORKSHOP_DB"
+  schema: "DEMO"
+  warehouse: "WORKSHOP_WH"
+
+agent:
+  name: "DEMO_AGENT"
+  
+# Test questions for different tools
+test_questions:
+  analyst:
+    - "What is the total fraud rate across all transactions?"
+    - "Show me top 5 transactions by amount"
+    - "Which channel has the highest fraud rate?"
+    
+  search:
+    - "Find transactions mentioning unauthorized access"
+    - "Search for notes about suspicious activity"
+    
+  predictor:
+    - "What's the fraud risk for transaction TXN_0000001?"
+    - "Predict fraud for TXN_0050000"
+    
+  combined:
+    - "Give me an executive summary of fraud status with recommended actions"
+    - "Which merchants have the most fraud and what patterns do you see in the notes?"
