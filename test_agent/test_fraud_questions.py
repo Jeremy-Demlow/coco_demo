@@ -1,19 +1,50 @@
 #!/usr/bin/env python3
 """
 Test DEMO_AGENT with the 3 fraud analysis questions.
+
+Configuration:
+    Uses Snowflake connection from environment variables:
+    - SNOWFLAKE_ACCOUNT
+    - SNOWFLAKE_USER  
+    - SNOWFLAKE_PRIVATE_KEY_PATH
+    - SNOWFLAKE_DATABASE (default: WORKSHOP_DB)
+    - SNOWFLAKE_SCHEMA (default: DEMO)
+    - SNOWFLAKE_AGENT_NAME (default: DEMO_AGENT)
 """
+import os
+import sys
+from pathlib import Path
+
+# Add parent dir to path for imports
+sys.path.insert(0, str(Path(__file__).parent))
 
 from agent_client import CortexAgentClient
 
-# Configuration - matches ~/.snowflake/config.toml
-CONFIG = {
-    "account": "trb65519",
-    "user": "jd_service_account_admin",
-    "private_key_path": "/Users/jdemlow/.snowflake/keys/snowflake_tf_key.p8",
-    "database": "WORKSHOP_DB",
-    "schema": "DEMO",
-    "agent_name": "DEMO_AGENT",
-}
+
+def get_config():
+    """Get configuration from environment variables."""
+    config = {
+        "account": os.environ.get("SNOWFLAKE_ACCOUNT"),
+        "user": os.environ.get("SNOWFLAKE_USER"),
+        "private_key_path": os.environ.get("SNOWFLAKE_PRIVATE_KEY_PATH"),
+        "database": os.environ.get("SNOWFLAKE_DATABASE", "WORKSHOP_DB"),
+        "schema": os.environ.get("SNOWFLAKE_SCHEMA", "DEMO"),
+        "agent_name": os.environ.get("SNOWFLAKE_AGENT_NAME", "DEMO_AGENT"),
+    }
+    
+    # Check required fields
+    missing = [k for k in ["account", "user", "private_key_path"] if not config[k]]
+    if missing:
+        print("ERROR: Missing required environment variables:")
+        print(f"  SNOWFLAKE_ACCOUNT, SNOWFLAKE_USER, SNOWFLAKE_PRIVATE_KEY_PATH")
+        print("\nSet them with:")
+        print("  export SNOWFLAKE_ACCOUNT='your_account'")
+        print("  export SNOWFLAKE_USER='your_user'")
+        print("  export SNOWFLAKE_PRIVATE_KEY_PATH='/path/to/key.p8'")
+        sys.exit(1)
+    
+    return config
+
 
 # Test questions
 QUESTIONS = [
@@ -27,7 +58,8 @@ def main():
     print("Testing DEMO_AGENT - Transaction Fraud Analysis")
     print("=" * 60)
     
-    client = CortexAgentClient(**CONFIG)
+    config = get_config()
+    client = CortexAgentClient(**config)
     
     for i, question in enumerate(QUESTIONS, 1):
         print(f"\n{'#'*60}")

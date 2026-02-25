@@ -94,40 +94,46 @@ git clone <repo-url> && cd coco_demo
 python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 
-# 2. Generate synthetic transaction data (100k records)
-cd data && python generate_data.py
-# Output: transactions_100k.csv
+# 2. Create Snowflake infrastructure (FIRST!)
+cd setup
+snow sql -f 00_prerequisites.sql   # Creates WH, DB, Schema, Stage
 
-# 3. Create Snowflake objects (database, schema, warehouse)
-snow sql -q "CREATE DATABASE IF NOT EXISTS WORKSHOP_DB"
-snow sql -q "CREATE SCHEMA IF NOT EXISTS WORKSHOP_DB.DEMO"
-snow sql -q "CREATE WAREHOUSE IF NOT EXISTS WORKSHOP_WH WITH WAREHOUSE_SIZE='XSMALL'"
-
-# 4. Run SQL setup scripts in order
-cd ../setup
+# 3. Create table and generate data
 snow sql -f 01_create_table.sql
-snow stage create WORKSHOP_DB.DEMO.DATA_STAGE  # Create stage for data
-snow stage copy ../data/transactions_100k.csv @WORKSHOP_DB.DEMO.DATA_STAGE
+cd ../data && python generate_data.py   # Generates transactions_100k.csv
+
+# 4. Upload and load data
+snow stage copy transactions_100k.csv @WORKSHOP_DB.DEMO.DATA_STAGE
+cd ../setup
 snow sql -f 02_load_from_stage.sql
-snow sql -f 03_create_search_service.sql
-snow sql -f 03b_create_semantic_view.sql
+
+# 5. Create AI services
+snow sql -f 03_create_search_service.sql   # Cortex Search
+snow sql -f 03b_create_semantic_view.sql   # Semantic View
+
+# 6. Add fraud patterns to data
 snow sql -f 06_populate_fraud_labels.sql
 
-# 5. Train and register ML model (required for FraudPredictor tool)
+# 7. Train ML model (REQUIRED before agent!)
 cd ../model && python fraud_model.py
 
-# 6. Create prediction procedure and agent
+# 8. Create prediction procedure (MUST come after model)
 cd ../setup
 snow sql -f 07_create_prediction_procedure.sql
+
+# 9. Create agent (MUST come after procedure)
 snow sql -f 04_create_agent.sql
 snow sql -f 05_grants.sql
 
-# 7. (Optional) Setup ML monitoring
+# 10. (Optional) Setup ML monitoring
 snow sql -f 08_batch_inference.sql
 snow sql -f 09_create_monitor.sql
 
-# 8. Test the agent
+# 11. Test the agent
 cd ../test_agent && python quick_test.py "What's the overall fraud rate?"
+
+# To reset and rebuild from scratch:
+cd ../setup && snow sql -f 99_teardown.sql
 ```
 
 > **Note**: See `setup/README.md` for detailed instructions, prerequisites, and troubleshooting.

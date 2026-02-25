@@ -24,3 +24,5 @@ Thumbs.db
 # Secrets
 .env
 credentials.json
+CRITICAL_ANALYSIS.md
+EXECUTION_ORDER.md

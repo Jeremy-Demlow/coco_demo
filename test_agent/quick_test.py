@@ -6,20 +6,49 @@ Usage:
     python quick_test.py                           # Default question
     python quick_test.py "Your question here"      # Custom question
     python quick_test.py -v "Question"             # Verbose mode (show raw events)
+
+Configuration:
+    Uses Snowflake connection from:
+    1. SNOWFLAKE_* environment variables
+    2. ~/.snowflake/config.toml (default connection)
 """
+import os
 import sys
+from pathlib import Path
+
+# Add parent dir to path for imports
+sys.path.insert(0, str(Path(__file__).parent))
+
 from agent_client import CortexAgentClient
 
-# Configuration - update these for your environment
-# Or use test_config.yaml for persistent configuration
-CONFIG = {
-    "account": "trb65519",
-    "user": "jd_service_account_admin", 
-    "private_key_path": "/Users/jdemlow/.snowflake/keys/snowflake_tf_key.p8",
-    "database": "WORKSHOP_DB",
-    "schema": "DEMO",
-    "agent_name": "DEMO_AGENT",
-}
+
+def get_config():
+    """
+    Get configuration from environment variables.
+    Falls back to prompting user if not set.
+    """
+    config = {
+        "account": os.environ.get("SNOWFLAKE_ACCOUNT"),
+        "user": os.environ.get("SNOWFLAKE_USER"),
+        "private_key_path": os.environ.get("SNOWFLAKE_PRIVATE_KEY_PATH"),
+        "database": os.environ.get("SNOWFLAKE_DATABASE", "WORKSHOP_DB"),
+        "schema": os.environ.get("SNOWFLAKE_SCHEMA", "DEMO"),
+        "agent_name": os.environ.get("SNOWFLAKE_AGENT_NAME", "DEMO_AGENT"),
+    }
+    
+    # Check required fields
+    missing = [k for k in ["account", "user", "private_key_path"] if not config[k]]
+    if missing:
+        print("ERROR: Missing required environment variables:")
+        print(f"  SNOWFLAKE_ACCOUNT, SNOWFLAKE_USER, SNOWFLAKE_PRIVATE_KEY_PATH")
+        print("\nSet them with:")
+        print("  export SNOWFLAKE_ACCOUNT='your_account'")
+        print("  export SNOWFLAKE_USER='your_user'")
+        print("  export SNOWFLAKE_PRIVATE_KEY_PATH='/path/to/key.p8'")
+        sys.exit(1)
+    
+    return config
+
 
 DEFAULT_QUESTION = "Give me an executive summary of overall fraud status - total fraud rate, top risk areas, and 1-2 recommended actions."
 
@@ -30,8 +59,11 @@ def main():
     args = [a for a in sys.argv[1:] if not a.startswith("-")]
     question = args[0] if args else DEFAULT_QUESTION
     
+    # Get config from environment
+    config = get_config()
+    
     # Initialize client
-    client = CortexAgentClient(**CONFIG)
+    client = CortexAgentClient(**config)
     
     print(f"Question: {question}\n")
     print("Asking agent..." + (" (verbose mode)" if verbose else ""))
