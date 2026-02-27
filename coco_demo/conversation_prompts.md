@@ -7,7 +7,7 @@ Please set up a proper empty DBT project using dbt skill in my coco_demo repo pl
 
 ## Prompt 2: Database Change & Data Model Context
 ```
-Okay I do want to change this slightly and I want to work I want to use DPAPI_REPLICA_DB
+Okay I do want to change this slightly and I want to work I want to use COCO_LIVE_DB 
 
 I believe that this is the data model 
 
@@ -34,7 +34,204 @@ The system enables organizations to:
 5. **Variance Analysis** - Track and explain variances over time
 6. **Consolidation** - Roll up results across organizational hierarchies
 
-[... full ERD and table descriptions provided ...]
+---
+
+## Entity Relationship Diagram
+
+```mermaid
+erDiagram
+    %% Core Organizational Entities
+    ORG_SETTINGS ||--o{ ORG_ENTITIES : configures
+    ORG_ENTITIES ||--o{ ORG_ENTITY_RELATIONSHIPS : has
+    ORG_ENTITIES ||--o{ ENTITIES_CONSOLIDATION_METHODS : uses
+    ORG_ENTITIES ||--o{ ORG_TEAM_RELATIONSHIPS : belongs_to
+    
+    %% Financial Statement Structure
+    ORG_FINANCIAL_STATEMENT_TYPES ||--o{ ORG_FINANCIAL_STATEMENTS : categorizes
+    ORG_FINANCIAL_STATEMENTS ||--o{ ORG_FINANCIAL_STATEMENT_RELATIONSHIPS : relates_to
+    
+    %% Period and Assignment Core
+    REC_PERIODS ||--o{ REC_PERIOD_INFORMATION : contains
+    REC_PERIODS ||--o{ REC_RECONCILIATIONS : belongs_to
+    REC_PERIODS ||--o{ ASSIGNMENT_LINK_PERIOD : links
+    REC_PERIODS ||--o{ CERT_STATUS_PERIOD : tracks
+    
+    %% Reconciliation Workflow
+    REC_ASSIGNMENTS ||--o{ REC_RECONCILIATIONS : manages
+    REC_ASSIGNMENTS ||--o{ REC_ASSIGNMENTS_ROLES : has
+    REC_ASSIGNMENTS ||--o{ REC_GROUP_ASSIGNMENTS : grouped_in
+    REC_ASSIGNMENTS ||--o{ REC_ITEM_ASSIGNMENTS : contains
+    
+    %% Items and Details
+    REC_ITEMS ||--o{ REC_ITEM_ASSIGNMENTS : assigned_to
+    REC_ITEMS ||--o{ REC_ITEMS_BASE_AMOUNTS : has_amounts
+    REC_RECONCILIATIONS ||--o{ COMMENT_DETAILS : has
+    COMMENT_DETAILS ||--o{ COMMENT_RECONCILIATION : links
+    
+    %% Variance Analysis
+    VAR_FREQUENCIES ||--o{ VAR_ACTIVITY : schedules
+    VAR_RULE_DEFINITION ||--o{ VAR_ACTIVITY : governs
+    REC_ASSIGNMENTS ||--o{ VAR_ACTIVITY : tracks
+    REC_ASSIGNMENTS ||--o{ VAR_GROUP_MAPPING : maps
+    
+    %% Certification Workflow
+    CERT_STATUS_TYPES ||--o{ CERT_STATUS_DETAILS : defines
+    CERT_STATUS_TYPES ||--o{ CERT_STATUS_PERIOD : tracks
+    
+    %% Consolidation
+    CONSOLIDATION_METHOD_RULES ||--o{ ENTITIES_CONSOLIDATION_METHODS : applies
+    CONSOLIDATION_METHOD_RULES ||--o{ CONSOLIDATION_LINK_PERIOD : uses
+    
+    %% Reference Data
+    OS_CURRENCIES ||--o{ REC_CURRENCY_RATES_RT : exchanges
+    REC_RATE_TYPES ||--o{ REC_CURRENCY_RATES_RT : categorizes
+    USERS ||--o{ REC_ASSIGNMENTS_ROLES : assigned_to
+    USERS_DEFINED_ROLES ||--o{ REC_ASSIGNMENTS_ROLES : defines
+```
+
+---
+
+## Table Descriptions
+
+### Core Organization (ORG_*)
+
+| Table | Rows | Description |
+|-------|------|-------------|
+| `org_settings` | 2 | Global organization configuration parameters |
+| `org_entities` | 650 | Organization units (companies, cost centers, departments) |
+| `org_entity_relationships` | 100 | Parent-child and affiliate relationships between entities |
+| `org_team_relationships` | 50 | Team membership and reporting relationships |
+| `org_related_type` | 5 | Reference: types of relationships (Parent, Sibling, etc.) |
+| `org_account_combinations` | 5 | Account segment configuration for GL structure |
+| `org_financial_statements` | 20 | Financial statement definitions (Balance Sheet, P&L, etc.) |
+| `org_financial_statement_types` | 4 | Categories of financial statements |
+| `org_financial_statement_relationships` | 20 | Links between related financial statements |
+
+### Reconciliation Core (REC_*)
+
+| Table | Rows | Description |
+|-------|------|-------------|
+| `rec_periods` | 48 | Reconciliation periods (4 years × 12 months) |
+| `rec_period_information` | 1.76M | Period-level metadata and status for each assignment |
+| `rec_assignments` | 32,500 | Reconciliation assignments to accounts/entities |
+| `rec_reconciliations` | 576K | Individual reconciliation records |
+| `rec_items` | 2.5M | Line items within reconciliations |
+| `rec_item_assignments` | 400K | Assignment of items to reconciliations |
+| `rec_items_base_amounts` | 497 | Multi-currency base amounts for items |
+| `rec_documents` | 50 | Supporting document references |
+| `rec_currency_rates_rt` | 12.7K | Real-time currency exchange rates |
+| `rec_rate_types` | 19 | Types of exchange rates (spot, average, etc.) |
+
+### Assignment Workflow
+
+| Table | Rows | Description |
+|-------|------|-------------|
+| `rec_assignments_roles` | 200 | User role assignments (preparer, reviewer, approver) |
+| `rec_group_assignments` | 150 | Group-based assignment mappings |
+| `assignment_link_period` | 198 | Links assignments to specific periods |
+
+### Certification (CERT_*)
+
+| Table | Rows | Description |
+|-------|------|-------------|
+| `cert_status_types` | 20 | Certification status definitions (Draft, Submitted, Approved) |
+| `cert_status_details` | 50 | Detailed certification status with reasons |
+| `cert_status_period` | 100 | Certification status by period and assignment |
+
+### Variance Analysis (VAR_*)
+
+| Table | Rows | Description |
+|-------|------|-------------|
+| `var_activity` | 183K | Variance tracking and history |
+| `var_frequencies` | 4 | Variance calculation frequencies (Daily, Weekly, Monthly) |
+| `var_rule_definition` | 10 | Rules for variance calculations and thresholds |
+| `var_group_mapping` | 100 | Maps related assignments for variance comparison |
+
+### Consolidation
+
+| Table | Rows | Description |
+|-------|------|-------------|
+| `consolidation_method_rules` | 5 | Consolidation methods (Full, Proportional, Equity) |
+| `consolidation_link_period` | 100 | Period-specific consolidation configurations |
+| `entities_consolidation_methods` | 100 | Entity-level consolidation method assignments |
+
+### Users & Comments
+
+| Table | Rows | Description |
+|-------|------|-------------|
+| `users` | 10.2K | System users |
+| `users_defined_roles` | 5 | Custom role definitions |
+| `comment_details` | 25.9K | Comments and notes on reconciliations |
+| `comment_reconciliation` | 200 | Links comments to specific reconciliations |
+
+### Reference Data
+
+| Table | Rows | Description |
+|-------|------|-------------|
+| `os_currencies` | 11 | Supported currencies (USD, EUR, GBP, etc.) |
+
+---
+
+## Data Volume Summary
+
+| Category | Tables | Total Rows |
+|----------|--------|------------|
+| Reconciliation Items | 4 | 5.2M |
+| Variance & Activity | 4 | 183K |
+| Assignments & Workflow | 6 | 33K |
+| Organization | 9 | 880 |
+| Certification | 3 | 170 |
+| Reference Data | 5 | 55 |
+| **Total** | **38** | **~5.5M** |
+
+---
+
+## Key Relationships
+
+### Reconciliation Flow
+```
+rec_periods → rec_assignments → rec_reconciliations → rec_items
+                    ↓
+            rec_item_assignments
+                    ↓
+            rec_items_base_amounts
+```
+
+### Certification Flow
+```
+cert_status_types → cert_status_details
+        ↓
+cert_status_period ← rec_assignments ← users
+```
+
+### Variance Analysis Flow
+```
+var_rule_definition → var_activity ← rec_assignments
+        ↓                    ↓
+var_frequencies      var_group_mapping
+```
+
+### Organization Hierarchy
+```
+org_settings → org_entities → org_entity_relationships
+                    ↓
+        entities_consolidation_methods
+                    ↓
+        consolidation_method_rules
+```
+
+---
+
+## Use Cases for Analytics
+
+1. **Reconciliation Status Dashboard** - Track completion rates by period, entity, assignee
+2. **Aging Analysis** - Identify overdue reconciliations
+3. **Variance Trending** - Analyze variance patterns over time
+4. **Certification Compliance** - Monitor sign-off completion rates
+5. **Workload Distribution** - Balance assignments across team members
+6. **Currency Impact Analysis** - Assess FX impact on reconciliations
+7. **Entity Consolidation** - Roll up results across hierarchies
+
 
 I want to create a DBT model that create a customer 360 view of this can you help me do this and create semantic views that can help me talk to my data when I create an agent later on? 
 
@@ -75,3 +272,38 @@ I don't see the cells being added though and it's not connectedto to a service i
 ```
 Can you put in a .md all the prompts I have sent you in this thread
 ```
+
+
+
+1. Anomaly Detection (High Value)
+
+Detect unusual variances before they become problems
+Flag reconciliations that deviate from historical patterns
+Use: Isolation Forest, Autoencoders, or Snowflake's built-in DETECT_ANOMALIES
+2. Variance Prediction (Forecasting)
+
+Predict next period's variance amounts per entity
+Help finance teams prepare for month-end close
+Use: Time series forecasting (ARIMA, Prophet, or Snowflake ML FORECAST)
+3. Risk Classification (Improve existing logic)
+
+Replace rule-based risk levels with ML classification
+Learn from historical patterns which entities become problematic
+Use: XGBoost, Random Forest classification
+4. Reconciliation Time-to-Close
+
+Predict which reconciliations will be delayed
+Prioritize workload for the team
+Use: Regression or survival analysis
+5. Root Cause Clustering
+
+Group similar variance patterns to identify systemic issues
+Use: K-Means, DBSCAN clustering on variance features
+6. Entity Similarity / Peer Analysis
+
+Find entities with similar reconciliation behavior
+Benchmark performance against peers
+Use: Embedding models + similarity search
+Best starting point? Anomaly detection on VAR_ACTIVITY - it's high value, relatively simple, and Snowflake has native support via Cortex ML functions.
+
+Want me to sketch out what that would look like?
