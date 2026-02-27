@@ -1,0 +1,22 @@
+# dbt
+target/
+dbt_packages/
+logs/
+.user.yml
+
+# Snowflake artifacts
+*.pyc
+__pycache__/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Secrets (uncomment if profiles.yml contains sensitive data)
+# profiles.yml
