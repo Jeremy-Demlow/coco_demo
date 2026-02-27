@@ -275,38 +275,21 @@ Can you put in a .md all the prompts I have sent you in this thread
 
 ````
 
-1. Anomaly Detection (High Value)
+Okay so this is great now what we want to do is make sure that we are showing off our skills to show case how we can do AI ML and work the magic of this process here so with that being said we most likely want to go after a 
 
-Detect unusual variances before they become problems
-Flag reconciliations that deviate from historical patterns
-Use: Isolation Forest, Autoencoders, or Snowflake's built-in DETECT_ANOMALIES
-2. Variance Prediction (Forecasting)
+Anomaly Detection (High Value)
+Detect unusual variances before they become problems Flag reconciliations that deviate from historical patterns Use: Isolation Forest, Autoencoders, or Snowflake's built-in DETECT_ANOMALIES Anomaly detection on VAR_ACTIVITY - it's high value,
 
-Predict next period's variance amounts per entity
-Help finance teams prepare for month-end close
-Use: Time series forecasting (ARIMA, Prophet, or Snowflake ML FORECAST)
-3. Risk Classification (Improve existing logic)
+Requirments that we need to use here are as follows: 
 
-Replace rule-based risk levels with ML classification
-Learn from historical patterns which entities become problematic
-Use: XGBoost, Random Forest classification
-4. Reconciliation Time-to-Close
+Invoke the 
 
-Predict which reconciliations will be delayed
-Prioritize workload for the team
-Use: Regression or survival analysis
-5. Root Cause Clustering
-
-Group similar variance patterns to identify systemic issues
-Use: K-Means, DBSCAN clustering on variance features
-6. Entity Similarity / Peer Analysis
-
-Find entities with similar reconciliation behavior
-Benchmark performance against peers
-Use: Embedding models + similarity search
-Best starting point? Anomaly detection on VAR_ACTIVITY - it's high value, relatively simple, and Snowflake has native support via Cortex ML functions.
-
-Want me to sketch out what that would look like?
+1. Do some EDA
+2. Make a decision of what kind of model that we should use
+3. Make a feature store view for this
+4. Make an experiment tracking with an artifact of picture of metrics
+5. Run more than just one model so that we have a few to compare maybe do a few versions so we can see what is doing better
+6. 
 
 ```
 
