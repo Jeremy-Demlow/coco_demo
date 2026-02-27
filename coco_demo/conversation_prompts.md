@@ -314,7 +314,7 @@ Want me to sketch out what that would look like?
 createa  stremlit app
 
 ```
-# Reconciliation 360 - dbt Project
+based on this project please make a professional dashboard of this # Reconciliation 360 - dbt Project
 
 A dbt project for the **Financial Reconciliation Management System** that creates comprehensive entity-level 360 views for reconciliation analysis, variance tracking, and compliance monitoring.
 
@@ -325,7 +325,7 @@ This project transforms raw reconciliation data from PostgreSQL CDC replication 
 ## Data Architecture
 
 ```
-Source (DBAPI_REPLICA_DB.CUSTOMER_A_DATA)
+Source (COCO_LIVE_DB.CUSTOMER_A_DATA)
     │
     ├── rec_periods
     ├── rec_assignments  
@@ -407,7 +407,7 @@ coco_demo:
       account: trb65519
       user: JDEMLOW
       role: ACCOUNTADMIN
-      database: DBAPI_REPLICA_DB
+      database: COCO_LIVE_DB
       warehouse: SNOW_INTELLIGENCE_DEMO_WH
       schema: PUBLIC
       threads: 4
@@ -462,12 +462,15 @@ coco_demo/
 ├── seeds/
 └── snapshots/
 ```
-
-## Deployment
-
-This project is deployed as a native Snowflake DBT PROJECT object for scheduled execution and monitoring.
+using a coco skill for the best available project don't spare any features and make this incredible
 
 
-This is my project and what I want to happen here is I want you to build an amazing application app that is executive and analyst worthy of show casing this dbt model
+## COCO CLI 
 
-```
+Hey Coco, we have a Coco demo database and I will give you a little bit more understanding of the, actually I'll let you do it. I don't need to give it to you. It's
+   already there. We have a DBT project here, we have a customer 360 tool here. And what we want to be able to do is use the best in class approaches where we will 
+  have a Docker container, Docker compose, and we will build out a professional looking streamlet app that is going to give us a demonstration of an executive and 
+  analyst approach to better understand our variance and in other metrics that are inside of the Customer 360 approach here. what we are looking to be able to do is 
+  really, really refine and have a professional looking application that we can build here today. And then from there, what we want to do is actually deploy that into
+   our snowflake project into our snow house, our snow site, so that we can actually see it there and local. So that's going to be the requirement here. You let me 
+  know what the plan is and we'll work through that. 
