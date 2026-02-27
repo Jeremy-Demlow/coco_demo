@@ -1,16 +1,16 @@
 
-  create or replace   view DBAPI_REPLICA_DB.PUBLIC.stg_rec_periods
+  create or replace   view COCO_LIVE_DB.DBT_MARTS.stg_rec_periods
   
    as (
-    select
-    pkid as period_id,
+    SELECT
+    pkid AS period_id,
     period_end_date,
-    date_trunc('month', period_end_date) as period_month,
-    year(period_end_date) as period_year,
-    quarter(period_end_date) as period_quarter,
-    month(period_end_date) as period_month_num,
-    db_insert_date as created_at,
-    db_update_date as updated_at
-from DBAPI_REPLICA_DB.CUSTOMER_A_DATA.rec_periods
+    DATE_TRUNC('month', period_end_date) AS period_month,
+    YEAR(period_end_date) AS period_year,
+    MONTH(period_end_date) AS period_month_num,
+    QUARTER(period_end_date) AS period_quarter,
+    db_insert_date AS created_at,
+    db_update_date AS updated_at
+FROM COCO_LIVE_DB.CUSTOMER_A_DATA.rec_periods
   );
 

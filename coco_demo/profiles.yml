@@ -1,4 +1,4 @@
-coco_demo:
+default:
   target: dev
   outputs:
     dev:
@@ -6,7 +6,7 @@ coco_demo:
       account: trb65519
       user: JDEMLOW
       role: ACCOUNTADMIN
-      database: DBAPI_REPLICA_DB
+      database: COCO_LIVE_DB
       warehouse: SNOW_INTELLIGENCE_DEMO_WH
-      schema: PUBLIC
+      schema: DBT_MARTS
       threads: 4

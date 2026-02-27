@@ -2,102 +2,157 @@
   
     
 
-        create or replace transient table DBAPI_REPLICA_DB.PUBLIC_MARTS.entity_360
+        create or replace transient table COCO_LIVE_DB.DBT_MARTS.entity_360
          as
         (
 
-with recon_details as (
-    select * from DBAPI_REPLICA_DB.PUBLIC.int_reconciliation_details
+WITH entity_base AS (
+    SELECT * FROM COCO_LIVE_DB.DBT_MARTS.stg_org_entities
 ),
 
-variance_analysis as (
-    select * from DBAPI_REPLICA_DB.PUBLIC.int_variance_analysis
+assignments AS (
+    SELECT * FROM COCO_LIVE_DB.DBT_MARTS.stg_rec_assignments
 ),
 
-entity_period_summary as (
-    select
+periods AS (
+    SELECT * FROM COCO_LIVE_DB.DBT_MARTS.stg_rec_periods
+),
+
+period_info AS (
+    SELECT * FROM COCO_LIVE_DB.DBT_MARTS.stg_rec_period_information
+),
+
+reconciliation_summary AS (
+    SELECT * FROM COCO_LIVE_DB.DBT_MARTS.int_reconciliation_summary
+),
+
+variance_summary AS (
+    SELECT * FROM COCO_LIVE_DB.DBT_MARTS.int_assignment_variance_summary
+),
+
+entity_assignment_counts AS (
+    SELECT
         entity_id,
-        entity_code,
-        entity_name,
-        period_id,
-        period_year,
-        period_quarter,
-        period_month_num,
-        period_end_date,
-        count(distinct assignment_id) as total_assignments,
-        sum(case when is_active then 1 else 0 end) as active_assignments,
-        sum(case when has_activity then 1 else 0 end) as assignments_with_activity,
-        sum(case when is_key_account then 1 else 0 end) as key_account_count,
-        sum(balance_gl) as total_gl_balance,
-        sum(balance_gl_base) as total_gl_balance_base,
-        sum(balance_bank) as total_bank_balance,
-        sum(balance_bank_base) as total_bank_balance_base,
-        sum(balance_subledger) as total_subledger_balance,
-        sum(balance_subledger_base) as total_subledger_balance_base,
-        avg(balance_gl) as avg_gl_balance,
-        max(last_update_date) as last_reconciliation_date
-    from recon_details
-    group by 1,2,3,4,5,6,7,8
+        COUNT(DISTINCT assignment_id) AS total_assignments,
+        COUNT(DISTINCT CASE WHEN assignment_type = 'Balance' THEN assignment_id END) AS balance_assignments,
+        COUNT(DISTINCT CASE WHEN assignment_type = 'Flux' THEN assignment_id END) AS flux_assignments,
+        COUNT(DISTINCT CASE WHEN assignment_type = 'Activity' THEN assignment_id END) AS activity_assignments,
+        COUNT(DISTINCT currency) AS currency_count
+    FROM assignments
+    GROUP BY entity_id
 ),
 
-entity_variance_summary as (
-    select
-        entity_id,
-        period_id,
-        count(*) as variance_count,
-        sum(variance) as total_variance,
-        sum(variance_base) as total_variance_base,
-        avg(variance) as avg_variance,
-        sum(variance_absolute) as total_absolute_variance,
-        sum(case when variance_direction = 'Over' then 1 else 0 end) as over_variance_count,
-        sum(case when variance_direction = 'Under' then 1 else 0 end) as under_variance_count,
-        max(variance_absolute) as max_single_variance
-    from variance_analysis
-    group by 1,2
+entity_period_metrics AS (
+    SELECT
+        a.entity_id,
+        pi.period_id,
+        COUNT(DISTINCT a.assignment_id) AS period_assignment_count,
+        SUM(CASE WHEN pi.is_active = 1 THEN 1 ELSE 0 END) AS active_assignments,
+        SUM(CASE WHEN pi.is_active = 0 THEN 1 ELSE 0 END) AS inactive_assignments,
+        SUM(pi.balance_gl) AS total_balance_gl,
+        SUM(pi.balance_gl_base) AS total_balance_gl_base,
+        SUM(pi.balance_bank) AS total_balance_bank,
+        SUM(pi.balance_bank_base) AS total_balance_bank_base,
+        SUM(pi.balance_subledger) AS total_balance_subledger,
+        AVG(pi.balance_gl) AS avg_balance_gl,
+        SUM(CASE WHEN pi.is_key_account = 1 THEN 1 ELSE 0 END) AS key_account_count
+    FROM assignments a
+    INNER JOIN period_info pi ON a.assignment_id = pi.assignment_id
+    GROUP BY a.entity_id, pi.period_id
+),
+
+entity_variance_metrics AS (
+    SELECT
+        a.entity_id,
+        vs.period_id,
+        SUM(vs.total_absolute_variance) AS total_variance,
+        SUM(vs.total_gl_variance) AS total_gl_variance,
+        SUM(vs.total_bank_variance) AS total_bank_variance,
+        AVG(vs.avg_variance) AS avg_variance,
+        MAX(vs.max_variance) AS max_single_variance
+    FROM assignments a
+    INNER JOIN variance_summary vs ON a.assignment_id = vs.assignment_id
+    GROUP BY a.entity_id, vs.period_id
+),
+
+entity_reconciliation_metrics AS (
+    SELECT
+        a.entity_id,
+        rs.period_id,
+        SUM(rs.reconciliation_count) AS total_reconciliations,
+        SUM(rs.proof_reconciliation_count) AS proof_reconciliations,
+        SUM(rs.total_bank_calc_diff) AS total_unreconciled_amount
+    FROM assignments a
+    INNER JOIN reconciliation_summary rs ON a.assignment_id = rs.assignment_id
+    GROUP BY a.entity_id, rs.period_id
 )
 
-select
-    eps.entity_id,
-    eps.entity_code,
-    eps.entity_name,
-    eps.period_id,
-    eps.period_year,
-    eps.period_quarter,
-    eps.period_month_num,
-    eps.period_end_date,
-    eps.total_assignments,
-    eps.active_assignments,
-    eps.assignments_with_activity,
-    eps.key_account_count,
-    round(eps.active_assignments * 100.0 / nullif(eps.total_assignments, 0), 2) as active_assignment_pct,
-    round(eps.assignments_with_activity * 100.0 / nullif(eps.total_assignments, 0), 2) as activity_coverage_pct,
-    eps.total_gl_balance,
-    eps.total_gl_balance_base,
-    eps.total_bank_balance,
-    eps.total_bank_balance_base,
-    eps.total_subledger_balance,
-    eps.total_subledger_balance_base,
-    eps.avg_gl_balance,
-    eps.last_reconciliation_date,
-    coalesce(evs.variance_count, 0) as variance_count,
-    coalesce(evs.total_variance, 0) as total_variance,
-    coalesce(evs.total_variance_base, 0) as total_variance_base,
-    coalesce(evs.avg_variance, 0) as avg_variance,
-    coalesce(evs.total_absolute_variance, 0) as total_absolute_variance,
-    coalesce(evs.over_variance_count, 0) as over_variance_count,
-    coalesce(evs.under_variance_count, 0) as under_variance_count,
-    coalesce(evs.max_single_variance, 0) as max_single_variance,
-    case 
-        when evs.total_absolute_variance > 100000 then 'High Risk'
-        when evs.total_absolute_variance > 10000 then 'Medium Risk'
-        when evs.total_absolute_variance > 0 then 'Low Risk'
-        else 'No Variance'
-    end as variance_risk_level,
-    current_timestamp() as dbt_updated_at
-from entity_period_summary eps
-left join entity_variance_summary evs 
-    on eps.entity_id = evs.entity_id 
-    and eps.period_id = evs.period_id
+SELECT
+    e.entity_id,
+    e.entity_code,
+    e.entity_name,
+    e.entity_description,
+    e.entity_type,
+    e.parent_id,
+    e.parent_name,
+    e.hierarchy_depth,
+    e.hierarchy_lineage,
+    e.ownership_percentage,
+    e.has_children,
+    e.financial_review_required,
+    
+    p.period_id,
+    p.period_end_date,
+    p.period_year,
+    p.period_month_num,
+    p.period_quarter,
+    
+    COALESCE(eac.total_assignments, 0) AS total_assignments,
+    COALESCE(eac.balance_assignments, 0) AS balance_assignments,
+    COALESCE(eac.flux_assignments, 0) AS flux_assignments,
+    COALESCE(eac.activity_assignments, 0) AS activity_assignments,
+    COALESCE(eac.currency_count, 0) AS currency_count,
+    
+    COALESCE(epm.period_assignment_count, 0) AS period_assignment_count,
+    COALESCE(epm.active_assignments, 0) AS active_assignments,
+    COALESCE(epm.inactive_assignments, 0) AS inactive_assignments,
+    COALESCE(epm.total_balance_gl, 0) AS total_balance_gl,
+    COALESCE(epm.total_balance_gl_base, 0) AS total_balance_gl_base,
+    COALESCE(epm.total_balance_bank, 0) AS total_balance_bank,
+    COALESCE(epm.total_balance_bank_base, 0) AS total_balance_bank_base,
+    COALESCE(epm.total_balance_subledger, 0) AS total_balance_subledger,
+    COALESCE(epm.avg_balance_gl, 0) AS avg_balance_gl,
+    COALESCE(epm.key_account_count, 0) AS key_account_count,
+    
+    COALESCE(evm.total_variance, 0) AS total_variance,
+    COALESCE(evm.total_gl_variance, 0) AS total_gl_variance,
+    COALESCE(evm.total_bank_variance, 0) AS total_bank_variance,
+    COALESCE(evm.avg_variance, 0) AS avg_variance,
+    COALESCE(evm.max_single_variance, 0) AS max_single_variance,
+    
+    COALESCE(erm.total_reconciliations, 0) AS total_reconciliations,
+    COALESCE(erm.proof_reconciliations, 0) AS proof_reconciliations,
+    COALESCE(erm.total_unreconciled_amount, 0) AS total_unreconciled_amount,
+    
+    CASE 
+        WHEN COALESCE(epm.period_assignment_count, 0) = 0 THEN 0
+        ELSE ROUND(COALESCE(epm.active_assignments, 0) * 100.0 / epm.period_assignment_count, 2)
+    END AS assignment_completion_rate,
+    
+    CASE
+        WHEN COALESCE(evm.total_variance, 0) > 100000 THEN 'High'
+        WHEN COALESCE(evm.total_variance, 0) > 10000 THEN 'Medium'
+        ELSE 'Low'
+    END AS variance_risk_level,
+    
+    CURRENT_TIMESTAMP() AS dbt_updated_at
+
+FROM entity_base e
+CROSS JOIN periods p
+LEFT JOIN entity_assignment_counts eac ON e.entity_id = eac.entity_id
+LEFT JOIN entity_period_metrics epm ON e.entity_id = epm.entity_id AND p.period_id = epm.period_id
+LEFT JOIN entity_variance_metrics evm ON e.entity_id = evm.entity_id AND p.period_id = evm.period_id
+LEFT JOIN entity_reconciliation_metrics erm ON e.entity_id = erm.entity_id AND p.period_id = erm.period_id
         );
       
   

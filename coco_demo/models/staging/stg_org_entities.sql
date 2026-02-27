@@ -1,22 +1,19 @@
-select
-    id as entity_id,
-    code as entity_code,
-    name as entity_name,
-    description as entity_description,
+SELECT
+    id AS entity_id,
+    code AS entity_code,
+    name AS entity_name,
+    description AS entity_description,
+    type AS entity_type,
     parent_id,
     parent_name,
-    depth as hierarchy_depth,
-    lineage as hierarchy_lineage,
+    depth AS hierarchy_depth,
+    lineage AS hierarchy_lineage,
+    ownership AS ownership_percentage,
     has_children,
-    max_child_level,
-    type as entity_type,
-    ownership,
-    consolidation_method_rule_id,
-    consolidation_ownership,
     financial_review_required,
     include_in_intercompany,
-    delete_flag as is_deleted,
-    db_insert_date as created_at,
-    db_update_date as updated_at
-from {{ source('replica', 'org_entities') }}
-where delete_flag = false or delete_flag is null
+    delete_flag AS is_deleted,
+    db_insert_date AS created_at,
+    db_update_date AS updated_at
+FROM {{ source('customer_a_data', 'org_entities') }}
+WHERE delete_flag = 0

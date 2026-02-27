@@ -1,10 +1,7 @@
-select
-    pkid as reconciliation_id,
-    account_assignment_id as assignment_id,
+SELECT
+    pkid AS reconciliation_id,
+    account_assignment_id AS assignment_id,
     period_id,
-    activity_period_id,
-    variance_activity_period_id,
-    variance_period_id,
     reconciliation_type,
     balance_bank,
     balance_bank_base,
@@ -16,8 +13,8 @@ select
     balance_subledger_base,
     balance_subledger_func,
     amount_unidentified,
-    delete_flag as is_deleted,
-    db_insert_date as created_at,
-    db_update_date as updated_at
-from {{ source('replica', 'rec_reconciliations') }}
-where delete_flag = false or delete_flag is null
+    delete_flag AS is_deleted,
+    db_insert_date AS created_at,
+    db_update_date AS updated_at
+FROM {{ source('customer_a_data', 'rec_reconciliations') }}
+WHERE delete_flag = 0

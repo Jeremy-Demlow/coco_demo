@@ -1,14 +1,10 @@
-select
-    pkid as period_info_id,
+SELECT
+    pkid AS period_info_id,
     assignment_id,
     period_id,
-    activity_period_id,
-    consolidation_id,
     financial_statement_id,
-    active_status as is_active,
-    activity_in_period as has_activity,
-    key_account as is_key_account,
-    is_elimination_account,
+    active_status AS is_active,
+    activity_in_period,
     balance_gl,
     balance_gl_base,
     balance_gl_func,
@@ -24,19 +20,11 @@ select
     balance_forecast,
     balance_forecast_base,
     balance_forecast_func,
-    purpose,
-    reconciliation_procedure,
-    recon_frequency,
-    custom_frequency,
-    child_count,
-    parent_id,
-    variance_activity_period_id,
-    variance_creation_id,
-    variance_period_id,
-    last_update_date,
-    account_balance_last_update_date,
-    delete_flag as is_deleted,
-    db_insert_date as created_at,
-    db_update_date as updated_at
-from {{ source('replica', 'rec_period_information') }}
-where delete_flag = false or delete_flag is null
+    key_account AS is_key_account,
+    rate_type,
+    is_elimination_account,
+    delete_flag AS is_deleted,
+    db_insert_date AS created_at,
+    db_update_date AS updated_at
+FROM {{ source('customer_a_data', 'rec_period_information') }}
+WHERE delete_flag = 0
