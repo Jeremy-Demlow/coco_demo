@@ -1,0 +1,7 @@
+version: 2
+
+models:
+  - name: int_reconciliation_details
+    description: Reconciliation details joined with assignments, entities, and periods
+  - name: int_variance_analysis
+    description: Variance activity joined with context for analysis

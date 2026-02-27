@@ -1,0 +1,12 @@
+coco_demo:
+  target: dev
+  outputs:
+    dev:
+      type: snowflake
+      account: trb65519
+      user: JDEMLOW
+      role: ACCOUNTADMIN
+      database: DBAPI_REPLICA_DB
+      warehouse: SNOW_INTELLIGENCE_DEMO_WH
+      schema: PUBLIC
+      threads: 4
