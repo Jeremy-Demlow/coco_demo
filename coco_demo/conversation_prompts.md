@@ -243,16 +243,6 @@ Also swich to ACCOUNTADMIN as the role for now please
 Can you create a .sql that is helpful queries for this data model for someone trying to get an understanding of what just created?
 ```
 
-## Prompt 4: Privilege Error
-```
-CREATE DBT PROJECT "DBAPI_REPLICA_DB"."DBT_PROJECTS"."COCO_DBT_PROJECT_TEST" FROM $$snow://workspace/USER$JDEMLOW.PUBLIC."coco_demo"/versions/live/coco_demo$$ DEFAULT_TARGET = 'dev' DBT_VERSION = '1.9.4'
-
-Error: SQL access control error:
-Insufficient privileges to operate on schema 'DBT_PROJECTS'.
-
-When I try to use the UI?
-```
-
 ## Prompt 5: Semantic View Correction
 ```
 I think one think I can see wrong is that we didn't use the semantic view syntax and we don't have the package maybe from snowflake labs that supports semantic views inside of dbt while the semantic model is great this isn't quick correct
@@ -270,15 +260,16 @@ Can we make a notebook and show awesome graphic and show casing what in in the d
 
 ## Prompt 8: Documentation Request
 ```
-Can you put in a .md all the prompts I have sent you in this thread
+Okay I need a readme of everything that we have created that gives guidance of the data model and what the next steps in your mind are to making this a better dbt model and what else we can add to the repo
 ```
 
 ````
 
 Okay so this is great now what we want to do is make sure that we are showing off our skills to show case how we can do AI ML and work the magic of this process here so with that being said we most likely want to go after a 
+You need to invoke /machine-learning  skill for this so we are doing the best practices
 
 Anomaly Detection (High Value)
-Detect unusual variances before they become problems Flag reconciliations that deviate from historical patterns Use: Isolation Forest, Autoencoders, or Snowflake's built-in DETECT_ANOMALIES Anomaly detection on VAR_ACTIVITY - it's high value,
+Detect unusual variances before they become problems Flag reconciliations that deviate from historical patterns Use: Isolation Forest, Autoencoders, or more what you think
 
 Requirments that we need to use here are as follows: 
 
@@ -286,10 +277,11 @@ Invoke the
 
 1. Do some EDA
 2. Make a decision of what kind of model that we should use
-3. Make a feature store view for this
-4. Make an experiment tracking with an artifact of picture of metrics
-5. Run more than just one model so that we have a few to compare maybe do a few versions so we can see what is doing better
-6. 
+3. Think about the best features that will help this model thrive, but aslo make a feature store view for this so that we begin that journey
+4. Make an experiment tracking with an artifact of picture of metrics and a model registry workthrough
+5. Run more than just one model so that we have a few to compare maybe do a few versions so we can see what is doing better you should be doing hyperparameter tuning and leveraging best in class tooling that snowflake offers https://docs.snowflake.com/en/developer-guide/snowflake-ml/container-hpo for example for building parameter search spaces
+6. I want you to make sure that there is cross validation and the validation set is set up to not have leaky data
+7. It should also have the ability to promote based on the best metric and settting the best model to default even if the last model was still better
 
 ```
 
