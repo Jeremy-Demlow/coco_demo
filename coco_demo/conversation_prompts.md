@@ -236,34 +236,36 @@ org_settings → org_entities → org_entity_relationships
 I want to create a DBT model that create a customer 360 view of this can you help me do this and create semantic views that can help me talk to my data when I create an agent later on? 
 
 Also swich to ACCOUNTADMIN as the role for now please
-```
+
 
 ## Prompt 3: Exploration Queries Request
 ```
 Can you create a .sql that is helpful queries for this data model for someone trying to get an understanding of what just created?
 ```
 
-## Prompt 5: Semantic View Correction
+## Prompt 4: Semantic View Correction
 ```
 I think one think I can see wrong is that we didn't use the semantic view syntax and we don't have the package maybe from snowflake labs that supports semantic views inside of dbt while the semantic model is great this isn't quick correct
 ```
 
-## Prompt 6: Skill Usage Suggestion
+## Prompt 5: Skill Usage Suggestion
 ```
 If you are struggling make sure you invoke the dbt skill and the semantic skill to help you get there as you have if you need to do any optimizations here this sounds amazing thank you
 ```
 
-## Prompt 7: Notebook
+## Prompt 6: Notebook
 ```
 Can we make a notebook and show awesome graphic and show casing what in in the dbt model it self make sure you are using plotly as this works the best for snowflake notebooks if you plan on making charts of this
 ```
 
-## Prompt 8: Documentation Request
+## Prompt 7: Build ReadMe
 ```
 Okay I need a readme of everything that we have created that gives guidance of the data model and what the next steps in your mind are to making this a better dbt model and what else we can add to the repo
 ```
 
-````
+## Prompt 8: Lets build a Machine Learning Model End to End
+
+```
 
 Okay so this is great now what we want to do is make sure that we are showing off our skills to show case how we can do AI ML and work the magic of this process here so with that being said we most likely want to go after a 
 You need to invoke /machine-learning  skill for this so we are doing the best practices
@@ -284,14 +286,49 @@ Invoke the
 7. It should also have the ability to promote based on the best metric and settting the best model to default even if the last model was still better
 
 ```
+## Prompt 9: Build Streamlit app in snowsight Cortex Code: 
 
+```
 
-createa  stremlit app
+based on this project here in this git please make a professional dashboard of this # Reconciliation 360 - dbt Project
+
+Create a Streamlit dashboard for the Reconciliation 360 dbt project.                                                                                                  
+                                                                                                                                                                        
+  Connection Setup:                                                                                                                                                     
+                                                                                                                                                                        
+  • Use the snowpark_session.py module in utils/ for Snowflake connections                                                                                              
+  • Connection name: myconnection (from ~/.snowflake/config.toml)                                                                                                       
+  • Database: COCO_LIVE_DB, Schema: PUBLIC                                                                                                                              
+                                                                                                                                                                        
+  Before building, verify:                                                                                                                                              
+                                                                                                                                                                        
+  1. Test connection works: python utils/snowpark_session.py -c myconnection --test                                                                                     
+  2. Check table schemas: snow sql -c myconnection -q "SELECT column_name FROM COCO_LIVE_DB.information_schema.columns WHERE table_name = 'MART_ENTITY_360'"            
+                                                                                                                                                                        
+  Requirements:                                                                                                                                                         
+                                                                                                                                                                        
+  • Professional React-level look and feel using Streamlit                                                                                                              
+  • Multi-page app with top navigation                                                                                                                                  
+  • Pages: Overview (KPIs), Entity Explorer, Variance Analysis, Reconciliation Status                                                                                   
+  • Use existing dbt marts: mart_entity_360, mart_variance_summary, int_assignment_period_balances, int_variance_analysis
+
+  Skills to invoke:
+
+  • /developing-with-streamlit
+
+  Workflow:
+
+  1. Verify connection and schemas first
+  2. Build locally on port 8502
+  3. Once User says complete you can then, deploy to Snowsight (Streamlit in Snowflake)
+```
+
+## Prompt 9: Createa stremlit app from the datamodel that we created
 
 ```
 based on this project please make a professional dashboard of this # Reconciliation 360 - dbt Project
 
-A dbt project for the **Financial Reconciliation Management System** that creates comprehensive entity-level 360 views for reconciliation analysis, variance tracking, and compliance monitoring.
+A dbt project for the **Financial Reconciliation Management System that creates comprehensive entity-level 360 views for reconciliation analysis, variance tracking, and compliance monitoring.
 
 ## Overview
 
@@ -442,10 +479,4 @@ using a coco skill for the best available project don't spare any features and m
 
 ## COCO CLI 
 
-Hey Coco, we have a Coco demo database and I will give you a little bit more understanding of the, actually I'll let you do it. I don't need to give it to you. It's
-   already there. We have a DBT project here, we have a customer 360 tool here. And what we want to be able to do is use the best in class approaches where we will 
-  have a Docker container, Docker compose, and we will build out a professional looking streamlet app that is going to give us a demonstration of an executive and 
-  analyst approach to better understand our variance and in other metrics that are inside of the Customer 360 approach here. what we are looking to be able to do is 
-  really, really refine and have a professional looking application that we can build here today. And then from there, what we want to do is actually deploy that into
-   our snowflake project into our snow house, our snow site, so that we can actually see it there and local. So that's going to be the requirement here. You let me 
-  know what the plan is and we'll work through that. 
+Hey Coco, we have a Coco demo database and I will give you a little bit more understanding of the, actually I'll let you do it. I don't need to give it to you. It's already there. We have a DBT project here, we have a customer 360 tool here. And what we want to be able to do is use the best in class approaches where we will have a Docker container, Docker compose, and we will build out a professional looking streamlet app that is going to give us a demonstration of an executive and analyst approach to better understand our variance and in other metrics that are inside of the Customer 360 approach here. what we are looking to be able to do is really, really refine and have a professional looking application that we can build here today. And then from there, what we want to do is actually deploy that into our snowflake project into our snow house, our snow site, so that we can actually see it there and local. So that's going to be the requirement here. You let me know what the plan is and we'll work through that. 
