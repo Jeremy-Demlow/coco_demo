@@ -1,0 +1,2376 @@
+
+
+============================== 08:52:50.520314 | 5346fd79-773d-4080-801e-f8c2223e17c7 ==============================
+[0m08:52:50.520314 [info ] [Dummy-1   ]: Running with dbt=1.9.4
+[0m08:52:50.521650 [debug] [Dummy-1   ]: running dbt with arguments {'printer_width': '80', 'indirect_selection': 'eager', 'log_cache_events': 'False', 'write_json': 'True', 'partial_parse': 'True', 'cache_selected_only': 'False', 'warn_error': 'None', 'fail_fast': 'False', 'profiles_dir': '/tmp/dbt/', 'log_path': '/tmp/dbt/logs', 'debug': 'False', 'version_check': 'True', 'use_colors': 'True', 'use_experimental_parser': 'False', 'empty': 'None', 'quiet': 'False', 'no_print': 'None', 'log_format': 'default', 'invocation_command': 'dbt ', 'introspect': 'True', 'warn_error_options': 'WarnErrorOptions(include=[], exclude=[])', 'target_path': '/tmp/dbt/target/', 'static_parser': 'True', 'send_anonymous_usage_stats': 'False'}
+[0m08:52:50.929652 [info ] [Dummy-1   ]: Registered adapter: snowflake=1.9.2
+[0m08:52:50.989847 [debug] [Dummy-1   ]: checksum: 53ed91fada2233efb98368d1716b44ab532c83a9c293cf1890b7905d5b45fb25, vars: {}, profile: , target: dev, version: 1.9.4
+[0m08:52:50.991527 [info ] [Dummy-1   ]: Unable to do partial parsing because saved manifest not found. Starting full parse.
+[0m08:52:52.299656 [info ] [Dummy-1   ]: Performance info: /tmp/dbt/target/perf_info.json
+[0m08:52:52.357645 [debug] [Dummy-1   ]: Wrote artifact WritableManifest to /tmp/dbt/target/manifest.json
+[0m08:52:52.360558 [debug] [Dummy-1   ]: Wrote artifact SemanticManifest to /tmp/dbt/target/semantic_manifest.json
+[0m08:52:52.362726 [debug] [Dummy-1   ]: Resource report: {"command_name": "parse", "command_success": true, "command_wall_clock_time": 1.9509609, "process_in_blocks": "0", "process_kernel_time": 1.08, "process_mem_max_rss": "406864", "process_out_blocks": "0", "process_user_time": 5.82}
+[0m08:52:52.363547 [debug] [Dummy-1   ]: Command `cli parse` succeeded at 08:52:52.363228 after 1.95 seconds
+[0m08:52:52.364268 [debug] [Dummy-1   ]: Flushing usage events
+
+
+============================== 08:58:36.621206 | 62dadc09-41d4-46d9-ab52-d3511773c8fa ==============================
+[0m08:58:36.621206 [info ] [Dummy-1   ]: Running with dbt=1.9.4
+[0m08:58:36.622305 [debug] [Dummy-1   ]: running dbt with arguments {'printer_width': '80', 'indirect_selection': 'eager', 'write_json': 'True', 'log_cache_events': 'False', 'partial_parse': 'True', 'cache_selected_only': 'False', 'profiles_dir': '/tmp/dbt/', 'version_check': 'True', 'warn_error': 'None', 'log_path': '/tmp/dbt/logs', 'fail_fast': 'False', 'debug': 'False', 'use_colors': 'True', 'use_experimental_parser': 'False', 'no_print': 'None', 'quiet': 'False', 'empty': 'False', 'warn_error_options': 'WarnErrorOptions(include=[], exclude=[])', 'static_parser': 'True', 'introspect': 'True', 'log_format': 'default', 'target_path': '/tmp/dbt/target/', 'invocation_command': 'dbt ', 'send_anonymous_usage_stats': 'False'}
+[0m08:58:37.000266 [info ] [Dummy-1   ]: Registered adapter: snowflake=1.9.2
+[0m08:58:37.055165 [debug] [Dummy-1   ]: checksum: 53ed91fada2233efb98368d1716b44ab532c83a9c293cf1890b7905d5b45fb25, vars: {}, profile: , target: dev, version: 1.9.4
+[0m08:58:37.151024 [info ] [Dummy-1   ]: Unable to do partial parsing because profile has changed
+[0m08:58:39.616150 [debug] [Dummy-1   ]: Wrote artifact WritableManifest to /tmp/dbt/target/manifest.json
+[0m08:58:39.619036 [debug] [Dummy-1   ]: Wrote artifact SemanticManifest to /tmp/dbt/target/semantic_manifest.json
+[0m08:58:39.700863 [info ] [Dummy-1   ]: Found 13 models, 2 data tests, 10 sources, 475 macros
+[0m08:58:39.705472 [info ] [Dummy-1   ]: 
+[0m08:58:39.706241 [info ] [Dummy-1   ]: Concurrency: 4 threads (target='dev')
+[0m08:58:39.706863 [info ] [Dummy-1   ]: 
+[0m08:58:39.707719 [debug] [Dummy-1   ]: Acquiring new snowflake connection 'master'
+[0m08:58:39.716230 [debug] [ThreadPool]: Acquiring new snowflake connection 'list_COCO_LIVE_DB'
+[0m08:58:39.830155 [debug] [ThreadPool]: Using snowflake connection "list_COCO_LIVE_DB"
+[0m08:58:39.830863 [debug] [ThreadPool]: On list_COCO_LIVE_DB: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "coco_demo", "target_name": "dev", "connection_name": "list_COCO_LIVE_DB"} */
+show terse schemas in database COCO_LIVE_DB
+    limit 10000
+[0m08:58:39.831389 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m08:58:40.569722 [debug] [ThreadPool]: SQL status: SUCCESS 3 in 0.738 seconds
+[0m08:58:40.574769 [debug] [ThreadPool]: Re-using an available connection from the pool (formerly list_COCO_LIVE_DB, now list_COCO_LIVE_DB_PUBLIC)
+[0m08:58:40.597252 [debug] [ThreadPool]: Using snowflake connection "list_COCO_LIVE_DB_PUBLIC"
+[0m08:58:40.597905 [debug] [ThreadPool]: On list_COCO_LIVE_DB_PUBLIC: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "coco_demo", "target_name": "dev", "connection_name": "list_COCO_LIVE_DB_PUBLIC"} */
+alter session set quoted_identifiers_ignore_case = false;
+[0m08:58:40.598490 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m08:58:41.501216 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.903 seconds
+[0m08:58:41.507249 [debug] [ThreadPool]: Using snowflake connection "list_COCO_LIVE_DB_PUBLIC"
+[0m08:58:41.507927 [debug] [ThreadPool]: On list_COCO_LIVE_DB_PUBLIC: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "coco_demo", "target_name": "dev", "connection_name": "list_COCO_LIVE_DB_PUBLIC"} */
+show objects in COCO_LIVE_DB.PUBLIC
+    limit 10000
+    
+;
+[0m08:58:41.658912 [debug] [ThreadPool]: SQL status: SUCCESS 0 in 0.150 seconds
+[0m08:58:41.661479 [debug] [ThreadPool]: Using snowflake connection "list_COCO_LIVE_DB_PUBLIC"
+[0m08:58:41.662084 [debug] [ThreadPool]: On list_COCO_LIVE_DB_PUBLIC: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "coco_demo", "target_name": "dev", "connection_name": "list_COCO_LIVE_DB_PUBLIC"} */
+alter session unset quoted_identifiers_ignore_case;
+[0m08:58:41.862515 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.200 seconds
+[0m08:58:41.871676 [debug] [Thread-2 (]: Began running node model.coco_demo.stg_comment_details
+[0m08:58:41.872624 [debug] [Thread-3 (]: Began running node model.coco_demo.stg_org_entities
+[0m08:58:41.873476 [debug] [Thread-4 (]: Began running node model.coco_demo.stg_rec_assignments
+[0m08:58:41.874274 [debug] [Thread-5 (]: Began running node model.coco_demo.stg_rec_items
+[0m08:58:41.875358 [info ] [Thread-2 (]: 1 of 15 START sql view model PUBLIC.stg_comment_details ........................ [RUN]
+[0m08:58:41.878873 [info ] [Thread-3 (]: 2 of 15 START sql view model PUBLIC.stg_org_entities ........................... [RUN]
+[0m08:58:41.880002 [info ] [Thread-4 (]: 3 of 15 START sql view model PUBLIC.stg_rec_assignments ........................ [RUN]
+[0m08:58:41.881028 [info ] [Thread-5 (]: 4 of 15 START sql view model PUBLIC.stg_rec_items .............................. [RUN]
+[0m08:58:41.881909 [debug] [Thread-2 (]: Re-using an available connection from the pool (formerly list_COCO_LIVE_DB_PUBLIC, now model.coco_demo.stg_comment_details)
+[0m08:58:41.882702 [debug] [Thread-3 (]: Acquiring new snowflake connection 'model.coco_demo.stg_org_entities'
+[0m08:58:41.883503 [debug] [Thread-4 (]: Acquiring new snowflake connection 'model.coco_demo.stg_rec_assignments'
+[0m08:58:41.884259 [debug] [Thread-5 (]: Acquiring new snowflake connection 'model.coco_demo.stg_rec_items'
+[0m08:58:41.884880 [debug] [Thread-2 (]: Began compiling node model.coco_demo.stg_comment_details
+[0m08:58:41.885480 [debug] [Thread-3 (]: Began compiling node model.coco_demo.stg_org_entities
+[0m08:58:41.886057 [debug] [Thread-4 (]: Began compiling node model.coco_demo.stg_rec_assignments
+[0m08:58:41.886617 [debug] [Thread-5 (]: Began compiling node model.coco_demo.stg_rec_items
+[0m08:58:41.903977 [debug] [Thread-2 (]: Writing injected SQL for node "model.coco_demo.stg_comment_details"
+[0m08:58:41.915934 [debug] [Thread-3 (]: Writing injected SQL for node "model.coco_demo.stg_org_entities"
+[0m08:58:41.930239 [debug] [Thread-4 (]: Writing injected SQL for node "model.coco_demo.stg_rec_assignments"
+[0m08:58:41.942123 [debug] [Thread-5 (]: Writing injected SQL for node "model.coco_demo.stg_rec_items"
+[0m08:58:41.944250 [debug] [Thread-2 (]: Began executing node model.coco_demo.stg_comment_details
+[0m08:58:41.944963 [debug] [Thread-3 (]: Began executing node model.coco_demo.stg_org_entities
+[0m08:58:41.945763 [debug] [Thread-4 (]: Began executing node model.coco_demo.stg_rec_assignments
+[0m08:58:41.963354 [debug] [Thread-5 (]: Began executing node model.coco_demo.stg_rec_items
+[0m08:58:42.058260 [debug] [Thread-3 (]: Writing runtime sql for node "model.coco_demo.stg_org_entities"
+[0m08:58:42.068769 [debug] [Thread-2 (]: Writing runtime sql for node "model.coco_demo.stg_comment_details"
+[0m08:58:42.086252 [debug] [Thread-4 (]: Writing runtime sql for node "model.coco_demo.stg_rec_assignments"
+[0m08:58:42.093990 [debug] [Thread-5 (]: Writing runtime sql for node "model.coco_demo.stg_rec_items"
+[0m08:58:42.097453 [debug] [Thread-3 (]: Using snowflake connection "model.coco_demo.stg_org_entities"
+[0m08:58:42.098983 [debug] [Thread-2 (]: Using snowflake connection "model.coco_demo.stg_comment_details"
+[0m08:58:42.100672 [debug] [Thread-4 (]: Using snowflake connection "model.coco_demo.stg_rec_assignments"
+[0m08:58:42.101570 [debug] [Thread-3 (]: On model.coco_demo.stg_org_entities: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "coco_demo", "target_name": "dev", "node_id": "model.coco_demo.stg_org_entities"} */
+create or replace   view COCO_LIVE_DB.PUBLIC.stg_org_entities
+  
+   as (
+    with source as (
+    select * from COCO_LIVE_DB.CUSTOMER_A_DATA.org_entities
+)
+
+select
+    id as entity_id,
+    code as entity_code,
+    name as entity_name,
+    description as entity_description,
+    type as entity_type,
+    parent_id,
+    parent_name,
+    ownership,
+    depth,
+    lineage,
+    has_children,
+    consolidation_method_rule_id,
+    consolidation_ownership,
+    financial_review_required,
+    include_in_intercompany,
+    delete_flag,
+    db_insert_date,
+    db_update_date
+from source
+where delete_flag = 0 or delete_flag is null
+  );
+[0m08:58:42.102920 [debug] [Thread-5 (]: Using snowflake connection "model.coco_demo.stg_rec_items"
+[0m08:58:42.103624 [debug] [Thread-2 (]: On model.coco_demo.stg_comment_details: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "coco_demo", "target_name": "dev", "node_id": "model.coco_demo.stg_comment_details"} */
+create or replace   view COCO_LIVE_DB.PUBLIC.stg_comment_details
+  
+   as (
+    with source as (
+    select * from COCO_LIVE_DB.CUSTOMER_A_DATA.comment_details
+)
+
+select
+    comment_id,
+    comment_desc,
+    comment_type_id,
+    user_id_orig,
+    user_id_update,
+    parent_id,
+    internal as is_internal,
+    date_orig,
+    date_update,
+    db_insert_date,
+    db_update_date
+from source
+  );
+[0m08:58:42.104357 [debug] [Thread-4 (]: On model.coco_demo.stg_rec_assignments: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "coco_demo", "target_name": "dev", "node_id": "model.coco_demo.stg_rec_assignments"} */
+create or replace   view COCO_LIVE_DB.PUBLIC.stg_rec_assignments
+  
+   as (
+    with source as (
+    select * from COCO_LIVE_DB.CUSTOMER_A_DATA.rec_assignments
+)
+
+select
+    pkid as assignment_id,
+    entity_id,
+    financial_statement_id,
+    assignment_key,
+    assignment_type,
+    combo_name,
+    description as assignment_description,
+    currency,
+    rate_type,
+    team_id,
+    group_assignment,
+    is_consolidated_account,
+    variance_assignment_id,
+    segment1,
+    segment2,
+    segment3,
+    allow_multi_cncy_group,
+    delete_flag,
+    db_insert_date,
+    db_update_date
+from source
+where delete_flag = 0 or delete_flag is null
+  );
+[0m08:58:42.105026 [debug] [Thread-3 (]: Opening a new connection, currently in state init
+[0m08:58:42.105710 [debug] [Thread-5 (]: On model.coco_demo.stg_rec_items: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "coco_demo", "target_name": "dev", "node_id": "model.coco_demo.stg_rec_items"} */
+create or replace   view COCO_LIVE_DB.PUBLIC.stg_rec_items
+  
+   as (
+    with source as (
+    select * from COCO_LIVE_DB.CUSTOMER_A_DATA.rec_items
+)
+
+select
+    pkid as item_id,
+    description as item_description,
+    item_type,
+    currency,
+    amount,
+    item_open_date,
+    delete_flag,
+    db_insert_date,
+    db_update_date
+from source
+where delete_flag = 0 or delete_flag is null
+  );
+[0m08:58:42.106353 [debug] [Thread-2 (]: Opening a new connection, currently in state init
+[0m08:58:42.106935 [debug] [Thread-4 (]: Opening a new connection, currently in state init
+[0m08:58:42.107793 [debug] [Thread-5 (]: Opening a new connection, currently in state init
+[0m08:58:43.284115 [debug] [Thread-5 (]: SQL status: SUCCESS 1 in 1.176 seconds
+[0m08:58:43.299427 [debug] [Thread-3 (]: SQL status: SUCCESS 1 in 1.194 seconds
+[0m08:58:43.306320 [debug] [Thread-4 (]: SQL status: SUCCESS 1 in 1.199 seconds
+[0m08:58:43.328071 [info ] [Thread-5 (]: 4 of 15 OK created sql view model PUBLIC.stg_rec_items ......................... [[32mSUCCESS 1[0m in 1.43s]
+[0m08:58:43.329481 [info ] [Thread-3 (]: 2 of 15 OK created sql view model PUBLIC.stg_org_entities ...................... [[32mSUCCESS 1[0m in 1.44s]
+[0m08:58:43.330695 [info ] [Thread-4 (]: 3 of 15 OK created sql view model PUBLIC.stg_rec_assignments ................... [[32mSUCCESS 1[0m in 1.44s]
+[0m08:58:43.331867 [debug] [Thread-2 (]: SQL status: SUCCESS 1 in 1.225 seconds
+[0m08:58:43.332926 [debug] [Thread-5 (]: Finished running node model.coco_demo.stg_rec_items
+[0m08:58:43.333904 [debug] [Thread-3 (]: Finished running node model.coco_demo.stg_org_entities
+[0m08:58:43.334804 [debug] [Thread-4 (]: Finished running node model.coco_demo.stg_rec_assignments
+[0m08:58:43.338431 [info ] [Thread-2 (]: 1 of 15 OK created sql view model PUBLIC.stg_comment_details ................... [[32mSUCCESS 1[0m in 1.46s]
+[0m08:58:43.339968 [debug] [Thread-5 (]: Began running node model.coco_demo.stg_rec_period_information
+[0m08:58:43.341317 [debug] [Thread-3 (]: Began running node model.coco_demo.stg_rec_periods
+[0m08:58:43.342474 [debug] [Thread-4 (]: Began running node model.coco_demo.stg_rec_reconciliations
+[0m08:58:43.343460 [debug] [Thread-2 (]: Finished running node model.coco_demo.stg_comment_details
+[0m08:58:43.344608 [info ] [Thread-5 (]: 5 of 15 START sql view model PUBLIC.stg_rec_period_information ................. [RUN]
+[0m08:58:43.345652 [info ] [Thread-3 (]: 6 of 15 START sql view model PUBLIC.stg_rec_periods ............................ [RUN]
+[0m08:58:43.346676 [info ] [Thread-4 (]: 7 of 15 START sql view model PUBLIC.stg_rec_reconciliations .................... [RUN]
+[0m08:58:43.347871 [debug] [Thread-2 (]: Began running node model.coco_demo.stg_users
+[0m08:58:43.348865 [debug] [Thread-5 (]: Re-using an available connection from the pool (formerly model.coco_demo.stg_rec_items, now model.coco_demo.stg_rec_period_information)
+[0m08:58:43.349580 [debug] [Thread-3 (]: Re-using an available connection from the pool (formerly model.coco_demo.stg_org_entities, now model.coco_demo.stg_rec_periods)
+[0m08:58:43.350226 [debug] [Thread-4 (]: Re-using an available connection from the pool (formerly model.coco_demo.stg_rec_assignments, now model.coco_demo.stg_rec_reconciliations)
+[0m08:58:43.351175 [info ] [Thread-2 (]: 8 of 15 START sql view model PUBLIC.stg_users .................................. [RUN]
+[0m08:58:43.351858 [debug] [Thread-5 (]: Began compiling node model.coco_demo.stg_rec_period_information
+[0m08:58:43.352441 [debug] [Thread-3 (]: Began compiling node model.coco_demo.stg_rec_periods
+[0m08:58:43.353040 [debug] [Thread-4 (]: Began compiling node model.coco_demo.stg_rec_reconciliations
+[0m08:58:43.353744 [debug] [Thread-2 (]: Re-using an available connection from the pool (formerly model.coco_demo.stg_comment_details, now model.coco_demo.stg_users)
+[0m08:58:43.528760 [debug] [Thread-5 (]: Writing injected SQL for node "model.coco_demo.stg_rec_period_information"
+[0m08:58:43.540465 [debug] [Thread-3 (]: Writing injected SQL for node "model.coco_demo.stg_rec_periods"
+[0m08:58:43.554543 [debug] [Thread-4 (]: Writing injected SQL for node "model.coco_demo.stg_rec_reconciliations"
+[0m08:58:43.555294 [debug] [Thread-2 (]: Began compiling node model.coco_demo.stg_users
+[0m08:58:43.556439 [debug] [Thread-5 (]: Began executing node model.coco_demo.stg_rec_period_information
+[0m08:58:43.557513 [debug] [Thread-3 (]: Began executing node model.coco_demo.stg_rec_periods
+[0m08:58:43.569286 [debug] [Thread-4 (]: Began executing node model.coco_demo.stg_rec_reconciliations
+[0m08:58:43.570182 [debug] [Thread-2 (]: Writing injected SQL for node "model.coco_demo.stg_users"
+[0m08:58:43.581763 [debug] [Thread-5 (]: Writing runtime sql for node "model.coco_demo.stg_rec_period_information"
+[0m08:58:43.595517 [debug] [Thread-3 (]: Writing runtime sql for node "model.coco_demo.stg_rec_periods"
+[0m08:58:43.606752 [debug] [Thread-4 (]: Writing runtime sql for node "model.coco_demo.stg_rec_reconciliations"
+[0m08:58:43.608053 [debug] [Thread-2 (]: Began executing node model.coco_demo.stg_users
+[0m08:58:43.610638 [debug] [Thread-5 (]: Using snowflake connection "model.coco_demo.stg_rec_period_information"
+[0m08:58:43.612375 [debug] [Thread-3 (]: Using snowflake connection "model.coco_demo.stg_rec_periods"
+[0m08:58:43.626437 [debug] [Thread-2 (]: Writing runtime sql for node "model.coco_demo.stg_users"
+[0m08:58:43.628261 [debug] [Thread-4 (]: Using snowflake connection "model.coco_demo.stg_rec_reconciliations"
+[0m08:58:43.629229 [debug] [Thread-5 (]: On model.coco_demo.stg_rec_period_information: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "coco_demo", "target_name": "dev", "node_id": "model.coco_demo.stg_rec_period_information"} */
+create or replace   view COCO_LIVE_DB.PUBLIC.stg_rec_period_information
+  
+   as (
+    with source as (
+    select * from COCO_LIVE_DB.CUSTOMER_A_DATA.rec_period_information
+)
+
+select
+    pkid as period_info_id,
+    assignment_id,
+    period_id,
+    active_status,
+    activity_in_period,
+    key_account,
+    balance_gl,
+    balance_gl_base,
+    balance_gl_func,
+    balance_bank,
+    balance_bank_base,
+    balance_bank_func,
+    balance_subledger,
+    balance_subledger_base,
+    balance_subledger_func,
+    balance_estimate,
+    balance_estimate_base,
+    balance_estimate_func,
+    balance_forecast,
+    balance_forecast_base,
+    balance_forecast_func,
+    rate_type,
+    is_elimination_account,
+    delete_flag,
+    db_insert_date,
+    db_update_date
+from source
+where delete_flag = 0 or delete_flag is null
+  );
+[0m08:58:43.630039 [debug] [Thread-3 (]: On model.coco_demo.stg_rec_periods: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "coco_demo", "target_name": "dev", "node_id": "model.coco_demo.stg_rec_periods"} */
+create or replace   view COCO_LIVE_DB.PUBLIC.stg_rec_periods
+  
+   as (
+    with source as (
+    select * from COCO_LIVE_DB.CUSTOMER_A_DATA.rec_periods
+)
+
+select
+    pkid as period_id,
+    period_end_date,
+    date_trunc('month', period_end_date) as period_month,
+    year(period_end_date) as period_year,
+    quarter(period_end_date) as period_quarter,
+    month(period_end_date) as period_month_num,
+    db_insert_date,
+    db_update_date
+from source
+  );
+[0m08:58:43.631125 [debug] [Thread-4 (]: On model.coco_demo.stg_rec_reconciliations: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "coco_demo", "target_name": "dev", "node_id": "model.coco_demo.stg_rec_reconciliations"} */
+create or replace   view COCO_LIVE_DB.PUBLIC.stg_rec_reconciliations
+  
+   as (
+    with source as (
+    select * from COCO_LIVE_DB.CUSTOMER_A_DATA.rec_reconciliations
+)
+
+select
+    pkid as reconciliation_id,
+    account_assignment_id as assignment_id,
+    period_id,
+    reconciliation_type,
+    balance_bank,
+    balance_bank_base,
+    balance_bank_func,
+    balance_calculated,
+    balance_calculated_base,
+    balance_calculated_func,
+    balance_subledger,
+    balance_subledger_base,
+    balance_subledger_func,
+    amount_unidentified,
+    delete_flag,
+    db_insert_date,
+    db_update_date
+from source
+where delete_flag = 0 or delete_flag is null
+  );
+[0m08:58:43.632388 [debug] [Thread-2 (]: Using snowflake connection "model.coco_demo.stg_users"
+[0m08:58:43.633041 [debug] [Thread-5 (]: Opening a new connection, currently in state init
+[0m08:58:43.633662 [debug] [Thread-3 (]: Opening a new connection, currently in state init
+[0m08:58:43.634253 [debug] [Thread-4 (]: Opening a new connection, currently in state init
+[0m08:58:43.634889 [debug] [Thread-2 (]: On model.coco_demo.stg_users: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "coco_demo", "target_name": "dev", "node_id": "model.coco_demo.stg_users"} */
+create or replace   view COCO_LIVE_DB.PUBLIC.stg_users
+  
+   as (
+    with source as (
+    select * from COCO_LIVE_DB.CUSTOMER_A_DATA.users
+)
+
+select
+    pkid as user_id,
+    full_name,
+    email,
+    db_insert_date,
+    db_update_date
+from source
+  );
+[0m08:58:43.636038 [debug] [Thread-2 (]: Opening a new connection, currently in state init
+[0m08:58:44.684400 [debug] [Thread-2 (]: SQL status: SUCCESS 1 in 1.048 seconds
+[0m08:58:44.688352 [info ] [Thread-2 (]: 8 of 15 OK created sql view model PUBLIC.stg_users ............................. [[32mSUCCESS 1[0m in 1.33s]
+[0m08:58:44.689395 [debug] [Thread-2 (]: Finished running node model.coco_demo.stg_users
+[0m08:58:44.690622 [debug] [Thread-2 (]: Began running node model.coco_demo.stg_var_activity
+[0m08:58:44.691775 [info ] [Thread-2 (]: 9 of 15 START sql view model PUBLIC.stg_var_activity ........................... [RUN]
+[0m08:58:44.692571 [debug] [Thread-2 (]: Re-using an available connection from the pool (formerly model.coco_demo.stg_users, now model.coco_demo.stg_var_activity)
+[0m08:58:44.693182 [debug] [Thread-2 (]: Began compiling node model.coco_demo.stg_var_activity
+[0m08:58:44.704803 [debug] [Thread-2 (]: Writing injected SQL for node "model.coco_demo.stg_var_activity"
+[0m08:58:44.705782 [debug] [Thread-2 (]: Began executing node model.coco_demo.stg_var_activity
+[0m08:58:44.718747 [debug] [Thread-2 (]: Writing runtime sql for node "model.coco_demo.stg_var_activity"
+[0m08:58:44.721002 [debug] [Thread-2 (]: Using snowflake connection "model.coco_demo.stg_var_activity"
+[0m08:58:44.721755 [debug] [Thread-2 (]: On model.coco_demo.stg_var_activity: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "coco_demo", "target_name": "dev", "node_id": "model.coco_demo.stg_var_activity"} */
+create or replace   view COCO_LIVE_DB.PUBLIC.stg_var_activity
+  
+   as (
+    with source as (
+    select * from COCO_LIVE_DB.CUSTOMER_A_DATA.var_activity
+)
+
+select
+    var_activity_id,
+    assignment_id,
+    period_id,
+    prior_period_id,
+    balance_gl_diff,
+    balance_gl_base_diff,
+    balance_gl_func_diff,
+    balance_estimate_diff,
+    balance_estimate_base_diff,
+    balance_estimate_func_diff,
+    balance_subledger_diff,
+    balance_subledger_base_diff,
+    balance_subledger_func_diff,
+    balance_bank_diff,
+    balance_bank_base_diff,
+    balance_bank_func_diff,
+    balance_forecast_diff,
+    balance_forecast_base_diff,
+    balance_forecast_func_diff,
+    variance,
+    variance_base,
+    variance_func,
+    db_insert_date,
+    db_update_date
+from source
+  );
+[0m08:58:44.722355 [debug] [Thread-2 (]: Opening a new connection, currently in state init
+[0m08:58:44.757693 [debug] [Thread-5 (]: SQL status: SUCCESS 1 in 1.124 seconds
+[0m08:58:44.758886 [debug] [Thread-3 (]: SQL status: SUCCESS 1 in 1.125 seconds
+[0m08:58:44.762687 [info ] [Thread-5 (]: 5 of 15 OK created sql view model PUBLIC.stg_rec_period_information ............ [[32mSUCCESS 1[0m in 1.41s]
+[0m08:58:44.767210 [info ] [Thread-3 (]: 6 of 15 OK created sql view model PUBLIC.stg_rec_periods ....................... [[32mSUCCESS 1[0m in 1.42s]
+[0m08:58:44.768965 [debug] [Thread-5 (]: Finished running node model.coco_demo.stg_rec_period_information
+[0m08:58:44.770104 [debug] [Thread-4 (]: SQL status: SUCCESS 1 in 1.136 seconds
+[0m08:58:44.771067 [debug] [Thread-3 (]: Finished running node model.coco_demo.stg_rec_periods
+[0m08:58:44.775359 [info ] [Thread-4 (]: 7 of 15 OK created sql view model PUBLIC.stg_rec_reconciliations ............... [[32mSUCCESS 1[0m in 1.42s]
+[0m08:58:44.777212 [debug] [Thread-5 (]: Began running node model.coco_demo.int_assignment_period_balances
+[0m08:58:44.778175 [debug] [Thread-4 (]: Finished running node model.coco_demo.stg_rec_reconciliations
+[0m08:58:44.779432 [info ] [Thread-5 (]: 10 of 15 START sql view model PUBLIC.int_assignment_period_balances ............ [RUN]
+[0m08:58:44.780892 [debug] [Thread-5 (]: Re-using an available connection from the pool (formerly model.coco_demo.stg_rec_period_information, now model.coco_demo.int_assignment_period_balances)
+[0m08:58:44.781592 [debug] [Thread-5 (]: Began compiling node model.coco_demo.int_assignment_period_balances
+[0m08:58:44.793907 [debug] [Thread-5 (]: Writing injected SQL for node "model.coco_demo.int_assignment_period_balances"
+[0m08:58:44.794892 [debug] [Thread-5 (]: Began executing node model.coco_demo.int_assignment_period_balances
+[0m08:58:44.808042 [debug] [Thread-5 (]: Writing runtime sql for node "model.coco_demo.int_assignment_period_balances"
+[0m08:58:44.811644 [debug] [Thread-5 (]: Using snowflake connection "model.coco_demo.int_assignment_period_balances"
+[0m08:58:44.812582 [debug] [Thread-5 (]: On model.coco_demo.int_assignment_period_balances: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "coco_demo", "target_name": "dev", "node_id": "model.coco_demo.int_assignment_period_balances"} */
+create or replace   view COCO_LIVE_DB.PUBLIC.int_assignment_period_balances
+  
+   as (
+    with assignments as (
+    select * from COCO_LIVE_DB.PUBLIC.stg_rec_assignments
+),
+
+period_info as (
+    select * from COCO_LIVE_DB.PUBLIC.stg_rec_period_information
+),
+
+periods as (
+    select * from COCO_LIVE_DB.PUBLIC.stg_rec_periods
+)
+
+select
+    a.assignment_id,
+    a.entity_id,
+    a.assignment_type,
+    a.combo_name,
+    a.currency,
+    a.segment1,
+    a.segment2,
+    a.segment3,
+    p.period_id,
+    p.period_end_date,
+    p.period_year,
+    p.period_quarter,
+    p.period_month_num,
+    pi.active_status,
+    pi.key_account,
+    coalesce(pi.balance_gl, 0) as balance_gl,
+    coalesce(pi.balance_gl_base, 0) as balance_gl_base,
+    coalesce(pi.balance_bank, 0) as balance_bank,
+    coalesce(pi.balance_bank_base, 0) as balance_bank_base,
+    coalesce(pi.balance_subledger, 0) as balance_subledger,
+    coalesce(pi.balance_estimate, 0) as balance_estimate,
+    coalesce(pi.balance_forecast, 0) as balance_forecast,
+    abs(coalesce(pi.balance_gl, 0) - coalesce(pi.balance_bank, 0)) as gl_bank_variance,
+    case 
+        when pi.balance_gl is null then 'Missing GL Balance'
+        when pi.balance_bank is null then 'Missing Bank Balance'
+        when abs(coalesce(pi.balance_gl, 0) - coalesce(pi.balance_bank, 0)) > 1000 then 'High Variance'
+        when abs(coalesce(pi.balance_gl, 0) - coalesce(pi.balance_bank, 0)) > 0 then 'Low Variance'
+        else 'Reconciled'
+    end as reconciliation_status,
+    pi.db_update_date as last_updated_at
+from assignments a
+inner join period_info pi on a.assignment_id = pi.assignment_id
+inner join periods p on pi.period_id = p.period_id
+  );
+[0m08:58:44.813385 [debug] [Thread-5 (]: Opening a new connection, currently in state init
+[0m08:58:46.780768 [debug] [Thread-2 (]: SQL status: SUCCESS 1 in 2.058 seconds
+[0m08:58:46.784422 [info ] [Thread-2 (]: 9 of 15 OK created sql view model PUBLIC.stg_var_activity ...................... [[32mSUCCESS 1[0m in 2.09s]
+[0m08:58:46.785423 [debug] [Thread-2 (]: Finished running node model.coco_demo.stg_var_activity
+[0m08:58:46.786747 [debug] [Thread-3 (]: Began running node model.coco_demo.int_variance_analysis
+[0m08:58:46.787760 [info ] [Thread-3 (]: 11 of 15 START sql view model PUBLIC.int_variance_analysis ..................... [RUN]
+[0m08:58:46.788622 [debug] [Thread-3 (]: Re-using an available connection from the pool (formerly model.coco_demo.stg_rec_periods, now model.coco_demo.int_variance_analysis)
+[0m08:58:46.789244 [debug] [Thread-3 (]: Began compiling node model.coco_demo.int_variance_analysis
+[0m08:58:46.800948 [debug] [Thread-3 (]: Writing injected SQL for node "model.coco_demo.int_variance_analysis"
+[0m08:58:46.801852 [debug] [Thread-3 (]: Began executing node model.coco_demo.int_variance_analysis
+[0m08:58:46.814760 [debug] [Thread-3 (]: Writing runtime sql for node "model.coco_demo.int_variance_analysis"
+[0m08:58:46.817229 [debug] [Thread-3 (]: Using snowflake connection "model.coco_demo.int_variance_analysis"
+[0m08:58:46.818004 [debug] [Thread-3 (]: On model.coco_demo.int_variance_analysis: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "coco_demo", "target_name": "dev", "node_id": "model.coco_demo.int_variance_analysis"} */
+create or replace   view COCO_LIVE_DB.PUBLIC.int_variance_analysis
+  
+   as (
+    with variance as (
+    select * from COCO_LIVE_DB.PUBLIC.stg_var_activity
+),
+
+periods as (
+    select * from COCO_LIVE_DB.PUBLIC.stg_rec_periods
+)
+
+select
+    v.var_activity_id,
+    v.assignment_id,
+    v.period_id,
+    p.period_end_date,
+    p.period_year,
+    p.period_quarter,
+    v.prior_period_id,
+    v.variance,
+    v.variance_base,
+    v.variance_func,
+    v.balance_gl_diff,
+    v.balance_bank_diff,
+    v.balance_subledger_diff,
+    v.balance_estimate_diff,
+    abs(v.variance) as abs_variance,
+    case
+        when abs(v.variance) > 10000 then 'Critical'
+        when abs(v.variance) > 5000 then 'High'
+        when abs(v.variance) > 1000 then 'Medium'
+        when abs(v.variance) > 0 then 'Low'
+        else 'None'
+    end as variance_severity,
+    case
+        when v.variance > 0 then 'Positive'
+        when v.variance < 0 then 'Negative'
+        else 'Zero'
+    end as variance_direction
+from variance v
+inner join periods p on v.period_id = p.period_id
+  );
+[0m08:58:46.818823 [debug] [Thread-3 (]: Opening a new connection, currently in state init
+[0m08:58:46.964560 [debug] [Thread-5 (]: SQL status: SUCCESS 1 in 2.151 seconds
+[0m08:58:46.968159 [info ] [Thread-5 (]: 10 of 15 OK created sql view model PUBLIC.int_assignment_period_balances ....... [[32mSUCCESS 1[0m in 2.19s]
+[0m08:58:46.969276 [debug] [Thread-5 (]: Finished running node model.coco_demo.int_assignment_period_balances
+[0m08:58:48.049287 [debug] [Thread-3 (]: SQL status: SUCCESS 1 in 1.230 seconds
+[0m08:58:48.052903 [info ] [Thread-3 (]: 11 of 15 OK created sql view model PUBLIC.int_variance_analysis ................ [[32mSUCCESS 1[0m in 1.26s]
+[0m08:58:48.053914 [debug] [Thread-3 (]: Finished running node model.coco_demo.int_variance_analysis
+[0m08:58:48.056158 [debug] [Thread-2 (]: Began running node model.coco_demo.mart_entity_360
+[0m08:58:48.057003 [debug] [Thread-4 (]: Began running node model.coco_demo.mart_variance_summary
+[0m08:58:48.058261 [info ] [Thread-2 (]: 12 of 15 START sql view model PUBLIC.mart_entity_360 ........................... [RUN]
+[0m08:58:48.059430 [info ] [Thread-4 (]: 13 of 15 START sql view model PUBLIC.mart_variance_summary ..................... [RUN]
+[0m08:58:48.060246 [debug] [Thread-2 (]: Re-using an available connection from the pool (formerly model.coco_demo.stg_var_activity, now model.coco_demo.mart_entity_360)
+[0m08:58:48.060907 [debug] [Thread-4 (]: Re-using an available connection from the pool (formerly model.coco_demo.stg_rec_reconciliations, now model.coco_demo.mart_variance_summary)
+[0m08:58:48.061585 [debug] [Thread-2 (]: Began compiling node model.coco_demo.mart_entity_360
+[0m08:58:48.062162 [debug] [Thread-4 (]: Began compiling node model.coco_demo.mart_variance_summary
+[0m08:58:48.075202 [debug] [Thread-2 (]: Writing injected SQL for node "model.coco_demo.mart_entity_360"
+[0m08:58:48.089415 [debug] [Thread-4 (]: Writing injected SQL for node "model.coco_demo.mart_variance_summary"
+[0m08:58:48.090853 [debug] [Thread-2 (]: Began executing node model.coco_demo.mart_entity_360
+[0m08:58:48.091573 [debug] [Thread-4 (]: Began executing node model.coco_demo.mart_variance_summary
+[0m08:58:48.102747 [debug] [Thread-2 (]: Writing runtime sql for node "model.coco_demo.mart_entity_360"
+[0m08:58:48.114284 [debug] [Thread-4 (]: Writing runtime sql for node "model.coco_demo.mart_variance_summary"
+[0m08:58:48.124963 [debug] [Thread-2 (]: Using snowflake connection "model.coco_demo.mart_entity_360"
+[0m08:58:48.128568 [debug] [Thread-4 (]: Using snowflake connection "model.coco_demo.mart_variance_summary"
+[0m08:58:48.129984 [debug] [Thread-2 (]: On model.coco_demo.mart_entity_360: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "coco_demo", "target_name": "dev", "node_id": "model.coco_demo.mart_entity_360"} */
+create or replace   view COCO_LIVE_DB.PUBLIC.mart_entity_360
+  
+   as (
+    with entities as (
+    select * from COCO_LIVE_DB.PUBLIC.stg_org_entities
+),
+
+assignment_balances as (
+    select * from COCO_LIVE_DB.PUBLIC.int_assignment_period_balances
+),
+
+variance_analysis as (
+    select * from COCO_LIVE_DB.PUBLIC.int_variance_analysis
+),
+
+entity_assignment_summary as (
+    select
+        entity_id,
+        count(distinct assignment_id) as total_assignments,
+        count(distinct period_id) as periods_with_activity,
+        sum(balance_gl) as total_gl_balance,
+        sum(balance_bank) as total_bank_balance,
+        sum(balance_subledger) as total_subledger_balance,
+        sum(gl_bank_variance) as total_gl_bank_variance,
+        count(case when reconciliation_status = 'Reconciled' then 1 end) as reconciled_count,
+        count(case when reconciliation_status = 'High Variance' then 1 end) as high_variance_count,
+        count(case when reconciliation_status = 'Low Variance' then 1 end) as low_variance_count,
+        count(case when reconciliation_status like 'Missing%' then 1 end) as missing_data_count,
+        max(last_updated_at) as last_activity_date
+    from assignment_balances
+    group by entity_id
+),
+
+entity_variance_summary as (
+    select
+        ab.entity_id,
+        count(distinct va.var_activity_id) as total_variance_records,
+        sum(va.abs_variance) as total_variance_amount,
+        avg(va.abs_variance) as avg_variance_amount,
+        count(case when va.variance_severity = 'Critical' then 1 end) as critical_variance_count,
+        count(case when va.variance_severity = 'High' then 1 end) as high_severity_count,
+        count(case when va.variance_severity = 'Medium' then 1 end) as medium_severity_count,
+        count(case when va.variance_direction = 'Positive' then 1 end) as positive_variance_count,
+        count(case when va.variance_direction = 'Negative' then 1 end) as negative_variance_count
+    from assignment_balances ab
+    inner join variance_analysis va on ab.assignment_id = va.assignment_id
+    group by ab.entity_id
+),
+
+latest_period_status as (
+    select
+        entity_id,
+        period_id,
+        sum(balance_gl) as current_period_gl_balance,
+        sum(balance_bank) as current_period_bank_balance,
+        sum(gl_bank_variance) as current_period_variance,
+        count(case when reconciliation_status = 'Reconciled' then 1 end) as current_reconciled_count,
+        count(case when reconciliation_status != 'Reconciled' then 1 end) as current_unreconciled_count
+    from assignment_balances
+    where period_id = (select max(period_id) from assignment_balances)
+    group by entity_id, period_id
+)
+
+select
+    e.entity_id,
+    e.entity_code,
+    e.entity_name,
+    e.entity_description,
+    e.entity_type,
+    e.parent_id,
+    e.parent_name,
+    e.ownership,
+    e.depth as hierarchy_depth,
+    e.lineage as hierarchy_lineage,
+    e.has_children,
+    e.financial_review_required,
+    
+    coalesce(eas.total_assignments, 0) as total_assignments,
+    coalesce(eas.periods_with_activity, 0) as periods_with_activity,
+    coalesce(eas.total_gl_balance, 0) as total_gl_balance,
+    coalesce(eas.total_bank_balance, 0) as total_bank_balance,
+    coalesce(eas.total_subledger_balance, 0) as total_subledger_balance,
+    coalesce(eas.total_gl_bank_variance, 0) as total_gl_bank_variance,
+    coalesce(eas.reconciled_count, 0) as reconciled_count,
+    coalesce(eas.high_variance_count, 0) as high_variance_count,
+    coalesce(eas.low_variance_count, 0) as low_variance_count,
+    coalesce(eas.missing_data_count, 0) as missing_data_count,
+    eas.last_activity_date,
+    
+    case 
+        when coalesce(eas.total_assignments, 0) = 0 then 0
+        else round(100.0 * coalesce(eas.reconciled_count, 0) / eas.total_assignments, 2)
+    end as reconciliation_completion_pct,
+    
+    coalesce(evs.total_variance_records, 0) as total_variance_records,
+    coalesce(evs.total_variance_amount, 0) as total_variance_amount,
+    coalesce(evs.avg_variance_amount, 0) as avg_variance_amount,
+    coalesce(evs.critical_variance_count, 0) as critical_variance_count,
+    coalesce(evs.high_severity_count, 0) as high_severity_count,
+    coalesce(evs.positive_variance_count, 0) as positive_variance_count,
+    coalesce(evs.negative_variance_count, 0) as negative_variance_count,
+    
+    coalesce(lps.current_period_gl_balance, 0) as current_period_gl_balance,
+    coalesce(lps.current_period_bank_balance, 0) as current_period_bank_balance,
+    coalesce(lps.current_period_variance, 0) as current_period_variance,
+    coalesce(lps.current_reconciled_count, 0) as current_reconciled_count,
+    coalesce(lps.current_unreconciled_count, 0) as current_unreconciled_count,
+    
+    case
+        when coalesce(evs.critical_variance_count, 0) > 0 then 'Critical'
+        when coalesce(eas.high_variance_count, 0) > 5 then 'At Risk'
+        when coalesce(eas.reconciled_count, 0) = coalesce(eas.total_assignments, 0) 
+             and coalesce(eas.total_assignments, 0) > 0 then 'Healthy'
+        when coalesce(eas.total_assignments, 0) = 0 then 'No Activity'
+        else 'Needs Attention'
+    end as entity_health_status,
+    
+    current_timestamp() as dbt_updated_at
+
+from entities e
+left join entity_assignment_summary eas on e.entity_id = eas.entity_id
+left join entity_variance_summary evs on e.entity_id = evs.entity_id
+left join latest_period_status lps on e.entity_id = lps.entity_id
+  );
+[0m08:58:48.131337 [debug] [Thread-4 (]: On model.coco_demo.mart_variance_summary: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "coco_demo", "target_name": "dev", "node_id": "model.coco_demo.mart_variance_summary"} */
+create or replace   view COCO_LIVE_DB.PUBLIC.mart_variance_summary
+  
+   as (
+    with assignment_balances as (
+    select * from COCO_LIVE_DB.PUBLIC.int_assignment_period_balances
+),
+
+entities as (
+    select * from COCO_LIVE_DB.PUBLIC.stg_org_entities
+),
+
+variance_analysis as (
+    select * from COCO_LIVE_DB.PUBLIC.int_variance_analysis
+),
+
+period_variance as (
+    select
+        va.period_id,
+        va.period_end_date,
+        va.period_year,
+        va.period_quarter,
+        ab.entity_id,
+        count(distinct va.assignment_id) as assignments_with_variance,
+        sum(va.abs_variance) as total_variance,
+        avg(va.abs_variance) as avg_variance,
+        count(case when va.variance_severity = 'Critical' then 1 end) as critical_count,
+        count(case when va.variance_severity = 'High' then 1 end) as high_count,
+        count(case when va.variance_severity = 'Medium' then 1 end) as medium_count,
+        count(case when va.variance_severity = 'Low' then 1 end) as low_count
+    from variance_analysis va
+    inner join assignment_balances ab on va.assignment_id = ab.assignment_id and va.period_id = ab.period_id
+    group by va.period_id, va.period_end_date, va.period_year, va.period_quarter, ab.entity_id
+)
+
+select
+    pv.period_id,
+    pv.period_end_date,
+    pv.period_year,
+    pv.period_quarter,
+    pv.entity_id,
+    e.entity_code,
+    e.entity_name,
+    pv.assignments_with_variance,
+    pv.total_variance,
+    pv.avg_variance,
+    pv.critical_count,
+    pv.high_count,
+    pv.medium_count,
+    pv.low_count,
+    pv.critical_count + pv.high_count as severe_variance_count,
+    case
+        when pv.critical_count > 0 then 'Critical'
+        when pv.high_count > 2 then 'High Risk'
+        when pv.medium_count > 5 then 'Medium Risk'
+        else 'Low Risk'
+    end as period_risk_level,
+    current_timestamp() as dbt_updated_at
+from period_variance pv
+inner join entities e on pv.entity_id = e.entity_id
+  );
+[0m08:58:48.132168 [debug] [Thread-2 (]: Opening a new connection, currently in state init
+[0m08:58:48.132769 [debug] [Thread-4 (]: Opening a new connection, currently in state init
+[0m08:58:49.398775 [debug] [Thread-4 (]: SQL status: SUCCESS 1 in 1.266 seconds
+[0m08:58:49.402326 [info ] [Thread-4 (]: 13 of 15 OK created sql view model PUBLIC.mart_variance_summary ................ [[32mSUCCESS 1[0m in 1.34s]
+[0m08:58:49.403320 [debug] [Thread-4 (]: Finished running node model.coco_demo.mart_variance_summary
+[0m08:58:49.426304 [debug] [Thread-2 (]: SQL status: SUCCESS 1 in 1.294 seconds
+[0m08:58:49.429871 [info ] [Thread-2 (]: 12 of 15 OK created sql view model PUBLIC.mart_entity_360 ...................... [[32mSUCCESS 1[0m in 1.37s]
+[0m08:58:49.430815 [debug] [Thread-2 (]: Finished running node model.coco_demo.mart_entity_360
+[0m08:58:49.432441 [debug] [Thread-3 (]: Began running node test.coco_demo.not_null_mart_entity_360_entity_id.1692531315
+[0m08:58:49.433186 [debug] [Thread-5 (]: Began running node test.coco_demo.unique_mart_entity_360_entity_id.b457204fef
+[0m08:58:49.434183 [info ] [Thread-3 (]: 14 of 15 START test not_null_mart_entity_360_entity_id ......................... [RUN]
+[0m08:58:49.434971 [info ] [Thread-5 (]: 15 of 15 START test unique_mart_entity_360_entity_id ........................... [RUN]
+[0m08:58:49.435754 [debug] [Thread-3 (]: Re-using an available connection from the pool (formerly model.coco_demo.int_variance_analysis, now test.coco_demo.not_null_mart_entity_360_entity_id.1692531315)
+[0m08:58:49.436411 [debug] [Thread-5 (]: Re-using an available connection from the pool (formerly model.coco_demo.int_assignment_period_balances, now test.coco_demo.unique_mart_entity_360_entity_id.b457204fef)
+[0m08:58:49.437038 [debug] [Thread-3 (]: Began compiling node test.coco_demo.not_null_mart_entity_360_entity_id.1692531315
+[0m08:58:49.437624 [debug] [Thread-5 (]: Began compiling node test.coco_demo.unique_mart_entity_360_entity_id.b457204fef
+[0m08:58:49.461636 [debug] [Thread-3 (]: Writing injected SQL for node "test.coco_demo.not_null_mart_entity_360_entity_id.1692531315"
+[0m08:58:49.480056 [debug] [Thread-5 (]: Writing injected SQL for node "test.coco_demo.unique_mart_entity_360_entity_id.b457204fef"
+[0m08:58:49.481352 [debug] [Thread-3 (]: Began executing node test.coco_demo.not_null_mart_entity_360_entity_id.1692531315
+[0m08:58:49.482069 [debug] [Thread-5 (]: Began executing node test.coco_demo.unique_mart_entity_360_entity_id.b457204fef
+[0m08:58:49.512326 [debug] [Thread-3 (]: Writing runtime sql for node "test.coco_demo.not_null_mart_entity_360_entity_id.1692531315"
+[0m08:58:49.523066 [debug] [Thread-5 (]: Writing runtime sql for node "test.coco_demo.unique_mart_entity_360_entity_id.b457204fef"
+[0m08:58:49.524994 [debug] [Thread-3 (]: Using snowflake connection "test.coco_demo.not_null_mart_entity_360_entity_id.1692531315"
+[0m08:58:49.526482 [debug] [Thread-5 (]: Using snowflake connection "test.coco_demo.unique_mart_entity_360_entity_id.b457204fef"
+[0m08:58:49.527189 [debug] [Thread-3 (]: On test.coco_demo.not_null_mart_entity_360_entity_id.1692531315: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "coco_demo", "target_name": "dev", "node_id": "test.coco_demo.not_null_mart_entity_360_entity_id.1692531315"} */
+select
+      count(*) as failures,
+      count(*) != 0 as should_warn,
+      count(*) != 0 as should_error
+    from (
+      
+    
+    
+
+
+
+select entity_id
+from COCO_LIVE_DB.PUBLIC.mart_entity_360
+where entity_id is null
+
+
+
+      
+    ) dbt_internal_test
+[0m08:58:49.527907 [debug] [Thread-5 (]: On test.coco_demo.unique_mart_entity_360_entity_id.b457204fef: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "coco_demo", "target_name": "dev", "node_id": "test.coco_demo.unique_mart_entity_360_entity_id.b457204fef"} */
+select
+      count(*) as failures,
+      count(*) != 0 as should_warn,
+      count(*) != 0 as should_error
+    from (
+      
+    
+    
+
+select
+    entity_id as unique_field,
+    count(*) as n_records
+
+from COCO_LIVE_DB.PUBLIC.mart_entity_360
+where entity_id is not null
+group by entity_id
+having count(*) > 1
+
+
+
+      
+    ) dbt_internal_test
+[0m08:58:49.528649 [debug] [Thread-3 (]: Opening a new connection, currently in state init
+[0m08:58:49.529301 [debug] [Thread-5 (]: Opening a new connection, currently in state init
+[0m08:58:50.923866 [debug] [Thread-3 (]: SQL status: SUCCESS 1 in 1.395 seconds
+[0m08:58:50.929424 [info ] [Thread-3 (]: 14 of 15 PASS not_null_mart_entity_360_entity_id ............................... [[32mPASS[0m in 1.49s]
+[0m08:58:50.930435 [debug] [Thread-3 (]: Finished running node test.coco_demo.not_null_mart_entity_360_entity_id.1692531315
+[0m08:58:53.008783 [debug] [Thread-5 (]: SQL status: SUCCESS 1 in 3.479 seconds
+[0m08:58:53.012161 [info ] [Thread-5 (]: 15 of 15 PASS unique_mart_entity_360_entity_id ................................. [[32mPASS[0m in 3.58s]
+[0m08:58:53.013217 [debug] [Thread-5 (]: Finished running node test.coco_demo.unique_mart_entity_360_entity_id.b457204fef
+[0m08:58:53.017280 [debug] [Dummy-1   ]: Connection 'master' was properly closed.
+[0m08:58:53.018286 [debug] [Dummy-1   ]: Connection 'model.coco_demo.mart_entity_360' was properly closed.
+[0m08:58:53.019011 [debug] [Dummy-1   ]: Connection 'test.coco_demo.not_null_mart_entity_360_entity_id.1692531315' was properly closed.
+[0m08:58:53.019510 [debug] [Dummy-1   ]: Connection 'model.coco_demo.mart_variance_summary' was properly closed.
+[0m08:58:53.019982 [debug] [Dummy-1   ]: Connection 'test.coco_demo.unique_mart_entity_360_entity_id.b457204fef' was properly closed.
+[0m08:58:53.020830 [info ] [Dummy-1   ]: 
+[0m08:58:53.021639 [info ] [Dummy-1   ]: Finished running 2 data tests, 13 view models in 0 hours 0 minutes and 13.31 seconds (13.31s).
+[0m08:58:53.025065 [debug] [Dummy-1   ]: Command end result
+[0m08:58:53.063072 [debug] [Dummy-1   ]: Wrote artifact WritableManifest to /tmp/dbt/target/manifest.json
+[0m08:58:53.066008 [debug] [Dummy-1   ]: Wrote artifact SemanticManifest to /tmp/dbt/target/semantic_manifest.json
+[0m08:58:53.075082 [debug] [Dummy-1   ]: Wrote artifact RunExecutionResult to /tmp/dbt/target/run_results.json
+[0m08:58:53.075843 [info ] [Dummy-1   ]: 
+[0m08:58:53.076654 [info ] [Dummy-1   ]: [32mCompleted successfully[0m
+[0m08:58:53.077378 [info ] [Dummy-1   ]: 
+[0m08:58:53.078050 [info ] [Dummy-1   ]: Done. PASS=15 WARN=0 ERROR=0 SKIP=0 TOTAL=15
+[0m08:58:53.080537 [debug] [Dummy-1   ]: Resource report: {"command_name": "build", "command_success": true, "command_wall_clock_time": 16.559761, "process_in_blocks": "0", "process_kernel_time": 1.1, "process_mem_max_rss": "509496", "process_out_blocks": "0", "process_user_time": 8.28}
+[0m08:58:53.081286 [debug] [Dummy-1   ]: Command `cli build` succeeded at 08:58:53.080995 after 16.56 seconds
+[0m08:58:53.081873 [debug] [Dummy-1   ]: Flushing usage events
+
+
+============================== 15:44:48.325805 | 7bc730b1-3ddc-497b-b122-e53f6f9c082d ==============================
+[0m15:44:48.325805 [info ] [Dummy-1   ]: Running with dbt=1.9.4
+[0m15:44:48.326882 [debug] [Dummy-1   ]: running dbt with arguments {'printer_width': '80', 'indirect_selection': 'eager', 'write_json': 'True', 'log_cache_events': 'False', 'partial_parse': 'True', 'cache_selected_only': 'False', 'warn_error': 'None', 'debug': 'False', 'fail_fast': 'False', 'log_path': '/tmp/dbt/logs', 'profiles_dir': '/tmp/dbt/', 'version_check': 'True', 'use_colors': 'True', 'use_experimental_parser': 'False', 'no_print': 'None', 'quiet': 'False', 'empty': 'None', 'warn_error_options': 'WarnErrorOptions(include=[], exclude=[])', 'invocation_command': 'dbt ', 'introspect': 'True', 'log_format': 'default', 'target_path': 'None', 'static_parser': 'True', 'send_anonymous_usage_stats': 'False'}
+[0m15:44:48.569450 [debug] [Dummy-1   ]: Set downloads directory='/tmp/dbt-downloads-dgff7wgp'
+[0m15:44:48.570403 [debug] [Dummy-1   ]: Making package index registry request: GET https://hub.getdbt.com/api/v1/index.json
+[0m15:44:48.801498 [debug] [Dummy-1   ]: Response from registry index: GET https://hub.getdbt.com/api/v1/index.json 200
+[0m15:44:48.802601 [debug] [Dummy-1   ]: Making package registry request: GET https://hub.getdbt.com/api/v1/Snowflake-Labs/dbt_semantic_view.json
+[0m15:44:48.923755 [debug] [Dummy-1   ]: Response from registry: GET https://hub.getdbt.com/api/v1/Snowflake-Labs/dbt_semantic_view.json 200
+[0m15:44:48.933261 [info ] [Dummy-1   ]: Updating lock file in file path: /tmp/dbt/package-lock.yml
+[0m15:44:48.935684 [debug] [Dummy-1   ]: Set downloads directory='/tmp/dbt-downloads-k_be9fp3'
+[0m15:44:48.937244 [info ] [Dummy-1   ]: Installing Snowflake-Labs/dbt_semantic_view
+[0m15:44:49.702724 [info ] [Dummy-1   ]: Installed from version 1.0.3
+[0m15:44:49.703433 [info ] [Dummy-1   ]: Up to date!
+[0m15:44:49.705682 [debug] [Dummy-1   ]: Resource report: {"command_name": "deps", "command_success": true, "command_wall_clock_time": 1.4783372, "process_in_blocks": "0", "process_kernel_time": 1.04, "process_mem_max_rss": "397136", "process_out_blocks": "0", "process_user_time": 4.12}
+[0m15:44:49.706415 [debug] [Dummy-1   ]: Command `cli deps` succeeded at 15:44:49.706135 after 1.48 seconds
+[0m15:44:49.706964 [debug] [Dummy-1   ]: Flushing usage events
+
+
+============================== 15:45:17.223000 | 689de552-6e61-4b33-b259-a65668a459d2 ==============================
+[0m15:45:17.223000 [info ] [Dummy-1   ]: Running with dbt=1.9.4
+[0m15:45:17.224078 [debug] [Dummy-1   ]: running dbt with arguments {'printer_width': '80', 'indirect_selection': 'eager', 'log_cache_events': 'False', 'write_json': 'True', 'partial_parse': 'True', 'cache_selected_only': 'False', 'warn_error': 'None', 'debug': 'False', 'version_check': 'True', 'log_path': '/tmp/dbt/logs', 'fail_fast': 'False', 'profiles_dir': '/tmp/dbt/', 'use_colors': 'True', 'use_experimental_parser': 'False', 'no_print': 'None', 'quiet': 'False', 'empty': 'False', 'warn_error_options': 'WarnErrorOptions(include=[], exclude=[])', 'static_parser': 'True', 'invocation_command': 'dbt ', 'introspect': 'True', 'target_path': '/tmp/dbt/target/', 'log_format': 'default', 'send_anonymous_usage_stats': 'False'}
+[0m15:45:17.610615 [info ] [Dummy-1   ]: Registered adapter: snowflake=1.9.2
+[0m15:45:17.672087 [debug] [Dummy-1   ]: checksum: 53ed91fada2233efb98368d1716b44ab532c83a9c293cf1890b7905d5b45fb25, vars: {}, profile: , target: dev, version: 1.9.4
+[0m15:45:17.974750 [info ] [Dummy-1   ]: Unable to do partial parsing because a project dependency has been added
+[0m15:45:20.355647 [debug] [Dummy-1   ]: Wrote artifact WritableManifest to /tmp/dbt/target/manifest.json
+[0m15:45:20.358616 [debug] [Dummy-1   ]: Wrote artifact SemanticManifest to /tmp/dbt/target/semantic_manifest.json
+[0m15:45:20.442220 [info ] [Dummy-1   ]: Found 14 models, 2 data tests, 10 sources, 481 macros
+[0m15:45:20.445499 [info ] [Dummy-1   ]: 
+[0m15:45:20.446226 [info ] [Dummy-1   ]: Concurrency: 4 threads (target='dev')
+[0m15:45:20.446816 [info ] [Dummy-1   ]: 
+[0m15:45:20.447649 [debug] [Dummy-1   ]: Acquiring new snowflake connection 'master'
+[0m15:45:20.449807 [debug] [ThreadPool]: Acquiring new snowflake connection 'list_COCO_LIVE_DB'
+[0m15:45:20.561760 [debug] [ThreadPool]: Using snowflake connection "list_COCO_LIVE_DB"
+[0m15:45:20.562427 [debug] [ThreadPool]: On list_COCO_LIVE_DB: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "coco_demo", "target_name": "dev", "connection_name": "list_COCO_LIVE_DB"} */
+show terse schemas in database COCO_LIVE_DB
+    limit 10000
+[0m15:45:20.562943 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m15:45:21.308006 [debug] [ThreadPool]: SQL status: SUCCESS 3 in 0.745 seconds
+[0m15:45:21.318394 [debug] [ThreadPool]: Re-using an available connection from the pool (formerly list_COCO_LIVE_DB, now list_COCO_LIVE_DB_PUBLIC)
+[0m15:45:21.341074 [debug] [ThreadPool]: Using snowflake connection "list_COCO_LIVE_DB_PUBLIC"
+[0m15:45:21.341740 [debug] [ThreadPool]: On list_COCO_LIVE_DB_PUBLIC: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "coco_demo", "target_name": "dev", "connection_name": "list_COCO_LIVE_DB_PUBLIC"} */
+alter session set quoted_identifiers_ignore_case = false;
+[0m15:45:21.342252 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m15:45:22.096307 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.754 seconds
+[0m15:45:22.102386 [debug] [ThreadPool]: Using snowflake connection "list_COCO_LIVE_DB_PUBLIC"
+[0m15:45:22.103053 [debug] [ThreadPool]: On list_COCO_LIVE_DB_PUBLIC: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "coco_demo", "target_name": "dev", "connection_name": "list_COCO_LIVE_DB_PUBLIC"} */
+show objects in COCO_LIVE_DB.PUBLIC
+    limit 10000
+    
+;
+[0m15:45:22.296441 [debug] [ThreadPool]: SQL status: SUCCESS 13 in 0.193 seconds
+[0m15:45:22.299786 [debug] [ThreadPool]: Using snowflake connection "list_COCO_LIVE_DB_PUBLIC"
+[0m15:45:22.300445 [debug] [ThreadPool]: On list_COCO_LIVE_DB_PUBLIC: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "coco_demo", "target_name": "dev", "connection_name": "list_COCO_LIVE_DB_PUBLIC"} */
+alter session unset quoted_identifiers_ignore_case;
+[0m15:45:22.465977 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.165 seconds
+[0m15:45:22.479966 [debug] [Thread-2 (]: Began running node model.coco_demo.semantic_entity_360
+[0m15:45:22.481178 [info ] [Thread-2 (]: 1 of 1 START sql semantic_view model PUBLIC.semantic_entity_360 ................ [RUN]
+[0m15:45:22.481995 [debug] [Thread-2 (]: Re-using an available connection from the pool (formerly list_COCO_LIVE_DB_PUBLIC, now model.coco_demo.semantic_entity_360)
+[0m15:45:22.482583 [debug] [Thread-2 (]: Began compiling node model.coco_demo.semantic_entity_360
+[0m15:45:22.503688 [debug] [Thread-2 (]: Writing injected SQL for node "model.coco_demo.semantic_entity_360"
+[0m15:45:22.504680 [debug] [Thread-2 (]: Began executing node model.coco_demo.semantic_entity_360
+[0m15:45:22.535873 [debug] [Thread-2 (]: Writing runtime sql for node "model.coco_demo.semantic_entity_360"
+[0m15:45:22.544991 [debug] [Thread-2 (]: Using snowflake connection "model.coco_demo.semantic_entity_360"
+[0m15:45:22.546752 [debug] [Thread-2 (]: On model.coco_demo.semantic_entity_360: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "coco_demo", "target_name": "dev", "node_id": "model.coco_demo.semantic_entity_360"} */
+create or replace semantic view COCO_LIVE_DB.PUBLIC.semantic_entity_360
+  
+
+TABLES(
+    entities AS COCO_LIVE_DB.PUBLIC.mart_entity_360
+        PRIMARY KEY (entity_id)
+        WITH SYNONYMS ('organizations', 'companies', 'org units')
+        COMMENT = 'Comprehensive 360 view of organizational entities with reconciliation health metrics',
+    variance_summary AS COCO_LIVE_DB.PUBLIC.mart_variance_summary
+        PRIMARY KEY (entity_id, period_id)
+        WITH SYNONYMS ('variance trends', 'period variances')
+        COMMENT = 'Period-by-period variance analysis by entity'
+)
+
+RELATIONSHIPS(
+    variance_to_entity AS
+        variance_summary (entity_id) REFERENCES entities (entity_id)
+)
+
+FACTS(
+    entities.total_assignments AS total_assignments
+        COMMENT = 'Total number of reconciliation assignments',
+    entities.periods_with_activity AS periods_with_activity
+        COMMENT = 'Number of periods with activity',
+    entities.total_gl_balance AS total_gl_balance
+        COMMENT = 'Total general ledger balance',
+    entities.total_bank_balance AS total_bank_balance
+        COMMENT = 'Total bank balance',
+    entities.total_subledger_balance AS total_subledger_balance
+        COMMENT = 'Total subledger balance',
+    entities.total_gl_bank_variance AS total_gl_bank_variance
+        COMMENT = 'Variance between GL and bank balances',
+    entities.reconciled_count AS reconciled_count
+        COMMENT = 'Number of fully reconciled assignments',
+    entities.high_variance_count AS high_variance_count
+        COMMENT = 'Number of high variance assignments',
+    entities.missing_data_count AS missing_data_count
+        COMMENT = 'Assignments with missing data',
+    entities.reconciliation_completion_pct AS reconciliation_completion_pct
+        COMMENT = 'Reconciliation completion percentage',
+    entities.total_variance_amount AS total_variance_amount
+        COMMENT = 'Sum of all variance amounts',
+    entities.avg_variance_amount AS avg_variance_amount
+        COMMENT = 'Average variance amount',
+    entities.critical_variance_count AS critical_variance_count
+        COMMENT = 'Number of critical severity variances',
+    entities.high_severity_count AS high_severity_count
+        COMMENT = 'Number of high severity variances',
+    entities.current_period_gl_balance AS current_period_gl_balance
+        COMMENT = 'GL balance for current period',
+    entities.current_period_bank_balance AS current_period_bank_balance
+        COMMENT = 'Bank balance for current period',
+    entities.current_period_variance AS current_period_variance
+        COMMENT = 'Variance for current period',
+    entities.current_reconciled_count AS current_reconciled_count
+        COMMENT = 'Reconciled items in current period',
+    entities.current_unreconciled_count AS current_unreconciled_count
+        COMMENT = 'Unreconciled items in current period',
+    entities.ownership AS ownership_pct
+        COMMENT = 'Ownership percentage',
+    entities.hierarchy_depth AS hierarchy_depth
+        COMMENT = 'Depth in organizational hierarchy',
+    variance_summary.total_variance AS period_total_variance
+        COMMENT = 'Total variance for the period',
+    variance_summary.avg_variance AS period_avg_variance
+        COMMENT = 'Average variance for the period',
+    variance_summary.critical_count AS period_critical_count
+        COMMENT = 'Critical variances in period',
+    variance_summary.high_count AS period_high_count
+        COMMENT = 'High severity variances in period',
+    variance_summary.medium_count AS period_medium_count
+        COMMENT = 'Medium severity variances in period',
+    variance_summary.low_count AS period_low_count
+        COMMENT = 'Low severity variances in period',
+    variance_summary.severe_variance_count AS period_severe_count
+        COMMENT = 'Combined critical and high variances'
+)
+
+DIMENSIONS(
+    entities.entity_id AS entity_id
+        WITH SYNONYMS ('org id', 'organization id', 'company id')
+        COMMENT = 'Unique entity identifier',
+    entities.entity_code AS entity_code
+        WITH SYNONYMS ('org code', 'company code')
+        COMMENT = 'Business code for the entity',
+    entities.entity_name AS entity_name
+        WITH SYNONYMS ('organization name', 'company name', 'org name')
+        COMMENT = 'Display name of the entity',
+    entities.entity_description AS entity_description
+        COMMENT = 'Detailed description',
+    entities.entity_type AS entity_type
+        WITH SYNONYMS ('org type', 'type')
+        COMMENT = 'Type classification',
+    entities.parent_name AS parent_name
+        WITH SYNONYMS ('parent entity', 'parent org')
+        COMMENT = 'Parent entity name',
+    entities.entity_health_status AS entity_health_status
+        WITH SYNONYMS ('health status', 'status', 'health', 'risk status')
+        COMMENT = 'Overall health (Critical, At Risk, Healthy, Needs Attention, No Activity)',
+    entities.has_children AS has_children
+        COMMENT = 'Whether entity has child entities',
+    entities.financial_review_required AS financial_review_required
+        WITH SYNONYMS ('requires review', 'needs review')
+        COMMENT = 'Whether financial review is required',
+    entities.hierarchy_lineage AS hierarchy_lineage
+        COMMENT = 'Hierarchy path lineage',
+    variance_summary.period_id AS period_id
+        COMMENT = 'Period identifier',
+    variance_summary.period_year AS period_year
+        WITH SYNONYMS ('year', 'fiscal year')
+        COMMENT = 'Year of the period',
+    variance_summary.period_quarter AS period_quarter
+        WITH SYNONYMS ('quarter', 'fiscal quarter')
+        COMMENT = 'Quarter of the period (1-4)',
+    variance_summary.period_risk_level AS period_risk_level
+        WITH SYNONYMS ('risk level', 'period risk')
+        COMMENT = 'Risk classification (Critical, High Risk, Medium Risk, Low Risk)',
+    variance_summary.period_end_date AS period_end_date
+        WITH SYNONYMS ('period date', 'close date')
+        COMMENT = 'End date of reconciliation period',
+    entities.last_activity_date AS last_activity_date
+        WITH SYNONYMS ('last updated', 'last activity')
+        COMMENT = 'Date of most recent activity'
+)
+
+METRICS(
+    entities.total_entity_count AS COUNT(entities.entity_id)
+        WITH SYNONYMS ('entity count', 'number of entities', 'org count')
+        COMMENT = 'Total count of entities',
+    entities.sum_gl_balance AS SUM(entities.total_gl_balance)
+        WITH SYNONYMS ('total gl', 'aggregate gl balance')
+        COMMENT = 'Sum of GL balances across entities',
+    entities.sum_bank_balance AS SUM(entities.total_bank_balance)
+        WITH SYNONYMS ('total bank', 'aggregate bank balance')
+        COMMENT = 'Sum of bank balances across entities',
+    entities.sum_variance AS SUM(entities.total_variance_amount)
+        WITH SYNONYMS ('total variance', 'aggregate variance')
+        COMMENT = 'Sum of variance amounts',
+    entities.avg_completion_rate AS AVG(entities.reconciliation_completion_pct)
+        WITH SYNONYMS ('average completion', 'mean completion rate')
+        COMMENT = 'Average reconciliation completion percentage',
+    entities.total_critical_variances AS SUM(entities.critical_variance_count)
+        WITH SYNONYMS ('critical count', 'total critical issues')
+        COMMENT = 'Total critical variances across entities',
+    entities.entities_at_risk_count AS COUNT(CASE WHEN entities.entity_health_status IN ('Critical', 'At Risk') THEN 1 END)
+        WITH SYNONYMS ('at risk count', 'risky entities')
+        COMMENT = 'Entities with Critical or At Risk status',
+    entities.healthy_entity_count AS COUNT(CASE WHEN entities.entity_health_status = 'Healthy' THEN 1 END)
+        WITH SYNONYMS ('healthy count')
+        COMMENT = 'Entities with Healthy status',
+    variance_summary.sum_period_variance AS SUM(variance_summary.total_variance)
+        COMMENT = 'Sum of variances across all periods',
+    variance_summary.sum_period_critical AS SUM(variance_summary.critical_count)
+        COMMENT = 'Total critical variances across periods'
+)
+
+COMMENT = 'Entity 360 semantic view for reconciliation management - enables natural language queries about entity health, reconciliation status, and variance analysis'
+[0m15:45:22.548076 [debug] [Thread-2 (]: Opening a new connection, currently in state init
+[0m15:45:24.255848 [debug] [Thread-2 (]: Snowflake adapter: Snowflake query id: 01c2b3f1-0207-e966-004d-de070eeae77a
+[0m15:45:24.256665 [debug] [Thread-2 (]: Snowflake adapter: Snowflake error: 000904 (42000): 01c2b3f1-0207-e966-004d-de070eeae77a: SQL compilation error: error line 59 at position 26
+invalid identifier 'OWNERSHIP_PCT'
+[0m15:45:24.262587 [debug] [Thread-2 (]: Database Error in model semantic_entity_360 (models/marts/semantic_entity_360.sql)
+  000904 (42000): 01c2b3f1-0207-e966-004d-de070eeae77a: SQL compilation error: error line 59 at position 26
+  invalid identifier 'OWNERSHIP_PCT'
+  compiled code at /tmp/dbt/target/run/coco_demo/models/marts/semantic_entity_360.sql
+[0m15:45:24.266271 [error] [Thread-2 (]: 1 of 1 ERROR creating sql semantic_view model PUBLIC.semantic_entity_360 ....... [[31mERROR[0m in 1.78s]
+[0m15:45:24.267342 [debug] [Thread-2 (]: Finished running node model.coco_demo.semantic_entity_360
+[0m15:45:24.268927 [debug] [Thread-8 (]: Marking all children of 'model.coco_demo.semantic_entity_360' to be skipped because of status 'error'.  Reason: Database Error in model semantic_entity_360 (models/marts/semantic_entity_360.sql)
+  000904 (42000): 01c2b3f1-0207-e966-004d-de070eeae77a: SQL compilation error: error line 59 at position 26
+  invalid identifier 'OWNERSHIP_PCT'
+  compiled code at /tmp/dbt/target/run/coco_demo/models/marts/semantic_entity_360.sql.
+[0m15:45:24.272578 [debug] [Dummy-1   ]: Connection 'master' was properly closed.
+[0m15:45:24.273172 [debug] [Dummy-1   ]: Connection 'model.coco_demo.semantic_entity_360' was properly closed.
+[0m15:45:24.273845 [info ] [Dummy-1   ]: 
+[0m15:45:24.274523 [info ] [Dummy-1   ]: Finished running 1 semantic view model in 0 hours 0 minutes and 3.83 seconds (3.83s).
+[0m15:45:24.275564 [debug] [Dummy-1   ]: Command end result
+[0m15:45:24.312811 [debug] [Dummy-1   ]: Wrote artifact WritableManifest to /tmp/dbt/target/manifest.json
+[0m15:45:24.315571 [debug] [Dummy-1   ]: Wrote artifact SemanticManifest to /tmp/dbt/target/semantic_manifest.json
+[0m15:45:24.323683 [debug] [Dummy-1   ]: Wrote artifact RunExecutionResult to /tmp/dbt/target/run_results.json
+[0m15:45:24.324440 [info ] [Dummy-1   ]: 
+[0m15:45:24.325256 [info ] [Dummy-1   ]: [31mCompleted with 1 error, 0 partial successes, and 0 warnings:[0m
+[0m15:45:24.325900 [info ] [Dummy-1   ]: 
+[0m15:45:24.326639 [error] [Dummy-1   ]:   Database Error in model semantic_entity_360 (models/marts/semantic_entity_360.sql)
+  000904 (42000): 01c2b3f1-0207-e966-004d-de070eeae77a: SQL compilation error: error line 59 at position 26
+  invalid identifier 'OWNERSHIP_PCT'
+  compiled code at /tmp/dbt/target/run/coco_demo/models/marts/semantic_entity_360.sql
+[0m15:45:24.327235 [info ] [Dummy-1   ]: 
+[0m15:45:24.327989 [info ] [Dummy-1   ]: Done. PASS=0 WARN=0 ERROR=1 SKIP=0 TOTAL=1
+[0m15:45:24.329907 [debug] [Dummy-1   ]: Resource report: {"command_name": "build", "command_success": false, "command_wall_clock_time": 7.207561, "process_in_blocks": "0", "process_kernel_time": 1.12, "process_mem_max_rss": "519056", "process_out_blocks": "0", "process_user_time": 7.25}
+[0m15:45:24.330615 [debug] [Dummy-1   ]: Command `cli build` failed at 15:45:24.330341 after 7.21 seconds
+[0m15:45:24.331191 [debug] [Dummy-1   ]: Flushing usage events
+
+
+============================== 15:46:16.319937 | a0105743-1f39-41e6-9c93-5a79860a1822 ==============================
+[0m15:46:16.319937 [info ] [Dummy-1   ]: Running with dbt=1.9.4
+[0m15:46:16.321030 [debug] [Dummy-1   ]: running dbt with arguments {'printer_width': '80', 'indirect_selection': 'eager', 'write_json': 'True', 'log_cache_events': 'False', 'partial_parse': 'True', 'cache_selected_only': 'False', 'warn_error': 'None', 'debug': 'False', 'profiles_dir': '/tmp/dbt/', 'log_path': '/tmp/dbt/logs', 'version_check': 'True', 'fail_fast': 'False', 'use_colors': 'True', 'use_experimental_parser': 'False', 'empty': 'False', 'quiet': 'False', 'no_print': 'None', 'warn_error_options': 'WarnErrorOptions(include=[], exclude=[])', 'invocation_command': 'dbt ', 'log_format': 'default', 'introspect': 'True', 'target_path': '/tmp/dbt/target/', 'static_parser': 'True', 'send_anonymous_usage_stats': 'False'}
+[0m15:46:16.704309 [info ] [Dummy-1   ]: Registered adapter: snowflake=1.9.2
+[0m15:46:16.765819 [debug] [Dummy-1   ]: checksum: 53ed91fada2233efb98368d1716b44ab532c83a9c293cf1890b7905d5b45fb25, vars: {}, profile: , target: dev, version: 1.9.4
+[0m15:46:17.165267 [debug] [Dummy-1   ]: Partial parsing enabled: 0 files deleted, 0 files added, 1 files changed.
+[0m15:46:17.166329 [debug] [Dummy-1   ]: Partial parsing: updated file: coco_demo://models/marts/semantic_entity_360.sql
+[0m15:46:17.805678 [debug] [Dummy-1   ]: Wrote artifact WritableManifest to /tmp/dbt/target/manifest.json
+[0m15:46:17.808631 [debug] [Dummy-1   ]: Wrote artifact SemanticManifest to /tmp/dbt/target/semantic_manifest.json
+[0m15:46:17.890429 [info ] [Dummy-1   ]: Found 14 models, 2 data tests, 10 sources, 481 macros
+[0m15:46:17.893598 [info ] [Dummy-1   ]: 
+[0m15:46:17.894336 [info ] [Dummy-1   ]: Concurrency: 4 threads (target='dev')
+[0m15:46:17.894931 [info ] [Dummy-1   ]: 
+[0m15:46:17.895806 [debug] [Dummy-1   ]: Acquiring new snowflake connection 'master'
+[0m15:46:17.898727 [debug] [ThreadPool]: Acquiring new snowflake connection 'list_COCO_LIVE_DB'
+[0m15:46:18.010433 [debug] [ThreadPool]: Using snowflake connection "list_COCO_LIVE_DB"
+[0m15:46:18.011112 [debug] [ThreadPool]: On list_COCO_LIVE_DB: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "coco_demo", "target_name": "dev", "connection_name": "list_COCO_LIVE_DB"} */
+show terse schemas in database COCO_LIVE_DB
+    limit 10000
+[0m15:46:18.011617 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m15:46:18.616327 [debug] [ThreadPool]: SQL status: SUCCESS 3 in 0.605 seconds
+[0m15:46:18.626607 [debug] [ThreadPool]: Re-using an available connection from the pool (formerly list_COCO_LIVE_DB, now list_COCO_LIVE_DB_PUBLIC)
+[0m15:46:18.649298 [debug] [ThreadPool]: Using snowflake connection "list_COCO_LIVE_DB_PUBLIC"
+[0m15:46:18.649957 [debug] [ThreadPool]: On list_COCO_LIVE_DB_PUBLIC: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "coco_demo", "target_name": "dev", "connection_name": "list_COCO_LIVE_DB_PUBLIC"} */
+alter session set quoted_identifiers_ignore_case = false;
+[0m15:46:18.650457 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m15:46:19.278380 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.628 seconds
+[0m15:46:19.284253 [debug] [ThreadPool]: Using snowflake connection "list_COCO_LIVE_DB_PUBLIC"
+[0m15:46:19.284885 [debug] [ThreadPool]: On list_COCO_LIVE_DB_PUBLIC: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "coco_demo", "target_name": "dev", "connection_name": "list_COCO_LIVE_DB_PUBLIC"} */
+show objects in COCO_LIVE_DB.PUBLIC
+    limit 10000
+    
+;
+[0m15:46:19.463385 [debug] [ThreadPool]: SQL status: SUCCESS 13 in 0.178 seconds
+[0m15:46:19.466479 [debug] [ThreadPool]: Using snowflake connection "list_COCO_LIVE_DB_PUBLIC"
+[0m15:46:19.467091 [debug] [ThreadPool]: On list_COCO_LIVE_DB_PUBLIC: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "coco_demo", "target_name": "dev", "connection_name": "list_COCO_LIVE_DB_PUBLIC"} */
+alter session unset quoted_identifiers_ignore_case;
+[0m15:46:19.633853 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.166 seconds
+[0m15:46:19.647933 [debug] [Thread-2 (]: Began running node model.coco_demo.semantic_entity_360
+[0m15:46:19.649143 [info ] [Thread-2 (]: 1 of 1 START sql semantic_view model PUBLIC.semantic_entity_360 ................ [RUN]
+[0m15:46:19.650006 [debug] [Thread-2 (]: Re-using an available connection from the pool (formerly list_COCO_LIVE_DB_PUBLIC, now model.coco_demo.semantic_entity_360)
+[0m15:46:19.650610 [debug] [Thread-2 (]: Began compiling node model.coco_demo.semantic_entity_360
+[0m15:46:19.669433 [debug] [Thread-2 (]: Writing injected SQL for node "model.coco_demo.semantic_entity_360"
+[0m15:46:19.670488 [debug] [Thread-2 (]: Began executing node model.coco_demo.semantic_entity_360
+[0m15:46:19.703208 [debug] [Thread-2 (]: Writing runtime sql for node "model.coco_demo.semantic_entity_360"
+[0m15:46:19.712480 [debug] [Thread-2 (]: Using snowflake connection "model.coco_demo.semantic_entity_360"
+[0m15:46:19.714221 [debug] [Thread-2 (]: On model.coco_demo.semantic_entity_360: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "coco_demo", "target_name": "dev", "node_id": "model.coco_demo.semantic_entity_360"} */
+create or replace semantic view COCO_LIVE_DB.PUBLIC.semantic_entity_360
+  
+
+TABLES(
+    entities AS COCO_LIVE_DB.PUBLIC.mart_entity_360
+        PRIMARY KEY (entity_id)
+        WITH SYNONYMS ('organizations', 'companies', 'org units')
+        COMMENT = 'Comprehensive 360 view of organizational entities with reconciliation health metrics',
+    variance_summary AS COCO_LIVE_DB.PUBLIC.mart_variance_summary
+        PRIMARY KEY (entity_id, period_id)
+        WITH SYNONYMS ('variance trends', 'period variances')
+        COMMENT = 'Period-by-period variance analysis by entity'
+)
+
+RELATIONSHIPS(
+    variance_to_entity AS
+        variance_summary (entity_id) REFERENCES entities (entity_id)
+)
+
+FACTS(
+    entities.total_assignments AS total_assignments
+        COMMENT = 'Total number of reconciliation assignments',
+    entities.periods_with_activity AS periods_with_activity
+        COMMENT = 'Number of periods with activity',
+    entities.total_gl_balance AS total_gl_balance
+        COMMENT = 'Total general ledger balance',
+    entities.total_bank_balance AS total_bank_balance
+        COMMENT = 'Total bank balance',
+    entities.total_subledger_balance AS total_subledger_balance
+        COMMENT = 'Total subledger balance',
+    entities.total_gl_bank_variance AS total_gl_bank_variance
+        COMMENT = 'Variance between GL and bank balances',
+    entities.reconciled_count AS reconciled_count
+        COMMENT = 'Number of fully reconciled assignments',
+    entities.high_variance_count AS high_variance_count
+        COMMENT = 'Number of high variance assignments',
+    entities.missing_data_count AS missing_data_count
+        COMMENT = 'Assignments with missing data',
+    entities.reconciliation_completion_pct AS reconciliation_completion_pct
+        COMMENT = 'Reconciliation completion percentage',
+    entities.total_variance_amount AS total_variance_amount
+        COMMENT = 'Sum of all variance amounts',
+    entities.avg_variance_amount AS avg_variance_amount
+        COMMENT = 'Average variance amount',
+    entities.critical_variance_count AS critical_variance_count
+        COMMENT = 'Number of critical severity variances',
+    entities.high_severity_count AS high_severity_count
+        COMMENT = 'Number of high severity variances',
+    entities.current_period_gl_balance AS current_period_gl_balance
+        COMMENT = 'GL balance for current period',
+    entities.current_period_bank_balance AS current_period_bank_balance
+        COMMENT = 'Bank balance for current period',
+    entities.current_period_variance AS current_period_variance
+        COMMENT = 'Variance for current period',
+    entities.current_reconciled_count AS current_reconciled_count
+        COMMENT = 'Reconciled items in current period',
+    entities.current_unreconciled_count AS current_unreconciled_count
+        COMMENT = 'Unreconciled items in current period',
+    entities.ownership AS ownership
+        COMMENT = 'Ownership percentage',
+    entities.hierarchy_depth AS hierarchy_depth
+        COMMENT = 'Depth in organizational hierarchy',
+    variance_summary.assignments_with_variance AS assignments_with_variance
+        COMMENT = 'Assignments with variance in period',
+    variance_summary.total_variance AS period_total_variance
+        COMMENT = 'Total variance for the period',
+    variance_summary.avg_variance AS period_avg_variance
+        COMMENT = 'Average variance for the period',
+    variance_summary.critical_count AS period_critical_count
+        COMMENT = 'Critical variances in period',
+    variance_summary.high_count AS period_high_count
+        COMMENT = 'High severity variances in period',
+    variance_summary.medium_count AS period_medium_count
+        COMMENT = 'Medium severity variances in period',
+    variance_summary.low_count AS period_low_count
+        COMMENT = 'Low severity variances in period',
+    variance_summary.severe_variance_count AS period_severe_count
+        COMMENT = 'Combined critical and high variances'
+)
+
+DIMENSIONS(
+    entities.entity_id AS entity_id
+        WITH SYNONYMS ('org id', 'organization id', 'company id')
+        COMMENT = 'Unique entity identifier',
+    entities.entity_code AS entity_code
+        WITH SYNONYMS ('org code', 'company code')
+        COMMENT = 'Business code for the entity',
+    entities.entity_name AS entity_name
+        WITH SYNONYMS ('organization name', 'company name', 'org name')
+        COMMENT = 'Display name of the entity',
+    entities.entity_description AS entity_description
+        COMMENT = 'Detailed description',
+    entities.entity_type AS entity_type
+        WITH SYNONYMS ('org type', 'type')
+        COMMENT = 'Type classification',
+    entities.parent_name AS parent_name
+        WITH SYNONYMS ('parent entity', 'parent org')
+        COMMENT = 'Parent entity name',
+    entities.entity_health_status AS entity_health_status
+        WITH SYNONYMS ('health status', 'status', 'health', 'risk status')
+        COMMENT = 'Overall health (Critical, At Risk, Healthy, Needs Attention, No Activity)',
+    entities.has_children AS has_children
+        COMMENT = 'Whether entity has child entities',
+    entities.financial_review_required AS financial_review_required
+        WITH SYNONYMS ('requires review', 'needs review')
+        COMMENT = 'Whether financial review is required',
+    entities.hierarchy_lineage AS hierarchy_lineage
+        COMMENT = 'Hierarchy path lineage',
+    variance_summary.period_id AS period_id
+        COMMENT = 'Period identifier',
+    variance_summary.period_year AS period_year
+        WITH SYNONYMS ('year', 'fiscal year')
+        COMMENT = 'Year of the period',
+    variance_summary.period_quarter AS period_quarter
+        WITH SYNONYMS ('quarter', 'fiscal quarter')
+        COMMENT = 'Quarter of the period (1-4)',
+    variance_summary.period_risk_level AS period_risk_level
+        WITH SYNONYMS ('risk level', 'period risk')
+        COMMENT = 'Risk classification (Critical, High Risk, Medium Risk, Low Risk)',
+    variance_summary.period_end_date AS period_end_date
+        WITH SYNONYMS ('period date', 'close date')
+        COMMENT = 'End date of reconciliation period',
+    entities.last_activity_date AS last_activity_date
+        WITH SYNONYMS ('last updated', 'last activity')
+        COMMENT = 'Date of most recent activity'
+)
+
+METRICS(
+    entities.total_entity_count AS COUNT(entities.entity_id)
+        WITH SYNONYMS ('entity count', 'number of entities', 'org count')
+        COMMENT = 'Total count of entities',
+    entities.sum_gl_balance AS SUM(entities.total_gl_balance)
+        WITH SYNONYMS ('total gl', 'aggregate gl balance')
+        COMMENT = 'Sum of GL balances across entities',
+    entities.sum_bank_balance AS SUM(entities.total_bank_balance)
+        WITH SYNONYMS ('total bank', 'aggregate bank balance')
+        COMMENT = 'Sum of bank balances across entities',
+    entities.sum_variance AS SUM(entities.total_variance_amount)
+        WITH SYNONYMS ('total variance', 'aggregate variance')
+        COMMENT = 'Sum of variance amounts',
+    entities.avg_completion_rate AS AVG(entities.reconciliation_completion_pct)
+        WITH SYNONYMS ('average completion', 'mean completion rate')
+        COMMENT = 'Average reconciliation completion percentage',
+    entities.total_critical_variances AS SUM(entities.critical_variance_count)
+        WITH SYNONYMS ('critical count', 'total critical issues')
+        COMMENT = 'Total critical variances across entities',
+    entities.entities_at_risk_count AS COUNT(CASE WHEN entities.entity_health_status IN ('Critical', 'At Risk') THEN 1 END)
+        WITH SYNONYMS ('at risk count', 'risky entities')
+        COMMENT = 'Entities with Critical or At Risk status',
+    entities.healthy_entity_count AS COUNT(CASE WHEN entities.entity_health_status = 'Healthy' THEN 1 END)
+        WITH SYNONYMS ('healthy count')
+        COMMENT = 'Entities with Healthy status',
+    variance_summary.sum_period_variance AS SUM(variance_summary.total_variance)
+        COMMENT = 'Sum of variances across all periods',
+    variance_summary.sum_period_critical AS SUM(variance_summary.critical_count)
+        COMMENT = 'Total critical variances across periods'
+)
+
+COMMENT = 'Entity 360 semantic view for reconciliation management - enables natural language queries about entity health, reconciliation status, and variance analysis'
+[0m15:46:19.715467 [debug] [Thread-2 (]: Opening a new connection, currently in state init
+[0m15:46:21.151155 [debug] [Thread-2 (]: Snowflake adapter: Snowflake query id: 01c2b3f2-0207-ec73-004d-de070eeb061a
+[0m15:46:21.151928 [debug] [Thread-2 (]: Snowflake adapter: Snowflake error: 000904 (42000): 01c2b3f2-0207-ec73-004d-de070eeb061a: SQL compilation error: error line 77 at position 46
+invalid identifier 'PERIOD_SEVERE_COUNT'
+[0m15:46:21.157787 [debug] [Thread-2 (]: Database Error in model semantic_entity_360 (models/marts/semantic_entity_360.sql)
+  000904 (42000): 01c2b3f2-0207-ec73-004d-de070eeb061a: SQL compilation error: error line 77 at position 46
+  invalid identifier 'PERIOD_SEVERE_COUNT'
+  compiled code at /tmp/dbt/target/run/coco_demo/models/marts/semantic_entity_360.sql
+[0m15:46:21.161431 [error] [Thread-2 (]: 1 of 1 ERROR creating sql semantic_view model PUBLIC.semantic_entity_360 ....... [[31mERROR[0m in 1.51s]
+[0m15:46:21.162466 [debug] [Thread-2 (]: Finished running node model.coco_demo.semantic_entity_360
+[0m15:46:21.163882 [debug] [Thread-8 (]: Marking all children of 'model.coco_demo.semantic_entity_360' to be skipped because of status 'error'.  Reason: Database Error in model semantic_entity_360 (models/marts/semantic_entity_360.sql)
+  000904 (42000): 01c2b3f2-0207-ec73-004d-de070eeb061a: SQL compilation error: error line 77 at position 46
+  invalid identifier 'PERIOD_SEVERE_COUNT'
+  compiled code at /tmp/dbt/target/run/coco_demo/models/marts/semantic_entity_360.sql.
+[0m15:46:21.167638 [debug] [Dummy-1   ]: Connection 'master' was properly closed.
+[0m15:46:21.168354 [debug] [Dummy-1   ]: Connection 'model.coco_demo.semantic_entity_360' was properly closed.
+[0m15:46:21.169075 [info ] [Dummy-1   ]: 
+[0m15:46:21.169766 [info ] [Dummy-1   ]: Finished running 1 semantic view model in 0 hours 0 minutes and 3.27 seconds (3.27s).
+[0m15:46:21.170784 [debug] [Dummy-1   ]: Command end result
+[0m15:46:21.207188 [debug] [Dummy-1   ]: Wrote artifact WritableManifest to /tmp/dbt/target/manifest.json
+[0m15:46:21.209876 [debug] [Dummy-1   ]: Wrote artifact SemanticManifest to /tmp/dbt/target/semantic_manifest.json
+[0m15:46:21.218222 [debug] [Dummy-1   ]: Wrote artifact RunExecutionResult to /tmp/dbt/target/run_results.json
+[0m15:46:21.218927 [info ] [Dummy-1   ]: 
+[0m15:46:21.219706 [info ] [Dummy-1   ]: [31mCompleted with 1 error, 0 partial successes, and 0 warnings:[0m
+[0m15:46:21.220420 [info ] [Dummy-1   ]: 
+[0m15:46:21.221156 [error] [Dummy-1   ]:   Database Error in model semantic_entity_360 (models/marts/semantic_entity_360.sql)
+  000904 (42000): 01c2b3f2-0207-ec73-004d-de070eeb061a: SQL compilation error: error line 77 at position 46
+  invalid identifier 'PERIOD_SEVERE_COUNT'
+  compiled code at /tmp/dbt/target/run/coco_demo/models/marts/semantic_entity_360.sql
+[0m15:46:21.221752 [info ] [Dummy-1   ]: 
+[0m15:46:21.222388 [info ] [Dummy-1   ]: Done. PASS=0 WARN=0 ERROR=1 SKIP=0 TOTAL=1
+[0m15:46:21.224273 [debug] [Dummy-1   ]: Resource report: {"command_name": "build", "command_success": false, "command_wall_clock_time": 5.005322, "process_in_blocks": "0", "process_kernel_time": 1.13, "process_mem_max_rss": "507020", "process_out_blocks": "0", "process_user_time": 5.67}
+[0m15:46:21.224964 [debug] [Dummy-1   ]: Command `cli build` failed at 15:46:21.224693 after 5.01 seconds
+[0m15:46:21.225541 [debug] [Dummy-1   ]: Flushing usage events
+
+
+============================== 15:47:09.386835 | bed3c84b-eecd-41db-8ba9-6a09c394b04a ==============================
+[0m15:47:09.386835 [info ] [Dummy-1   ]: Running with dbt=1.9.4
+[0m15:47:09.387885 [debug] [Dummy-1   ]: running dbt with arguments {'printer_width': '80', 'indirect_selection': 'eager', 'write_json': 'True', 'log_cache_events': 'False', 'partial_parse': 'True', 'cache_selected_only': 'False', 'warn_error': 'None', 'fail_fast': 'False', 'version_check': 'True', 'log_path': '/tmp/dbt/logs', 'debug': 'False', 'profiles_dir': '/tmp/dbt/', 'use_colors': 'True', 'use_experimental_parser': 'False', 'empty': 'False', 'quiet': 'False', 'no_print': 'None', 'warn_error_options': 'WarnErrorOptions(include=[], exclude=[])', 'introspect': 'True', 'invocation_command': 'dbt ', 'log_format': 'default', 'target_path': '/tmp/dbt/target/', 'static_parser': 'True', 'send_anonymous_usage_stats': 'False'}
+[0m15:47:09.762715 [info ] [Dummy-1   ]: Registered adapter: snowflake=1.9.2
+[0m15:47:09.819655 [debug] [Dummy-1   ]: checksum: 53ed91fada2233efb98368d1716b44ab532c83a9c293cf1890b7905d5b45fb25, vars: {}, profile: , target: dev, version: 1.9.4
+[0m15:47:10.202344 [debug] [Dummy-1   ]: Partial parsing enabled: 0 files deleted, 0 files added, 1 files changed.
+[0m15:47:10.203348 [debug] [Dummy-1   ]: Partial parsing: updated file: coco_demo://models/marts/semantic_entity_360.sql
+[0m15:47:10.816249 [debug] [Dummy-1   ]: Wrote artifact WritableManifest to /tmp/dbt/target/manifest.json
+[0m15:47:10.818922 [debug] [Dummy-1   ]: Wrote artifact SemanticManifest to /tmp/dbt/target/semantic_manifest.json
+[0m15:47:10.896514 [info ] [Dummy-1   ]: Found 14 models, 2 data tests, 10 sources, 481 macros
+[0m15:47:10.899536 [info ] [Dummy-1   ]: 
+[0m15:47:10.900271 [info ] [Dummy-1   ]: Concurrency: 4 threads (target='dev')
+[0m15:47:10.900854 [info ] [Dummy-1   ]: 
+[0m15:47:10.901670 [debug] [Dummy-1   ]: Acquiring new snowflake connection 'master'
+[0m15:47:10.904587 [debug] [ThreadPool]: Acquiring new snowflake connection 'list_COCO_LIVE_DB'
+[0m15:47:11.013934 [debug] [ThreadPool]: Using snowflake connection "list_COCO_LIVE_DB"
+[0m15:47:11.014595 [debug] [ThreadPool]: On list_COCO_LIVE_DB: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "coco_demo", "target_name": "dev", "connection_name": "list_COCO_LIVE_DB"} */
+show terse schemas in database COCO_LIVE_DB
+    limit 10000
+[0m15:47:11.015088 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m15:47:11.669995 [debug] [ThreadPool]: SQL status: SUCCESS 3 in 0.655 seconds
+[0m15:47:11.680140 [debug] [ThreadPool]: Re-using an available connection from the pool (formerly list_COCO_LIVE_DB, now list_COCO_LIVE_DB_PUBLIC)
+[0m15:47:11.702657 [debug] [ThreadPool]: Using snowflake connection "list_COCO_LIVE_DB_PUBLIC"
+[0m15:47:11.703330 [debug] [ThreadPool]: On list_COCO_LIVE_DB_PUBLIC: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "coco_demo", "target_name": "dev", "connection_name": "list_COCO_LIVE_DB_PUBLIC"} */
+alter session set quoted_identifiers_ignore_case = false;
+[0m15:47:11.703871 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m15:47:12.536049 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.832 seconds
+[0m15:47:12.541805 [debug] [ThreadPool]: Using snowflake connection "list_COCO_LIVE_DB_PUBLIC"
+[0m15:47:12.542404 [debug] [ThreadPool]: On list_COCO_LIVE_DB_PUBLIC: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "coco_demo", "target_name": "dev", "connection_name": "list_COCO_LIVE_DB_PUBLIC"} */
+show objects in COCO_LIVE_DB.PUBLIC
+    limit 10000
+    
+;
+[0m15:47:12.700432 [debug] [ThreadPool]: SQL status: SUCCESS 13 in 0.157 seconds
+[0m15:47:12.703468 [debug] [ThreadPool]: Using snowflake connection "list_COCO_LIVE_DB_PUBLIC"
+[0m15:47:12.704079 [debug] [ThreadPool]: On list_COCO_LIVE_DB_PUBLIC: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "coco_demo", "target_name": "dev", "connection_name": "list_COCO_LIVE_DB_PUBLIC"} */
+alter session unset quoted_identifiers_ignore_case;
+[0m15:47:12.824994 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.120 seconds
+[0m15:47:12.838480 [debug] [Thread-2 (]: Began running node model.coco_demo.semantic_entity_360
+[0m15:47:12.839643 [info ] [Thread-2 (]: 1 of 1 START sql semantic_view model PUBLIC.semantic_entity_360 ................ [RUN]
+[0m15:47:12.840473 [debug] [Thread-2 (]: Re-using an available connection from the pool (formerly list_COCO_LIVE_DB_PUBLIC, now model.coco_demo.semantic_entity_360)
+[0m15:47:12.841074 [debug] [Thread-2 (]: Began compiling node model.coco_demo.semantic_entity_360
+[0m15:47:12.859579 [debug] [Thread-2 (]: Writing injected SQL for node "model.coco_demo.semantic_entity_360"
+[0m15:47:12.860567 [debug] [Thread-2 (]: Began executing node model.coco_demo.semantic_entity_360
+[0m15:47:12.891912 [debug] [Thread-2 (]: Writing runtime sql for node "model.coco_demo.semantic_entity_360"
+[0m15:47:12.901001 [debug] [Thread-2 (]: Using snowflake connection "model.coco_demo.semantic_entity_360"
+[0m15:47:12.902672 [debug] [Thread-2 (]: On model.coco_demo.semantic_entity_360: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "coco_demo", "target_name": "dev", "node_id": "model.coco_demo.semantic_entity_360"} */
+create or replace semantic view COCO_LIVE_DB.PUBLIC.semantic_entity_360
+  
+
+TABLES(
+    entities AS COCO_LIVE_DB.PUBLIC.mart_entity_360
+        PRIMARY KEY (entity_id)
+        WITH SYNONYMS ('organizations', 'companies', 'org units')
+        COMMENT = 'Comprehensive 360 view of organizational entities with reconciliation health metrics',
+    variance_summary AS COCO_LIVE_DB.PUBLIC.mart_variance_summary
+        PRIMARY KEY (entity_id, period_id)
+        WITH SYNONYMS ('variance trends', 'period variances')
+        COMMENT = 'Period-by-period variance analysis by entity'
+)
+
+RELATIONSHIPS(
+    variance_to_entity AS
+        variance_summary (entity_id) REFERENCES entities (entity_id)
+)
+
+FACTS(
+    entities.total_assignments AS total_assignments
+        COMMENT = 'Total number of reconciliation assignments',
+    entities.periods_with_activity AS periods_with_activity
+        COMMENT = 'Number of periods with activity',
+    entities.total_gl_balance AS total_gl_balance
+        COMMENT = 'Total general ledger balance',
+    entities.total_bank_balance AS total_bank_balance
+        COMMENT = 'Total bank balance',
+    entities.total_subledger_balance AS total_subledger_balance
+        COMMENT = 'Total subledger balance',
+    entities.total_gl_bank_variance AS total_gl_bank_variance
+        COMMENT = 'Variance between GL and bank balances',
+    entities.reconciled_count AS reconciled_count
+        COMMENT = 'Number of fully reconciled assignments',
+    entities.high_variance_count AS high_variance_count
+        COMMENT = 'Number of high variance assignments',
+    entities.missing_data_count AS missing_data_count
+        COMMENT = 'Assignments with missing data',
+    entities.reconciliation_completion_pct AS reconciliation_completion_pct
+        COMMENT = 'Reconciliation completion percentage',
+    entities.total_variance_amount AS total_variance_amount
+        COMMENT = 'Sum of all variance amounts',
+    entities.avg_variance_amount AS avg_variance_amount
+        COMMENT = 'Average variance amount',
+    entities.critical_variance_count AS critical_variance_count
+        COMMENT = 'Number of critical severity variances',
+    entities.high_severity_count AS high_severity_count
+        COMMENT = 'Number of high severity variances',
+    entities.current_period_gl_balance AS current_period_gl_balance
+        COMMENT = 'GL balance for current period',
+    entities.current_period_bank_balance AS current_period_bank_balance
+        COMMENT = 'Bank balance for current period',
+    entities.current_period_variance AS current_period_variance
+        COMMENT = 'Variance for current period',
+    entities.current_reconciled_count AS current_reconciled_count
+        COMMENT = 'Reconciled items in current period',
+    entities.current_unreconciled_count AS current_unreconciled_count
+        COMMENT = 'Unreconciled items in current period',
+    entities.ownership AS ownership
+        COMMENT = 'Ownership percentage',
+    entities.hierarchy_depth AS hierarchy_depth
+        COMMENT = 'Depth in organizational hierarchy',
+    variance_summary.assignments_with_variance AS assignments_with_variance
+        COMMENT = 'Assignments with variance in period',
+    variance_summary.total_variance AS period_total_variance
+        COMMENT = 'Total variance for the period',
+    variance_summary.avg_variance AS period_avg_variance
+        COMMENT = 'Average variance for the period',
+    variance_summary.critical_count AS period_critical_count
+        COMMENT = 'Critical variances in period',
+    variance_summary.high_count AS period_high_count
+        COMMENT = 'High severity variances in period',
+    variance_summary.medium_count AS period_medium_count
+        COMMENT = 'Medium severity variances in period',
+    variance_summary.low_count AS period_low_count
+        COMMENT = 'Low severity variances in period',
+    variance_summary.severe_variance_count AS severe_variance_count
+        COMMENT = 'Combined critical and high variances'
+)
+
+DIMENSIONS(
+    entities.entity_id AS entity_id
+        WITH SYNONYMS ('org id', 'organization id', 'company id')
+        COMMENT = 'Unique entity identifier',
+    entities.entity_code AS entity_code
+        WITH SYNONYMS ('org code', 'company code')
+        COMMENT = 'Business code for the entity',
+    entities.entity_name AS entity_name
+        WITH SYNONYMS ('organization name', 'company name', 'org name')
+        COMMENT = 'Display name of the entity',
+    entities.entity_description AS entity_description
+        COMMENT = 'Detailed description',
+    entities.entity_type AS entity_type
+        WITH SYNONYMS ('org type', 'type')
+        COMMENT = 'Type classification',
+    entities.parent_name AS parent_name
+        WITH SYNONYMS ('parent entity', 'parent org')
+        COMMENT = 'Parent entity name',
+    entities.entity_health_status AS entity_health_status
+        WITH SYNONYMS ('health status', 'status', 'health', 'risk status')
+        COMMENT = 'Overall health (Critical, At Risk, Healthy, Needs Attention, No Activity)',
+    entities.has_children AS has_children
+        COMMENT = 'Whether entity has child entities',
+    entities.financial_review_required AS financial_review_required
+        WITH SYNONYMS ('requires review', 'needs review')
+        COMMENT = 'Whether financial review is required',
+    entities.hierarchy_lineage AS hierarchy_lineage
+        COMMENT = 'Hierarchy path lineage',
+    variance_summary.period_id AS period_id
+        COMMENT = 'Period identifier',
+    variance_summary.period_year AS period_year
+        WITH SYNONYMS ('year', 'fiscal year')
+        COMMENT = 'Year of the period',
+    variance_summary.period_quarter AS period_quarter
+        WITH SYNONYMS ('quarter', 'fiscal quarter')
+        COMMENT = 'Quarter of the period (1-4)',
+    variance_summary.period_risk_level AS period_risk_level
+        WITH SYNONYMS ('risk level', 'period risk')
+        COMMENT = 'Risk classification (Critical, High Risk, Medium Risk, Low Risk)',
+    variance_summary.period_end_date AS period_end_date
+        WITH SYNONYMS ('period date', 'close date')
+        COMMENT = 'End date of reconciliation period',
+    entities.last_activity_date AS last_activity_date
+        WITH SYNONYMS ('last updated', 'last activity')
+        COMMENT = 'Date of most recent activity'
+)
+
+METRICS(
+    entities.total_entity_count AS COUNT(entities.entity_id)
+        WITH SYNONYMS ('entity count', 'number of entities', 'org count')
+        COMMENT = 'Total count of entities',
+    entities.sum_gl_balance AS SUM(entities.total_gl_balance)
+        WITH SYNONYMS ('total gl', 'aggregate gl balance')
+        COMMENT = 'Sum of GL balances across entities',
+    entities.sum_bank_balance AS SUM(entities.total_bank_balance)
+        WITH SYNONYMS ('total bank', 'aggregate bank balance')
+        COMMENT = 'Sum of bank balances across entities',
+    entities.sum_variance AS SUM(entities.total_variance_amount)
+        WITH SYNONYMS ('total variance', 'aggregate variance')
+        COMMENT = 'Sum of variance amounts',
+    entities.avg_completion_rate AS AVG(entities.reconciliation_completion_pct)
+        WITH SYNONYMS ('average completion', 'mean completion rate')
+        COMMENT = 'Average reconciliation completion percentage',
+    entities.total_critical_variances AS SUM(entities.critical_variance_count)
+        WITH SYNONYMS ('critical count', 'total critical issues')
+        COMMENT = 'Total critical variances across entities',
+    entities.entities_at_risk_count AS COUNT(CASE WHEN entities.entity_health_status IN ('Critical', 'At Risk') THEN 1 END)
+        WITH SYNONYMS ('at risk count', 'risky entities')
+        COMMENT = 'Entities with Critical or At Risk status',
+    entities.healthy_entity_count AS COUNT(CASE WHEN entities.entity_health_status = 'Healthy' THEN 1 END)
+        WITH SYNONYMS ('healthy count')
+        COMMENT = 'Entities with Healthy status',
+    variance_summary.sum_period_variance AS SUM(variance_summary.total_variance)
+        COMMENT = 'Sum of variances across all periods',
+    variance_summary.sum_period_critical AS SUM(variance_summary.critical_count)
+        COMMENT = 'Total critical variances across periods'
+)
+
+COMMENT = 'Entity 360 semantic view for reconciliation management - enables natural language queries about entity health, reconciliation status, and variance analysis'
+[0m15:47:12.903887 [debug] [Thread-2 (]: Opening a new connection, currently in state init
+[0m15:47:14.274111 [debug] [Thread-2 (]: Snowflake adapter: Snowflake query id: 01c2b3f3-0207-eb24-004d-de070eeace9a
+[0m15:47:14.274845 [debug] [Thread-2 (]: Snowflake adapter: Snowflake error: 000904 (42000): 01c2b3f3-0207-eb24-004d-de070eeace9a: SQL compilation error: error line 73 at position 37
+invalid identifier 'PERIOD_MEDIUM_COUNT'
+[0m15:47:14.280613 [debug] [Thread-2 (]: Database Error in model semantic_entity_360 (models/marts/semantic_entity_360.sql)
+  000904 (42000): 01c2b3f3-0207-eb24-004d-de070eeace9a: SQL compilation error: error line 73 at position 37
+  invalid identifier 'PERIOD_MEDIUM_COUNT'
+  compiled code at /tmp/dbt/target/run/coco_demo/models/marts/semantic_entity_360.sql
+[0m15:47:14.284075 [error] [Thread-2 (]: 1 of 1 ERROR creating sql semantic_view model PUBLIC.semantic_entity_360 ....... [[31mERROR[0m in 1.44s]
+[0m15:47:14.285063 [debug] [Thread-2 (]: Finished running node model.coco_demo.semantic_entity_360
+[0m15:47:14.286459 [debug] [Thread-8 (]: Marking all children of 'model.coco_demo.semantic_entity_360' to be skipped because of status 'error'.  Reason: Database Error in model semantic_entity_360 (models/marts/semantic_entity_360.sql)
+  000904 (42000): 01c2b3f3-0207-eb24-004d-de070eeace9a: SQL compilation error: error line 73 at position 37
+  invalid identifier 'PERIOD_MEDIUM_COUNT'
+  compiled code at /tmp/dbt/target/run/coco_demo/models/marts/semantic_entity_360.sql.
+[0m15:47:14.290280 [debug] [Dummy-1   ]: Connection 'master' was properly closed.
+[0m15:47:14.290840 [debug] [Dummy-1   ]: Connection 'model.coco_demo.semantic_entity_360' was properly closed.
+[0m15:47:14.291498 [info ] [Dummy-1   ]: 
+[0m15:47:14.292183 [info ] [Dummy-1   ]: Finished running 1 semantic view model in 0 hours 0 minutes and 3.39 seconds (3.39s).
+[0m15:47:14.293184 [debug] [Dummy-1   ]: Command end result
+[0m15:47:14.328622 [debug] [Dummy-1   ]: Wrote artifact WritableManifest to /tmp/dbt/target/manifest.json
+[0m15:47:14.331086 [debug] [Dummy-1   ]: Wrote artifact SemanticManifest to /tmp/dbt/target/semantic_manifest.json
+[0m15:47:14.339096 [debug] [Dummy-1   ]: Wrote artifact RunExecutionResult to /tmp/dbt/target/run_results.json
+[0m15:47:14.339793 [info ] [Dummy-1   ]: 
+[0m15:47:14.340587 [info ] [Dummy-1   ]: [31mCompleted with 1 error, 0 partial successes, and 0 warnings:[0m
+[0m15:47:14.341206 [info ] [Dummy-1   ]: 
+[0m15:47:14.341922 [error] [Dummy-1   ]:   Database Error in model semantic_entity_360 (models/marts/semantic_entity_360.sql)
+  000904 (42000): 01c2b3f3-0207-eb24-004d-de070eeace9a: SQL compilation error: error line 73 at position 37
+  invalid identifier 'PERIOD_MEDIUM_COUNT'
+  compiled code at /tmp/dbt/target/run/coco_demo/models/marts/semantic_entity_360.sql
+[0m15:47:14.342513 [info ] [Dummy-1   ]: 
+[0m15:47:14.343221 [info ] [Dummy-1   ]: Done. PASS=0 WARN=0 ERROR=1 SKIP=0 TOTAL=1
+[0m15:47:14.345072 [debug] [Dummy-1   ]: Resource report: {"command_name": "build", "command_success": false, "command_wall_clock_time": 5.0541487, "process_in_blocks": "0", "process_kernel_time": 0.95, "process_mem_max_rss": "504792", "process_out_blocks": "0", "process_user_time": 5.55}
+[0m15:47:14.345756 [debug] [Dummy-1   ]: Command `cli build` failed at 15:47:14.345481 after 5.06 seconds
+[0m15:47:14.346331 [debug] [Dummy-1   ]: Flushing usage events
+
+
+============================== 15:51:30.301624 | 3ea2f943-2df8-401c-9ce0-129cb684bc5d ==============================
+[0m15:51:30.301624 [info ] [Dummy-1   ]: Running with dbt=1.9.4
+[0m15:51:30.302656 [debug] [Dummy-1   ]: running dbt with arguments {'printer_width': '80', 'indirect_selection': 'eager', 'write_json': 'True', 'log_cache_events': 'False', 'partial_parse': 'True', 'cache_selected_only': 'False', 'warn_error': 'None', 'version_check': 'True', 'fail_fast': 'False', 'log_path': '/tmp/dbt/logs', 'profiles_dir': '/tmp/dbt/', 'debug': 'False', 'use_colors': 'True', 'use_experimental_parser': 'False', 'empty': 'False', 'quiet': 'False', 'no_print': 'None', 'log_format': 'default', 'invocation_command': 'dbt ', 'warn_error_options': 'WarnErrorOptions(include=[], exclude=[])', 'introspect': 'True', 'target_path': '/tmp/dbt/target/', 'static_parser': 'True', 'send_anonymous_usage_stats': 'False'}
+[0m15:51:30.676541 [info ] [Dummy-1   ]: Registered adapter: snowflake=1.9.2
+[0m15:51:30.734307 [debug] [Dummy-1   ]: checksum: 53ed91fada2233efb98368d1716b44ab532c83a9c293cf1890b7905d5b45fb25, vars: {}, profile: , target: dev, version: 1.9.4
+[0m15:51:31.120555 [debug] [Dummy-1   ]: Partial parsing enabled: 0 files deleted, 0 files added, 1 files changed.
+[0m15:51:31.121628 [debug] [Dummy-1   ]: Partial parsing: updated file: coco_demo://models/marts/semantic_entity_360.sql
+[0m15:51:31.736410 [debug] [Dummy-1   ]: Wrote artifact WritableManifest to /tmp/dbt/target/manifest.json
+[0m15:51:31.739103 [debug] [Dummy-1   ]: Wrote artifact SemanticManifest to /tmp/dbt/target/semantic_manifest.json
+[0m15:51:31.817026 [info ] [Dummy-1   ]: Found 14 models, 2 data tests, 10 sources, 481 macros
+[0m15:51:31.820111 [info ] [Dummy-1   ]: 
+[0m15:51:31.820805 [info ] [Dummy-1   ]: Concurrency: 4 threads (target='dev')
+[0m15:51:31.821397 [info ] [Dummy-1   ]: 
+[0m15:51:31.822209 [debug] [Dummy-1   ]: Acquiring new snowflake connection 'master'
+[0m15:51:31.824121 [debug] [ThreadPool]: Acquiring new snowflake connection 'list_COCO_LIVE_DB'
+[0m15:51:31.936214 [debug] [ThreadPool]: Using snowflake connection "list_COCO_LIVE_DB"
+[0m15:51:31.936874 [debug] [ThreadPool]: On list_COCO_LIVE_DB: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "coco_demo", "target_name": "dev", "connection_name": "list_COCO_LIVE_DB"} */
+show terse schemas in database COCO_LIVE_DB
+    limit 10000
+[0m15:51:31.937374 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m15:51:33.642290 [debug] [ThreadPool]: SQL status: SUCCESS 3 in 1.705 seconds
+[0m15:51:33.652801 [debug] [ThreadPool]: Re-using an available connection from the pool (formerly list_COCO_LIVE_DB, now list_COCO_LIVE_DB_PUBLIC)
+[0m15:51:33.675408 [debug] [ThreadPool]: Using snowflake connection "list_COCO_LIVE_DB_PUBLIC"
+[0m15:51:33.676093 [debug] [ThreadPool]: On list_COCO_LIVE_DB_PUBLIC: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "coco_demo", "target_name": "dev", "connection_name": "list_COCO_LIVE_DB_PUBLIC"} */
+alter session set quoted_identifiers_ignore_case = false;
+[0m15:51:33.676582 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m15:51:34.462313 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.786 seconds
+[0m15:51:34.468121 [debug] [ThreadPool]: Using snowflake connection "list_COCO_LIVE_DB_PUBLIC"
+[0m15:51:34.468860 [debug] [ThreadPool]: On list_COCO_LIVE_DB_PUBLIC: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "coco_demo", "target_name": "dev", "connection_name": "list_COCO_LIVE_DB_PUBLIC"} */
+show objects in COCO_LIVE_DB.PUBLIC
+    limit 10000
+    
+;
+[0m15:51:34.711837 [debug] [ThreadPool]: SQL status: SUCCESS 13 in 0.242 seconds
+[0m15:51:34.714894 [debug] [ThreadPool]: Using snowflake connection "list_COCO_LIVE_DB_PUBLIC"
+[0m15:51:34.715503 [debug] [ThreadPool]: On list_COCO_LIVE_DB_PUBLIC: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "coco_demo", "target_name": "dev", "connection_name": "list_COCO_LIVE_DB_PUBLIC"} */
+alter session unset quoted_identifiers_ignore_case;
+[0m15:51:34.946118 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.230 seconds
+[0m15:51:34.959763 [debug] [Thread-2 (]: Began running node model.coco_demo.semantic_entity_360
+[0m15:51:34.960940 [info ] [Thread-2 (]: 1 of 1 START sql semantic_view model PUBLIC.semantic_entity_360 ................ [RUN]
+[0m15:51:34.961742 [debug] [Thread-2 (]: Re-using an available connection from the pool (formerly list_COCO_LIVE_DB_PUBLIC, now model.coco_demo.semantic_entity_360)
+[0m15:51:34.962337 [debug] [Thread-2 (]: Began compiling node model.coco_demo.semantic_entity_360
+[0m15:51:34.980915 [debug] [Thread-2 (]: Writing injected SQL for node "model.coco_demo.semantic_entity_360"
+[0m15:51:34.981905 [debug] [Thread-2 (]: Began executing node model.coco_demo.semantic_entity_360
+[0m15:51:35.013957 [debug] [Thread-2 (]: Writing runtime sql for node "model.coco_demo.semantic_entity_360"
+[0m15:51:35.021705 [debug] [Thread-2 (]: Using snowflake connection "model.coco_demo.semantic_entity_360"
+[0m15:51:35.023313 [debug] [Thread-2 (]: On model.coco_demo.semantic_entity_360: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "coco_demo", "target_name": "dev", "node_id": "model.coco_demo.semantic_entity_360"} */
+create or replace semantic view COCO_LIVE_DB.PUBLIC.semantic_entity_360
+  
+
+TABLES(
+    entities AS COCO_LIVE_DB.PUBLIC.mart_entity_360
+        PRIMARY KEY (entity_id)
+        WITH SYNONYMS ('organizations', 'companies', 'org units')
+        COMMENT = 'Comprehensive 360 view of organizational entities with reconciliation health metrics',
+    variance_summary AS COCO_LIVE_DB.PUBLIC.mart_variance_summary
+        PRIMARY KEY (entity_id, period_id)
+        WITH SYNONYMS ('variance trends', 'period variances')
+        COMMENT = 'Period-by-period variance analysis by entity'
+)
+
+RELATIONSHIPS(
+    variance_to_entity AS
+        variance_summary (entity_id) REFERENCES entities (entity_id)
+)
+
+FACTS(
+    entities.total_assignments
+        COMMENT = 'Total number of reconciliation assignments',
+    entities.periods_with_activity
+        COMMENT = 'Number of periods with activity',
+    entities.total_gl_balance
+        COMMENT = 'Total general ledger balance',
+    entities.total_bank_balance
+        COMMENT = 'Total bank balance',
+    entities.total_subledger_balance
+        COMMENT = 'Total subledger balance',
+    entities.total_gl_bank_variance
+        COMMENT = 'Variance between GL and bank balances',
+    entities.reconciled_count
+        COMMENT = 'Number of fully reconciled assignments',
+    entities.high_variance_count
+        COMMENT = 'Number of high variance assignments',
+    entities.missing_data_count
+        COMMENT = 'Assignments with missing data',
+    entities.reconciliation_completion_pct
+        COMMENT = 'Reconciliation completion percentage',
+    entities.total_variance_amount
+        COMMENT = 'Sum of all variance amounts',
+    entities.avg_variance_amount
+        COMMENT = 'Average variance amount',
+    entities.critical_variance_count
+        COMMENT = 'Number of critical severity variances',
+    entities.high_severity_count
+        COMMENT = 'Number of high severity variances',
+    entities.current_period_gl_balance
+        COMMENT = 'GL balance for current period',
+    entities.current_period_bank_balance
+        COMMENT = 'Bank balance for current period',
+    entities.current_period_variance
+        COMMENT = 'Variance for current period',
+    entities.current_reconciled_count
+        COMMENT = 'Reconciled items in current period',
+    entities.current_unreconciled_count
+        COMMENT = 'Unreconciled items in current period',
+    entities.ownership
+        COMMENT = 'Ownership percentage',
+    entities.hierarchy_depth
+        COMMENT = 'Depth in organizational hierarchy',
+    variance_summary.assignments_with_variance
+        COMMENT = 'Assignments with variance in period',
+    variance_summary.total_variance
+        COMMENT = 'Total variance for the period',
+    variance_summary.avg_variance
+        COMMENT = 'Average variance for the period',
+    variance_summary.critical_count
+        COMMENT = 'Critical variances in period',
+    variance_summary.high_count
+        COMMENT = 'High severity variances in period',
+    variance_summary.medium_count
+        COMMENT = 'Medium severity variances in period',
+    variance_summary.low_count
+        COMMENT = 'Low severity variances in period',
+    variance_summary.severe_variance_count
+        COMMENT = 'Combined critical and high variances'
+)
+
+DIMENSIONS(
+    entities.entity_id
+        WITH SYNONYMS ('org id', 'organization id', 'company id')
+        COMMENT = 'Unique entity identifier',
+    entities.entity_code
+        WITH SYNONYMS ('org code', 'company code')
+        COMMENT = 'Business code for the entity',
+    entities.entity_name
+        WITH SYNONYMS ('organization name', 'company name', 'org name')
+        COMMENT = 'Display name of the entity',
+    entities.entity_description
+        COMMENT = 'Detailed description',
+    entities.entity_type
+        WITH SYNONYMS ('org type', 'type')
+        COMMENT = 'Type classification',
+    entities.parent_name
+        WITH SYNONYMS ('parent entity', 'parent org')
+        COMMENT = 'Parent entity name',
+    entities.entity_health_status
+        WITH SYNONYMS ('health status', 'status', 'health', 'risk status')
+        COMMENT = 'Overall health (Critical, At Risk, Healthy, Needs Attention, No Activity)',
+    entities.has_children
+        COMMENT = 'Whether entity has child entities',
+    entities.financial_review_required
+        WITH SYNONYMS ('requires review', 'needs review')
+        COMMENT = 'Whether financial review is required',
+    entities.hierarchy_lineage
+        COMMENT = 'Hierarchy path lineage',
+    variance_summary.period_id
+        COMMENT = 'Period identifier',
+    variance_summary.period_year
+        WITH SYNONYMS ('year', 'fiscal year')
+        COMMENT = 'Year of the period',
+    variance_summary.period_quarter
+        WITH SYNONYMS ('quarter', 'fiscal quarter')
+        COMMENT = 'Quarter of the period (1-4)',
+    variance_summary.period_risk_level
+        WITH SYNONYMS ('risk level', 'period risk')
+        COMMENT = 'Risk classification (Critical, High Risk, Medium Risk, Low Risk)',
+    variance_summary.period_end_date
+        WITH SYNONYMS ('period date', 'close date')
+        COMMENT = 'End date of reconciliation period',
+    entities.last_activity_date
+        WITH SYNONYMS ('last updated', 'last activity')
+        COMMENT = 'Date of most recent activity'
+)
+
+METRICS(
+    entities.total_entity_count AS COUNT(entities.entity_id)
+        WITH SYNONYMS ('entity count', 'number of entities', 'org count')
+        COMMENT = 'Total count of entities',
+    entities.sum_gl_balance AS SUM(entities.total_gl_balance)
+        WITH SYNONYMS ('total gl', 'aggregate gl balance')
+        COMMENT = 'Sum of GL balances across entities',
+    entities.sum_bank_balance AS SUM(entities.total_bank_balance)
+        WITH SYNONYMS ('total bank', 'aggregate bank balance')
+        COMMENT = 'Sum of bank balances across entities',
+    entities.sum_variance AS SUM(entities.total_variance_amount)
+        WITH SYNONYMS ('total variance', 'aggregate variance')
+        COMMENT = 'Sum of variance amounts',
+    entities.avg_completion_rate AS AVG(entities.reconciliation_completion_pct)
+        WITH SYNONYMS ('average completion', 'mean completion rate')
+        COMMENT = 'Average reconciliation completion percentage',
+    entities.total_critical_variances AS SUM(entities.critical_variance_count)
+        WITH SYNONYMS ('critical count', 'total critical issues')
+        COMMENT = 'Total critical variances across entities',
+    entities.entities_at_risk_count AS COUNT(CASE WHEN entities.entity_health_status IN ('Critical', 'At Risk') THEN 1 END)
+        WITH SYNONYMS ('at risk count', 'risky entities')
+        COMMENT = 'Entities with Critical or At Risk status',
+    entities.healthy_entity_count AS COUNT(CASE WHEN entities.entity_health_status = 'Healthy' THEN 1 END)
+        WITH SYNONYMS ('healthy count')
+        COMMENT = 'Entities with Healthy status',
+    variance_summary.sum_period_variance AS SUM(variance_summary.total_variance)
+        COMMENT = 'Sum of variances across all periods',
+    variance_summary.sum_period_critical AS SUM(variance_summary.critical_count)
+        COMMENT = 'Total critical variances across periods'
+)
+
+COMMENT = 'Entity 360 semantic view for reconciliation management - enables natural language queries about entity health, reconciliation status, and variance analysis'
+[0m15:51:35.024495 [debug] [Thread-2 (]: Opening a new connection, currently in state init
+[0m15:51:35.724644 [debug] [Thread-2 (]: Snowflake adapter: Snowflake query id: 01c2b3f7-0207-e96a-004d-de070eeabc92
+[0m15:51:35.725709 [debug] [Thread-2 (]: Snowflake adapter: Snowflake error: 001003 (42000): 01c2b3f7-0207-e96a-004d-de070eeabc92: SQL compilation error:
+syntax error line 22 at position 8 unexpected 'COMMENT'.
+syntax error line 24 at position 8 unexpected 'COMMENT'.
+syntax error line 26 at position 8 unexpected 'COMMENT'.
+syntax error line 28 at position 8 unexpected 'COMMENT'.
+syntax error line 30 at position 8 unexpected 'COMMENT'.
+syntax error line 32 at position 8 unexpected 'COMMENT'.
+syntax error line 34 at position 8 unexpected 'COMMENT'.
+syntax error line 36 at position 8 unexpected 'COMMENT'.
+syntax error line 38 at position 8 unexpected 'COMMENT'.
+syntax error line 40 at position 8 unexpected 'COMMENT'.
+syntax error line 42 at position 8 unexpected 'COMMENT'.
+syntax error line 44 at position 8 unexpected 'COMMENT'.
+syntax error line 46 at position 8 unexpected 'COMMENT'.
+syntax error line 48 at position 8 unexpected 'COMMENT'.
+syntax error line 50 at position 8 unexpected 'COMMENT'.
+syntax error line 52 at position 8 unexpected 'COMMENT'.
+syntax error line 54 at position 8 unexpected 'COMMENT'.
+syntax error line 56 at position 8 unexpected 'COMMENT'.
+syntax error line 58 at position 8 unexpected 'COMMENT'.
+syntax error line 60 at position 8 unexpected 'COMMENT'.
+syntax error line 62 at position 8 unexpected 'COMMENT'.
+syntax error line 64 at position 8 unexpected 'COMMENT'.
+syntax error line 66 at position 8 unexpected 'COMMENT'.
+syntax error line 68 at position 8 unexpected 'COMMENT'.
+syntax error line 70 at position 8 unexpected 'COMMENT'.
+syntax error line 72 at position 8 unexpected 'COMMENT'.
+syntax error line 74 at position 8 unexpected 'COMMENT'.
+syntax error line 76 at position 8 unexpected 'COMMENT'.
+syntax error line 78 at position 8 unexpected 'COMMENT'.
+syntax error line 83 at position 8 unexpected 'WITH'.
+syntax error line 83 at position 13 unexpected 'SYNONYMS'.
+[0m15:51:35.732076 [debug] [Thread-2 (]: Database Error in model semantic_entity_360 (models/marts/semantic_entity_360.sql)
+  001003 (42000): 01c2b3f7-0207-e96a-004d-de070eeabc92: SQL compilation error:
+  syntax error line 22 at position 8 unexpected 'COMMENT'.
+  syntax error line 24 at position 8 unexpected 'COMMENT'.
+  syntax error line 26 at position 8 unexpected 'COMMENT'.
+  syntax error line 28 at position 8 unexpected 'COMMENT'.
+  syntax error line 30 at position 8 unexpected 'COMMENT'.
+  syntax error line 32 at position 8 unexpected 'COMMENT'.
+  syntax error line 34 at position 8 unexpected 'COMMENT'.
+  syntax error line 36 at position 8 unexpected 'COMMENT'.
+  syntax error line 38 at position 8 unexpected 'COMMENT'.
+  syntax error line 40 at position 8 unexpected 'COMMENT'.
+  syntax error line 42 at position 8 unexpected 'COMMENT'.
+  syntax error line 44 at position 8 unexpected 'COMMENT'.
+  syntax error line 46 at position 8 unexpected 'COMMENT'.
+  syntax error line 48 at position 8 unexpected 'COMMENT'.
+  syntax error line 50 at position 8 unexpected 'COMMENT'.
+  syntax error line 52 at position 8 unexpected 'COMMENT'.
+  syntax error line 54 at position 8 unexpected 'COMMENT'.
+  syntax error line 56 at position 8 unexpected 'COMMENT'.
+  syntax error line 58 at position 8 unexpected 'COMMENT'.
+  syntax error line 60 at position 8 unexpected 'COMMENT'.
+  syntax error line 62 at position 8 unexpected 'COMMENT'.
+  syntax error line 64 at position 8 unexpected 'COMMENT'.
+  syntax error line 66 at position 8 unexpected 'COMMENT'.
+  syntax error line 68 at position 8 unexpected 'COMMENT'.
+  syntax error line 70 at position 8 unexpected 'COMMENT'.
+  syntax error line 72 at position 8 unexpected 'COMMENT'.
+  syntax error line 74 at position 8 unexpected 'COMMENT'.
+  syntax error line 76 at position 8 unexpected 'COMMENT'.
+  syntax error line 78 at position 8 unexpected 'COMMENT'.
+  syntax error line 83 at position 8 unexpected 'WITH'.
+  syntax error line 83 at position 13 unexpected 'SYNONYMS'.
+  compiled code at /tmp/dbt/target/run/coco_demo/models/marts/semantic_entity_360.sql
+[0m15:51:35.735667 [error] [Thread-2 (]: 1 of 1 ERROR creating sql semantic_view model PUBLIC.semantic_entity_360 ....... [[31mERROR[0m in 0.77s]
+[0m15:51:35.736789 [debug] [Thread-2 (]: Finished running node model.coco_demo.semantic_entity_360
+[0m15:51:35.738545 [debug] [Thread-8 (]: Marking all children of 'model.coco_demo.semantic_entity_360' to be skipped because of status 'error'.  Reason: Database Error in model semantic_entity_360 (models/marts/semantic_entity_360.sql)
+  001003 (42000): 01c2b3f7-0207-e96a-004d-de070eeabc92: SQL compilation error:
+  syntax error line 22 at position 8 unexpected 'COMMENT'.
+  syntax error line 24 at position 8 unexpected 'COMMENT'.
+  syntax error line 26 at position 8 unexpected 'COMMENT'.
+  syntax error line 28 at position 8 unexpected 'COMMENT'.
+  syntax error line 30 at position 8 unexpected 'COMMENT'.
+  syntax error line 32 at position 8 unexpected 'COMMENT'.
+  syntax error line 34 at position 8 unexpected 'COMMENT'.
+  syntax error line 36 at position 8 unexpected 'COMMENT'.
+  syntax error line 38 at position 8 unexpected 'COMMENT'.
+  syntax error line 40 at position 8 unexpected 'COMMENT'.
+  syntax error line 42 at position 8 unexpected 'COMMENT'.
+  syntax error line 44 at position 8 unexpected 'COMMENT'.
+  syntax error line 46 at position 8 unexpected 'COMMENT'.
+  syntax error line 48 at position 8 unexpected 'COMMENT'.
+  syntax error line 50 at position 8 unexpected 'COMMENT'.
+  syntax error line 52 at position 8 unexpected 'COMMENT'.
+  syntax error line 54 at position 8 unexpected 'COMMENT'.
+  syntax error line 56 at position 8 unexpected 'COMMENT'.
+  syntax error line 58 at position 8 unexpected 'COMMENT'.
+  syntax error line 60 at position 8 unexpected 'COMMENT'.
+  syntax error line 62 at position 8 unexpected 'COMMENT'.
+  syntax error line 64 at position 8 unexpected 'COMMENT'.
+  syntax error line 66 at position 8 unexpected 'COMMENT'.
+  syntax error line 68 at position 8 unexpected 'COMMENT'.
+  syntax error line 70 at position 8 unexpected 'COMMENT'.
+  syntax error line 72 at position 8 unexpected 'COMMENT'.
+  syntax error line 74 at position 8 unexpected 'COMMENT'.
+  syntax error line 76 at position 8 unexpected 'COMMENT'.
+  syntax error line 78 at position 8 unexpected 'COMMENT'.
+  syntax error line 83 at position 8 unexpected 'WITH'.
+  syntax error line 83 at position 13 unexpected 'SYNONYMS'.
+  compiled code at /tmp/dbt/target/run/coco_demo/models/marts/semantic_entity_360.sql.
+[0m15:51:35.742431 [debug] [Dummy-1   ]: Connection 'master' was properly closed.
+[0m15:51:35.743052 [debug] [Dummy-1   ]: Connection 'model.coco_demo.semantic_entity_360' was properly closed.
+[0m15:51:35.743750 [info ] [Dummy-1   ]: 
+[0m15:51:35.744410 [info ] [Dummy-1   ]: Finished running 1 semantic view model in 0 hours 0 minutes and 3.92 seconds (3.92s).
+[0m15:51:35.745497 [debug] [Dummy-1   ]: Command end result
+[0m15:51:35.780821 [debug] [Dummy-1   ]: Wrote artifact WritableManifest to /tmp/dbt/target/manifest.json
+[0m15:51:35.783269 [debug] [Dummy-1   ]: Wrote artifact SemanticManifest to /tmp/dbt/target/semantic_manifest.json
+[0m15:51:35.791416 [debug] [Dummy-1   ]: Wrote artifact RunExecutionResult to /tmp/dbt/target/run_results.json
+[0m15:51:35.792131 [info ] [Dummy-1   ]: 
+[0m15:51:35.792900 [info ] [Dummy-1   ]: [31mCompleted with 1 error, 0 partial successes, and 0 warnings:[0m
+[0m15:51:35.793536 [info ] [Dummy-1   ]: 
+[0m15:51:35.794469 [error] [Dummy-1   ]:   Database Error in model semantic_entity_360 (models/marts/semantic_entity_360.sql)
+  001003 (42000): 01c2b3f7-0207-e96a-004d-de070eeabc92: SQL compilation error:
+  syntax error line 22 at position 8 unexpected 'COMMENT'.
+  syntax error line 24 at position 8 unexpected 'COMMENT'.
+  syntax error line 26 at position 8 unexpected 'COMMENT'.
+  syntax error line 28 at position 8 unexpected 'COMMENT'.
+  syntax error line 30 at position 8 unexpected 'COMMENT'.
+  syntax error line 32 at position 8 unexpected 'COMMENT'.
+  syntax error line 34 at position 8 unexpected 'COMMENT'.
+  syntax error line 36 at position 8 unexpected 'COMMENT'.
+  syntax error line 38 at position 8 unexpected 'COMMENT'.
+  syntax error line 40 at position 8 unexpected 'COMMENT'.
+  syntax error line 42 at position 8 unexpected 'COMMENT'.
+  syntax error line 44 at position 8 unexpected 'COMMENT'.
+  syntax error line 46 at position 8 unexpected 'COMMENT'.
+  syntax error line 48 at position 8 unexpected 'COMMENT'.
+  syntax error line 50 at position 8 unexpected 'COMMENT'.
+  syntax error line 52 at position 8 unexpected 'COMMENT'.
+  syntax error line 54 at position 8 unexpected 'COMMENT'.
+  syntax error line 56 at position 8 unexpected 'COMMENT'.
+  syntax error line 58 at position 8 unexpected 'COMMENT'.
+  syntax error line 60 at position 8 unexpected 'COMMENT'.
+  syntax error line 62 at position 8 unexpected 'COMMENT'.
+  syntax error line 64 at position 8 unexpected 'COMMENT'.
+  syntax error line 66 at position 8 unexpected 'COMMENT'.
+  syntax error line 68 at position 8 unexpected 'COMMENT'.
+  syntax error line 70 at position 8 unexpected 'COMMENT'.
+  syntax error line 72 at position 8 unexpected 'COMMENT'.
+  syntax error line 74 at position 8 unexpected 'COMMENT'.
+  syntax error line 76 at position 8 unexpected 'COMMENT'.
+  syntax error line 78 at position 8 unexpected 'COMMENT'.
+  syntax error line 83 at position 8 unexpected 'WITH'.
+  syntax error line 83 at position 13 unexpected 'SYNONYMS'.
+  compiled code at /tmp/dbt/target/run/coco_demo/models/marts/semantic_entity_360.sql
+[0m15:51:35.795179 [info ] [Dummy-1   ]: 
+[0m15:51:35.795824 [info ] [Dummy-1   ]: Done. PASS=0 WARN=0 ERROR=1 SKIP=0 TOTAL=1
+[0m15:51:35.797636 [debug] [Dummy-1   ]: Resource report: {"command_name": "build", "command_success": false, "command_wall_clock_time": 5.593653, "process_in_blocks": "0", "process_kernel_time": 1.08, "process_mem_max_rss": "511108", "process_out_blocks": "0", "process_user_time": 5.6}
+[0m15:51:35.798403 [debug] [Dummy-1   ]: Command `cli build` failed at 15:51:35.798047 after 5.59 seconds
+[0m15:51:35.799036 [debug] [Dummy-1   ]: Flushing usage events
+
+
+============================== 15:54:02.357638 | a56ea0fc-d50b-4f2f-8713-2c6269bc8731 ==============================
+[0m15:54:02.357638 [info ] [Dummy-1   ]: Running with dbt=1.9.4
+[0m15:54:02.358815 [debug] [Dummy-1   ]: running dbt with arguments {'printer_width': '80', 'indirect_selection': 'eager', 'write_json': 'True', 'log_cache_events': 'False', 'partial_parse': 'True', 'cache_selected_only': 'False', 'profiles_dir': '/tmp/dbt/', 'fail_fast': 'False', 'version_check': 'True', 'log_path': '/tmp/dbt/logs', 'warn_error': 'None', 'debug': 'False', 'use_colors': 'True', 'use_experimental_parser': 'False', 'empty': 'False', 'quiet': 'False', 'no_print': 'None', 'log_format': 'default', 'introspect': 'True', 'static_parser': 'True', 'invocation_command': 'dbt ', 'target_path': '/tmp/dbt/target/', 'warn_error_options': 'WarnErrorOptions(include=[], exclude=[])', 'send_anonymous_usage_stats': 'False'}
+[0m15:54:02.742058 [info ] [Dummy-1   ]: Registered adapter: snowflake=1.9.2
+[0m15:54:02.798750 [debug] [Dummy-1   ]: checksum: 53ed91fada2233efb98368d1716b44ab532c83a9c293cf1890b7905d5b45fb25, vars: {}, profile: , target: dev, version: 1.9.4
+[0m15:54:03.203254 [debug] [Dummy-1   ]: Partial parsing enabled: 0 files deleted, 0 files added, 1 files changed.
+[0m15:54:03.204310 [debug] [Dummy-1   ]: Partial parsing: updated file: coco_demo://models/marts/semantic_entity_360.sql
+[0m15:54:03.837457 [debug] [Dummy-1   ]: Wrote artifact WritableManifest to /tmp/dbt/target/manifest.json
+[0m15:54:03.840174 [debug] [Dummy-1   ]: Wrote artifact SemanticManifest to /tmp/dbt/target/semantic_manifest.json
+[0m15:54:03.920428 [info ] [Dummy-1   ]: Found 14 models, 2 data tests, 10 sources, 481 macros
+[0m15:54:03.923377 [info ] [Dummy-1   ]: 
+[0m15:54:03.924092 [info ] [Dummy-1   ]: Concurrency: 4 threads (target='dev')
+[0m15:54:03.924696 [info ] [Dummy-1   ]: 
+[0m15:54:03.925526 [debug] [Dummy-1   ]: Acquiring new snowflake connection 'master'
+[0m15:54:03.927429 [debug] [ThreadPool]: Acquiring new snowflake connection 'list_COCO_LIVE_DB'
+[0m15:54:04.039570 [debug] [ThreadPool]: Using snowflake connection "list_COCO_LIVE_DB"
+[0m15:54:04.040245 [debug] [ThreadPool]: On list_COCO_LIVE_DB: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "coco_demo", "target_name": "dev", "connection_name": "list_COCO_LIVE_DB"} */
+show terse schemas in database COCO_LIVE_DB
+    limit 10000
+[0m15:54:04.040760 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m15:54:05.460375 [debug] [ThreadPool]: SQL status: SUCCESS 3 in 1.419 seconds
+[0m15:54:05.470585 [debug] [ThreadPool]: Re-using an available connection from the pool (formerly list_COCO_LIVE_DB, now list_COCO_LIVE_DB_PUBLIC)
+[0m15:54:05.493485 [debug] [ThreadPool]: Using snowflake connection "list_COCO_LIVE_DB_PUBLIC"
+[0m15:54:05.494134 [debug] [ThreadPool]: On list_COCO_LIVE_DB_PUBLIC: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "coco_demo", "target_name": "dev", "connection_name": "list_COCO_LIVE_DB_PUBLIC"} */
+alter session set quoted_identifiers_ignore_case = false;
+[0m15:54:05.494643 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m15:54:06.393787 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.899 seconds
+[0m15:54:06.399666 [debug] [ThreadPool]: Using snowflake connection "list_COCO_LIVE_DB_PUBLIC"
+[0m15:54:06.400284 [debug] [ThreadPool]: On list_COCO_LIVE_DB_PUBLIC: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "coco_demo", "target_name": "dev", "connection_name": "list_COCO_LIVE_DB_PUBLIC"} */
+show objects in COCO_LIVE_DB.PUBLIC
+    limit 10000
+    
+;
+[0m15:54:06.633748 [debug] [ThreadPool]: SQL status: SUCCESS 13 in 0.233 seconds
+[0m15:54:06.636806 [debug] [ThreadPool]: Using snowflake connection "list_COCO_LIVE_DB_PUBLIC"
+[0m15:54:06.637400 [debug] [ThreadPool]: On list_COCO_LIVE_DB_PUBLIC: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "coco_demo", "target_name": "dev", "connection_name": "list_COCO_LIVE_DB_PUBLIC"} */
+alter session unset quoted_identifiers_ignore_case;
+[0m15:54:06.808500 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.170 seconds
+[0m15:54:06.822072 [debug] [Thread-2 (]: Began running node model.coco_demo.semantic_entity_360
+[0m15:54:06.823221 [info ] [Thread-2 (]: 1 of 1 START sql semantic_view model PUBLIC.semantic_entity_360 ................ [RUN]
+[0m15:54:06.824035 [debug] [Thread-2 (]: Re-using an available connection from the pool (formerly list_COCO_LIVE_DB_PUBLIC, now model.coco_demo.semantic_entity_360)
+[0m15:54:06.824632 [debug] [Thread-2 (]: Began compiling node model.coco_demo.semantic_entity_360
+[0m15:54:06.843546 [debug] [Thread-2 (]: Writing injected SQL for node "model.coco_demo.semantic_entity_360"
+[0m15:54:06.844553 [debug] [Thread-2 (]: Began executing node model.coco_demo.semantic_entity_360
+[0m15:54:06.877347 [debug] [Thread-2 (]: Writing runtime sql for node "model.coco_demo.semantic_entity_360"
+[0m15:54:06.886324 [debug] [Thread-2 (]: Using snowflake connection "model.coco_demo.semantic_entity_360"
+[0m15:54:06.887953 [debug] [Thread-2 (]: On model.coco_demo.semantic_entity_360: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "coco_demo", "target_name": "dev", "node_id": "model.coco_demo.semantic_entity_360"} */
+create or replace semantic view COCO_LIVE_DB.PUBLIC.semantic_entity_360
+  
+
+TABLES(
+    entities AS COCO_LIVE_DB.PUBLIC.mart_entity_360
+        PRIMARY KEY (entity_id)
+        WITH SYNONYMS ('organizations', 'companies', 'org units')
+        COMMENT = 'Comprehensive 360 view of organizational entities with reconciliation health metrics',
+    variance_summary AS COCO_LIVE_DB.PUBLIC.mart_variance_summary
+        PRIMARY KEY (entity_id, period_id)
+        WITH SYNONYMS ('variance trends', 'period variances')
+        COMMENT = 'Period-by-period variance analysis by entity'
+)
+
+RELATIONSHIPS(
+    variance_to_entity AS
+        variance_summary (entity_id) REFERENCES entities (entity_id)
+)
+
+FACTS(
+    entities.total_assignments AS entities.total_assignments,
+    entities.periods_with_activity AS entities.periods_with_activity,
+    entities.total_gl_balance AS entities.total_gl_balance,
+    entities.total_bank_balance AS entities.total_bank_balance,
+    entities.total_subledger_balance AS entities.total_subledger_balance,
+    entities.total_gl_bank_variance AS entities.total_gl_bank_variance,
+    entities.reconciled_count AS entities.reconciled_count,
+    entities.high_variance_count AS entities.high_variance_count,
+    entities.missing_data_count AS entities.missing_data_count,
+    entities.reconciliation_completion_pct AS entities.reconciliation_completion_pct,
+    entities.total_variance_amount AS entities.total_variance_amount,
+    entities.avg_variance_amount AS entities.avg_variance_amount,
+    entities.critical_variance_count AS entities.critical_variance_count,
+    entities.high_severity_count AS entities.high_severity_count,
+    entities.current_period_gl_balance AS entities.current_period_gl_balance,
+    entities.current_period_bank_balance AS entities.current_period_bank_balance,
+    entities.current_period_variance AS entities.current_period_variance,
+    entities.current_reconciled_count AS entities.current_reconciled_count,
+    entities.current_unreconciled_count AS entities.current_unreconciled_count,
+    entities.ownership AS entities.ownership,
+    entities.hierarchy_depth AS entities.hierarchy_depth,
+    variance_summary.assignments_with_variance AS variance_summary.assignments_with_variance,
+    variance_summary.total_variance AS variance_summary.total_variance,
+    variance_summary.avg_variance AS variance_summary.avg_variance,
+    variance_summary.critical_count AS variance_summary.critical_count,
+    variance_summary.high_count AS variance_summary.high_count,
+    variance_summary.medium_count AS variance_summary.medium_count,
+    variance_summary.low_count AS variance_summary.low_count,
+    variance_summary.severe_variance_count AS variance_summary.severe_variance_count
+)
+
+DIMENSIONS(
+    entities.entity_id AS entities.entity_id
+        WITH SYNONYMS ('org id', 'organization id', 'company id')
+        COMMENT = 'Unique entity identifier',
+    entities.entity_code AS entities.entity_code
+        WITH SYNONYMS ('org code', 'company code')
+        COMMENT = 'Business code for the entity',
+    entities.entity_name AS entities.entity_name
+        WITH SYNONYMS ('organization name', 'company name', 'org name')
+        COMMENT = 'Display name of the entity',
+    entities.entity_description AS entities.entity_description
+        COMMENT = 'Detailed description',
+    entities.entity_type AS entities.entity_type
+        WITH SYNONYMS ('org type', 'type')
+        COMMENT = 'Type classification',
+    entities.parent_name AS entities.parent_name
+        WITH SYNONYMS ('parent entity', 'parent org')
+        COMMENT = 'Parent entity name',
+    entities.entity_health_status AS entities.entity_health_status
+        WITH SYNONYMS ('health status', 'status', 'health', 'risk status')
+        COMMENT = 'Overall health (Critical, At Risk, Healthy, Needs Attention, No Activity)',
+    entities.has_children AS entities.has_children
+        COMMENT = 'Whether entity has child entities',
+    entities.financial_review_required AS entities.financial_review_required
+        WITH SYNONYMS ('requires review', 'needs review')
+        COMMENT = 'Whether financial review is required',
+    entities.hierarchy_lineage AS entities.hierarchy_lineage
+        COMMENT = 'Hierarchy path lineage',
+    variance_summary.period_id AS variance_summary.period_id
+        COMMENT = 'Period identifier',
+    variance_summary.period_year AS variance_summary.period_year
+        WITH SYNONYMS ('year', 'fiscal year')
+        COMMENT = 'Year of the period',
+    variance_summary.period_quarter AS variance_summary.period_quarter
+        WITH SYNONYMS ('quarter', 'fiscal quarter')
+        COMMENT = 'Quarter of the period (1-4)',
+    variance_summary.period_risk_level AS variance_summary.period_risk_level
+        WITH SYNONYMS ('risk level', 'period risk')
+        COMMENT = 'Risk classification (Critical, High Risk, Medium Risk, Low Risk)',
+    variance_summary.period_end_date AS variance_summary.period_end_date
+        WITH SYNONYMS ('period date', 'close date')
+        COMMENT = 'End date of reconciliation period',
+    entities.last_activity_date AS entities.last_activity_date
+        WITH SYNONYMS ('last updated', 'last activity')
+        COMMENT = 'Date of most recent activity'
+)
+
+METRICS(
+    entities.total_entity_count AS COUNT(entities.entity_id)
+        WITH SYNONYMS ('entity count', 'number of entities', 'org count')
+        COMMENT = 'Total count of entities',
+    entities.sum_gl_balance AS SUM(entities.total_gl_balance)
+        WITH SYNONYMS ('total gl', 'aggregate gl balance')
+        COMMENT = 'Sum of GL balances across entities',
+    entities.sum_bank_balance AS SUM(entities.total_bank_balance)
+        WITH SYNONYMS ('total bank', 'aggregate bank balance')
+        COMMENT = 'Sum of bank balances across entities',
+    entities.sum_variance AS SUM(entities.total_variance_amount)
+        WITH SYNONYMS ('total variance', 'aggregate variance')
+        COMMENT = 'Sum of variance amounts',
+    entities.avg_completion_rate AS AVG(entities.reconciliation_completion_pct)
+        WITH SYNONYMS ('average completion', 'mean completion rate')
+        COMMENT = 'Average reconciliation completion percentage',
+    entities.total_critical_variances AS SUM(entities.critical_variance_count)
+        WITH SYNONYMS ('critical count', 'total critical issues')
+        COMMENT = 'Total critical variances across entities',
+    entities.entities_at_risk_count AS COUNT(CASE WHEN entities.entity_health_status IN ('Critical', 'At Risk') THEN 1 END)
+        WITH SYNONYMS ('at risk count', 'risky entities')
+        COMMENT = 'Entities with Critical or At Risk status',
+    entities.healthy_entity_count AS COUNT(CASE WHEN entities.entity_health_status = 'Healthy' THEN 1 END)
+        WITH SYNONYMS ('healthy count')
+        COMMENT = 'Entities with Healthy status',
+    variance_summary.sum_period_variance AS SUM(variance_summary.total_variance)
+        COMMENT = 'Sum of variances across all periods',
+    variance_summary.sum_period_critical AS SUM(variance_summary.critical_count)
+        COMMENT = 'Total critical variances across periods'
+)
+
+COMMENT = 'Entity 360 semantic view for reconciliation management - enables natural language queries about entity health, reconciliation status, and variance analysis'
+[0m15:54:06.889183 [debug] [Thread-2 (]: Opening a new connection, currently in state init
+[0m15:54:10.369625 [debug] [Thread-2 (]: SQL status: SUCCESS 1 in 3.480 seconds
+[0m15:54:10.383871 [info ] [Thread-2 (]: 1 of 1 OK created sql semantic_view model PUBLIC.semantic_entity_360 ........... [[32mSUCCESS 1[0m in 3.56s]
+[0m15:54:10.384929 [debug] [Thread-2 (]: Finished running node model.coco_demo.semantic_entity_360
+[0m15:54:10.388825 [debug] [Dummy-1   ]: Connection 'master' was properly closed.
+[0m15:54:10.389400 [debug] [Dummy-1   ]: Connection 'model.coco_demo.semantic_entity_360' was properly closed.
+[0m15:54:10.390079 [info ] [Dummy-1   ]: 
+[0m15:54:10.390767 [info ] [Dummy-1   ]: Finished running 1 semantic view model in 0 hours 0 minutes and 6.46 seconds (6.46s).
+[0m15:54:10.391863 [debug] [Dummy-1   ]: Command end result
+[0m15:54:10.428599 [debug] [Dummy-1   ]: Wrote artifact WritableManifest to /tmp/dbt/target/manifest.json
+[0m15:54:10.431225 [debug] [Dummy-1   ]: Wrote artifact SemanticManifest to /tmp/dbt/target/semantic_manifest.json
+[0m15:54:10.439565 [debug] [Dummy-1   ]: Wrote artifact RunExecutionResult to /tmp/dbt/target/run_results.json
+[0m15:54:10.440340 [info ] [Dummy-1   ]: 
+[0m15:54:10.441204 [info ] [Dummy-1   ]: [32mCompleted successfully[0m
+[0m15:54:10.441834 [info ] [Dummy-1   ]: 
+[0m15:54:10.442500 [info ] [Dummy-1   ]: Done. PASS=1 WARN=0 ERROR=0 SKIP=0 TOTAL=1
+[0m15:54:10.444354 [debug] [Dummy-1   ]: Resource report: {"command_name": "build", "command_success": true, "command_wall_clock_time": 8.187582, "process_in_blocks": "0", "process_kernel_time": 0.98, "process_mem_max_rss": "502576", "process_out_blocks": "0", "process_user_time": 5.84}
+[0m15:54:10.445068 [debug] [Dummy-1   ]: Command `cli build` succeeded at 15:54:10.444786 after 8.19 seconds
+[0m15:54:10.445649 [debug] [Dummy-1   ]: Flushing usage events
+
+
+============================== 16:55:39.984971 | 442a125c-cc00-4b9b-aeb5-ec3b5d092dad ==============================
+[0m16:55:39.984971 [info ] [Dummy-1   ]: Running with dbt=1.9.4
+[0m16:55:39.986040 [debug] [Dummy-1   ]: running dbt with arguments {'printer_width': '80', 'indirect_selection': 'eager', 'log_cache_events': 'False', 'write_json': 'True', 'partial_parse': 'True', 'cache_selected_only': 'False', 'warn_error': 'None', 'debug': 'False', 'fail_fast': 'False', 'log_path': '/tmp/dbt/logs', 'profiles_dir': '/tmp/dbt/', 'version_check': 'True', 'use_colors': 'True', 'use_experimental_parser': 'False', 'no_print': 'None', 'quiet': 'False', 'empty': 'False', 'log_format': 'default', 'introspect': 'True', 'invocation_command': 'dbt ', 'static_parser': 'True', 'target_path': '/tmp/dbt/target/', 'warn_error_options': 'WarnErrorOptions(include=[], exclude=[])', 'send_anonymous_usage_stats': 'False'}
+[0m16:55:40.369774 [info ] [Dummy-1   ]: Registered adapter: snowflake=1.9.2
+[0m16:55:40.429031 [debug] [Dummy-1   ]: checksum: 53ed91fada2233efb98368d1716b44ab532c83a9c293cf1890b7905d5b45fb25, vars: {}, profile: , target: dev, version: 1.9.4
+[0m16:55:40.819998 [debug] [Dummy-1   ]: Partial parsing enabled: 0 files deleted, 1 files added, 1 files changed.
+[0m16:55:40.821082 [debug] [Dummy-1   ]: Partial parsing: added file: coco_demo://models/marts/mart_anomaly_features.sql
+[0m16:55:40.822232 [debug] [Dummy-1   ]: Partial parsing: updated file: coco_demo://models/marts/schema.yml
+[0m16:55:41.612530 [debug] [Dummy-1   ]: Wrote artifact WritableManifest to /tmp/dbt/target/manifest.json
+[0m16:55:41.615334 [debug] [Dummy-1   ]: Wrote artifact SemanticManifest to /tmp/dbt/target/semantic_manifest.json
+[0m16:55:41.670127 [info ] [Dummy-1   ]: Found 15 models, 2 data tests, 10 sources, 481 macros
+[0m16:55:41.672924 [info ] [Dummy-1   ]: 
+[0m16:55:41.673623 [info ] [Dummy-1   ]: Concurrency: 4 threads (target='dev')
+[0m16:55:41.674203 [info ] [Dummy-1   ]: 
+[0m16:55:41.675046 [debug] [Dummy-1   ]: Acquiring new snowflake connection 'master'
+[0m16:55:41.677103 [debug] [ThreadPool]: Acquiring new snowflake connection 'list_COCO_LIVE_DB'
+[0m16:55:41.788476 [debug] [ThreadPool]: Using snowflake connection "list_COCO_LIVE_DB"
+[0m16:55:41.789187 [debug] [ThreadPool]: On list_COCO_LIVE_DB: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "coco_demo", "target_name": "dev", "connection_name": "list_COCO_LIVE_DB"} */
+show terse schemas in database COCO_LIVE_DB
+    limit 10000
+[0m16:55:41.789705 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m16:55:42.565842 [debug] [ThreadPool]: SQL status: SUCCESS 3 in 0.776 seconds
+[0m16:55:42.576140 [debug] [ThreadPool]: Re-using an available connection from the pool (formerly list_COCO_LIVE_DB, now list_COCO_LIVE_DB_PUBLIC)
+[0m16:55:42.599220 [debug] [ThreadPool]: Using snowflake connection "list_COCO_LIVE_DB_PUBLIC"
+[0m16:55:42.599871 [debug] [ThreadPool]: On list_COCO_LIVE_DB_PUBLIC: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "coco_demo", "target_name": "dev", "connection_name": "list_COCO_LIVE_DB_PUBLIC"} */
+alter session set quoted_identifiers_ignore_case = false;
+[0m16:55:42.600358 [debug] [ThreadPool]: Opening a new connection, currently in state init
+[0m16:55:43.245972 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.645 seconds
+[0m16:55:43.252045 [debug] [ThreadPool]: Using snowflake connection "list_COCO_LIVE_DB_PUBLIC"
+[0m16:55:43.252674 [debug] [ThreadPool]: On list_COCO_LIVE_DB_PUBLIC: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "coco_demo", "target_name": "dev", "connection_name": "list_COCO_LIVE_DB_PUBLIC"} */
+show objects in COCO_LIVE_DB.PUBLIC
+    limit 10000
+    
+;
+[0m16:55:43.424519 [debug] [ThreadPool]: SQL status: SUCCESS 14 in 0.171 seconds
+[0m16:55:43.427723 [debug] [ThreadPool]: Using snowflake connection "list_COCO_LIVE_DB_PUBLIC"
+[0m16:55:43.428408 [debug] [ThreadPool]: On list_COCO_LIVE_DB_PUBLIC: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "coco_demo", "target_name": "dev", "connection_name": "list_COCO_LIVE_DB_PUBLIC"} */
+alter session unset quoted_identifiers_ignore_case;
+[0m16:55:43.554767 [debug] [ThreadPool]: SQL status: SUCCESS 1 in 0.126 seconds
+[0m16:55:43.568503 [debug] [Thread-2 (]: Began running node model.coco_demo.mart_anomaly_features
+[0m16:55:43.569671 [info ] [Thread-2 (]: 1 of 1 START sql view model PUBLIC.mart_anomaly_features ....................... [RUN]
+[0m16:55:43.570462 [debug] [Thread-2 (]: Re-using an available connection from the pool (formerly list_COCO_LIVE_DB_PUBLIC, now model.coco_demo.mart_anomaly_features)
+[0m16:55:43.571038 [debug] [Thread-2 (]: Began compiling node model.coco_demo.mart_anomaly_features
+[0m16:55:43.589666 [debug] [Thread-2 (]: Writing injected SQL for node "model.coco_demo.mart_anomaly_features"
+[0m16:55:43.590598 [debug] [Thread-2 (]: Began executing node model.coco_demo.mart_anomaly_features
+[0m16:55:43.792187 [debug] [Thread-2 (]: Writing runtime sql for node "model.coco_demo.mart_anomaly_features"
+[0m16:55:43.802641 [debug] [Thread-2 (]: Using snowflake connection "model.coco_demo.mart_anomaly_features"
+[0m16:55:43.804175 [debug] [Thread-2 (]: On model.coco_demo.mart_anomaly_features: /* {"app": "dbt", "dbt_version": "1.9.4", "profile_name": "coco_demo", "target_name": "dev", "node_id": "model.coco_demo.mart_anomaly_features"} */
+create or replace   view COCO_LIVE_DB.PUBLIC.mart_anomaly_features
+  
+   as (
+    with assignment_balances as (
+    select * from COCO_LIVE_DB.PUBLIC.int_assignment_period_balances
+),
+
+variance_analysis as (
+    select * from COCO_LIVE_DB.PUBLIC.int_variance_analysis
+),
+
+entities as (
+    select * from COCO_LIVE_DB.PUBLIC.stg_org_entities
+),
+
+periods as (
+    select * from COCO_LIVE_DB.PUBLIC.stg_rec_periods
+),
+
+assignment_stats as (
+    select
+        assignment_id,
+        count(*) as total_periods,
+        avg(balance_gl) as avg_gl_balance,
+        stddev(balance_gl) as stddev_gl_balance,
+        avg(balance_bank) as avg_bank_balance,
+        stddev(balance_bank) as stddev_bank_balance,
+        avg(gl_bank_variance) as avg_gl_bank_variance,
+        stddev(gl_bank_variance) as stddev_gl_bank_variance,
+        min(balance_gl) as min_gl_balance,
+        max(balance_gl) as max_gl_balance,
+        sum(case when reconciliation_status = 'High Variance' then 1 else 0 end) as high_variance_periods
+    from assignment_balances
+    group by assignment_id
+),
+
+variance_stats as (
+    select
+        assignment_id,
+        count(*) as variance_records,
+        avg(abs_variance) as avg_abs_variance,
+        stddev(abs_variance) as stddev_abs_variance,
+        max(abs_variance) as max_abs_variance,
+        sum(case when variance_severity = 'Critical' then 1 else 0 end) as critical_count,
+        sum(case when variance_severity = 'High' then 1 else 0 end) as high_count,
+        sum(case when variance_direction = 'Positive' then 1 else 0 end) as positive_variance_count,
+        sum(case when variance_direction = 'Negative' then 1 else 0 end) as negative_variance_count
+    from variance_analysis
+    group by assignment_id
+),
+
+period_features as (
+    select
+        ab.assignment_id,
+        ab.entity_id,
+        ab.period_id,
+        p.period_end_date,
+        p.period_year,
+        p.period_quarter,
+        p.period_month_num,
+        ab.assignment_type,
+        ab.balance_gl,
+        ab.balance_bank,
+        ab.balance_subledger,
+        ab.gl_bank_variance,
+        ab.reconciliation_status,
+        
+        va.variance as period_variance,
+        va.abs_variance as period_abs_variance,
+        va.variance_severity,
+        va.variance_direction,
+        va.balance_gl_diff,
+        va.balance_bank_diff,
+        
+        ast.avg_gl_balance as hist_avg_gl_balance,
+        ast.stddev_gl_balance as hist_stddev_gl_balance,
+        ast.avg_bank_balance as hist_avg_bank_balance,
+        ast.avg_gl_bank_variance as hist_avg_variance,
+        ast.stddev_gl_bank_variance as hist_stddev_variance,
+        ast.high_variance_periods as hist_high_variance_count,
+        
+        vs.avg_abs_variance as hist_avg_abs_variance,
+        vs.stddev_abs_variance as hist_stddev_abs_variance,
+        vs.max_abs_variance as hist_max_abs_variance,
+        vs.critical_count as hist_critical_count,
+        vs.high_count as hist_high_count,
+        
+        case 
+            when ast.stddev_gl_balance > 0 
+            then (ab.balance_gl - ast.avg_gl_balance) / ast.stddev_gl_balance 
+            else 0 
+        end as gl_balance_zscore,
+        
+        case 
+            when ast.stddev_gl_bank_variance > 0 
+            then (ab.gl_bank_variance - ast.avg_gl_bank_variance) / ast.stddev_gl_bank_variance 
+            else 0 
+        end as variance_zscore,
+        
+        case 
+            when vs.stddev_abs_variance > 0 
+            then (va.abs_variance - vs.avg_abs_variance) / vs.stddev_abs_variance 
+            else 0 
+        end as abs_variance_zscore,
+        
+        coalesce(ab.balance_gl, 0) - coalesce(ab.balance_bank, 0) as gl_bank_diff,
+        
+        case when abs(coalesce(ab.balance_gl, 0)) > 0 
+            then abs(ab.gl_bank_variance) / abs(ab.balance_gl) 
+            else 0 
+        end as variance_to_gl_ratio,
+        
+        lag(ab.balance_gl, 1) over (partition by ab.assignment_id order by ab.period_id) as prev_period_gl,
+        lag(ab.gl_bank_variance, 1) over (partition by ab.assignment_id order by ab.period_id) as prev_period_variance,
+        
+        coalesce(ab.balance_gl, 0) - coalesce(lag(ab.balance_gl, 1) over (partition by ab.assignment_id order by ab.period_id), ab.balance_gl) as gl_period_change,
+        
+        e.entity_type,
+        e.ownership,
+        e.depth as hierarchy_depth,
+        
+        case 
+            when va.variance_severity in ('Critical', 'High') then 1 
+            else 0 
+        end as is_anomaly_label
+        
+    from assignment_balances ab
+    left join variance_analysis va 
+        on ab.assignment_id = va.assignment_id 
+        and ab.period_id = va.period_id
+    left join assignment_stats ast on ab.assignment_id = ast.assignment_id
+    left join variance_stats vs on ab.assignment_id = vs.assignment_id
+    left join entities e on ab.entity_id = e.entity_id
+    left join periods p on ab.period_id = p.period_id
+    where ast.total_periods >= 3
+)
+
+select
+    assignment_id,
+    entity_id,
+    period_id,
+    period_end_date,
+    period_year,
+    period_quarter,
+    period_month_num,
+    assignment_type,
+    
+    coalesce(balance_gl, 0) as balance_gl,
+    coalesce(balance_bank, 0) as balance_bank,
+    coalesce(balance_subledger, 0) as balance_subledger,
+    coalesce(gl_bank_variance, 0) as gl_bank_variance,
+    coalesce(period_variance, 0) as period_variance,
+    coalesce(period_abs_variance, 0) as period_abs_variance,
+    coalesce(balance_gl_diff, 0) as balance_gl_diff,
+    coalesce(balance_bank_diff, 0) as balance_bank_diff,
+    
+    coalesce(hist_avg_gl_balance, 0) as hist_avg_gl_balance,
+    coalesce(hist_stddev_gl_balance, 0) as hist_stddev_gl_balance,
+    coalesce(hist_avg_bank_balance, 0) as hist_avg_bank_balance,
+    coalesce(hist_avg_variance, 0) as hist_avg_variance,
+    coalesce(hist_stddev_variance, 0) as hist_stddev_variance,
+    coalesce(hist_high_variance_count, 0) as hist_high_variance_count,
+    coalesce(hist_avg_abs_variance, 0) as hist_avg_abs_variance,
+    coalesce(hist_stddev_abs_variance, 0) as hist_stddev_abs_variance,
+    coalesce(hist_max_abs_variance, 0) as hist_max_abs_variance,
+    coalesce(hist_critical_count, 0) as hist_critical_count,
+    coalesce(hist_high_count, 0) as hist_high_count,
+    
+    coalesce(gl_balance_zscore, 0) as gl_balance_zscore,
+    coalesce(variance_zscore, 0) as variance_zscore,
+    coalesce(abs_variance_zscore, 0) as abs_variance_zscore,
+    coalesce(gl_bank_diff, 0) as gl_bank_diff,
+    coalesce(variance_to_gl_ratio, 0) as variance_to_gl_ratio,
+    coalesce(gl_period_change, 0) as gl_period_change,
+    
+    coalesce(entity_type, 0) as entity_type,
+    coalesce(ownership, 0) as ownership,
+    coalesce(hierarchy_depth, 0) as hierarchy_depth,
+    
+    reconciliation_status,
+    variance_severity,
+    variance_direction,
+    is_anomaly_label,
+    
+    current_timestamp() as feature_timestamp
+    
+from period_features
+where period_abs_variance is not null
+  );
+[0m16:55:43.805333 [debug] [Thread-2 (]: Opening a new connection, currently in state init
+[0m16:55:45.553556 [debug] [Thread-2 (]: SQL status: SUCCESS 1 in 1.748 seconds
+[0m16:55:45.585421 [info ] [Thread-2 (]: 1 of 1 OK created sql view model PUBLIC.mart_anomaly_features .................. [[32mSUCCESS 1[0m in 2.01s]
+[0m16:55:45.586428 [debug] [Thread-2 (]: Finished running node model.coco_demo.mart_anomaly_features
+[0m16:55:45.590189 [debug] [Dummy-1   ]: Connection 'master' was properly closed.
+[0m16:55:45.590741 [debug] [Dummy-1   ]: Connection 'model.coco_demo.mart_anomaly_features' was properly closed.
+[0m16:55:45.591388 [info ] [Dummy-1   ]: 
+[0m16:55:45.592028 [info ] [Dummy-1   ]: Finished running 1 view model in 0 hours 0 minutes and 3.92 seconds (3.92s).
+[0m16:55:45.593026 [debug] [Dummy-1   ]: Command end result
+[0m16:55:45.629734 [debug] [Dummy-1   ]: Wrote artifact WritableManifest to /tmp/dbt/target/manifest.json
+[0m16:55:45.632489 [debug] [Dummy-1   ]: Wrote artifact SemanticManifest to /tmp/dbt/target/semantic_manifest.json
+[0m16:55:45.640196 [debug] [Dummy-1   ]: Wrote artifact RunExecutionResult to /tmp/dbt/target/run_results.json
+[0m16:55:45.640910 [info ] [Dummy-1   ]: 
+[0m16:55:45.641735 [info ] [Dummy-1   ]: [32mCompleted successfully[0m
+[0m16:55:45.642327 [info ] [Dummy-1   ]: 
+[0m16:55:45.642970 [info ] [Dummy-1   ]: Done. PASS=1 WARN=0 ERROR=0 SKIP=0 TOTAL=1
+[0m16:55:45.644803 [debug] [Dummy-1   ]: Resource report: {"command_name": "run", "command_success": true, "command_wall_clock_time": 5.7592764, "process_in_blocks": "0", "process_kernel_time": 1.13, "process_mem_max_rss": "509572", "process_out_blocks": "0", "process_user_time": 6.04}
+[0m16:55:45.645504 [debug] [Dummy-1   ]: Command `cli run` succeeded at 16:55:45.645230 after 5.76 seconds
+[0m16:55:45.646055 [debug] [Dummy-1   ]: Flushing usage events

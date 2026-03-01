@@ -1,0 +1,516 @@
+name: reconciliation_entity_360
+description: >
+  Comprehensive 360-degree view of organizational entities for the Reconciliation Management System.
+  Enables natural language queries about entity health, reconciliation status, variance analysis,
+  and financial close performance.
+
+tables:
+  - name: entities
+    description: Organization units (companies, cost centers, departments) with reconciliation health metrics
+    base_table:
+      database: COCO_LIVE_DB
+      schema: PUBLIC
+      table: MART_ENTITY_360
+    dimensions:
+      - name: entity_id
+        synonyms:
+          - org id
+          - organization id
+          - company id
+        description: Unique identifier for the organizational entity
+        expr: entity_id
+        data_type: NUMBER
+        unique: true
+      - name: entity_code
+        synonyms:
+          - org code
+          - company code
+        description: Business code for the entity
+        expr: entity_code
+        data_type: VARCHAR
+      - name: entity_name
+        synonyms:
+          - organization name
+          - company name
+          - entity
+          - org
+        description: Display name of the entity
+        expr: entity_name
+        data_type: VARCHAR
+      - name: entity_description
+        description: Detailed description of the entity
+        expr: entity_description
+        data_type: VARCHAR
+      - name: entity_type
+        synonyms:
+          - org type
+          - type
+        description: Type classification of the entity
+        expr: entity_type
+        data_type: NUMBER
+        is_enum: true
+      - name: parent_name
+        synonyms:
+          - parent entity
+          - parent org
+        description: Name of the parent entity in the hierarchy
+        expr: parent_name
+        data_type: VARCHAR
+      - name: entity_health_status
+        synonyms:
+          - health status
+          - status
+          - health
+          - risk status
+        description: Overall health status (Critical, At Risk, Healthy, Needs Attention, No Activity)
+        expr: entity_health_status
+        data_type: VARCHAR
+        is_enum: true
+        sample_values:
+          - Critical
+          - At Risk
+          - Healthy
+          - Needs Attention
+          - No Activity
+      - name: has_children
+        description: Whether the entity has child entities in the hierarchy
+        expr: has_children
+        data_type: BOOLEAN
+      - name: financial_review_required
+        synonyms:
+          - requires review
+          - needs review
+        description: Whether the entity requires financial review
+        expr: financial_review_required
+        data_type: BOOLEAN
+    facts:
+      - name: total_assignments
+        synonyms:
+          - assignment count
+          - number of assignments
+        description: Total number of reconciliation assignments for the entity
+        expr: total_assignments
+        data_type: NUMBER
+      - name: periods_with_activity
+        synonyms:
+          - active periods
+        description: Number of periods with reconciliation activity
+        expr: periods_with_activity
+        data_type: NUMBER
+      - name: total_gl_balance
+        synonyms:
+          - gl balance
+          - general ledger balance
+        description: Total general ledger balance across all assignments
+        expr: total_gl_balance
+        data_type: NUMBER
+      - name: total_bank_balance
+        synonyms:
+          - bank balance
+        description: Total bank balance across all assignments
+        expr: total_bank_balance
+        data_type: NUMBER
+      - name: total_subledger_balance
+        synonyms:
+          - subledger balance
+        description: Total subledger balance across all assignments
+        expr: total_subledger_balance
+        data_type: NUMBER
+      - name: total_gl_bank_variance
+        synonyms:
+          - gl bank difference
+          - variance amount
+        description: Total variance between GL and bank balances
+        expr: total_gl_bank_variance
+        data_type: NUMBER
+      - name: reconciled_count
+        synonyms:
+          - completed reconciliations
+          - reconciled assignments
+        description: Number of fully reconciled assignments
+        expr: reconciled_count
+        data_type: NUMBER
+      - name: high_variance_count
+        synonyms:
+          - high variance assignments
+        description: Number of assignments with high variance
+        expr: high_variance_count
+        data_type: NUMBER
+      - name: missing_data_count
+        synonyms:
+          - incomplete assignments
+        description: Number of assignments with missing data
+        expr: missing_data_count
+        data_type: NUMBER
+      - name: reconciliation_completion_pct
+        synonyms:
+          - completion rate
+          - completion percentage
+          - reconciliation rate
+        description: Percentage of assignments that are fully reconciled
+        expr: reconciliation_completion_pct
+        data_type: NUMBER
+      - name: total_variance_amount
+        synonyms:
+          - total variance
+          - variance sum
+        description: Sum of all variance amounts
+        expr: total_variance_amount
+        data_type: NUMBER
+      - name: avg_variance_amount
+        synonyms:
+          - average variance
+        description: Average variance amount across all records
+        expr: avg_variance_amount
+        data_type: NUMBER
+      - name: critical_variance_count
+        synonyms:
+          - critical variances
+          - critical issues
+        description: Number of critical severity variances
+        expr: critical_variance_count
+        data_type: NUMBER
+      - name: high_severity_count
+        synonyms:
+          - high severity variances
+        description: Number of high severity variances
+        expr: high_severity_count
+        data_type: NUMBER
+      - name: current_period_gl_balance
+        description: GL balance for the current/latest period
+        expr: current_period_gl_balance
+        data_type: NUMBER
+      - name: current_period_bank_balance
+        description: Bank balance for the current/latest period
+        expr: current_period_bank_balance
+        data_type: NUMBER
+      - name: current_period_variance
+        description: Variance for the current/latest period
+        expr: current_period_variance
+        data_type: NUMBER
+      - name: current_reconciled_count
+        description: Number of reconciled items in current period
+        expr: current_reconciled_count
+        data_type: NUMBER
+      - name: current_unreconciled_count
+        synonyms:
+          - open items
+          - unreconciled items
+        description: Number of unreconciled items in current period
+        expr: current_unreconciled_count
+        data_type: NUMBER
+      - name: ownership
+        description: Ownership percentage of the entity
+        expr: ownership
+        data_type: NUMBER
+      - name: hierarchy_depth
+        synonyms:
+          - org level
+          - hierarchy level
+        description: Depth in the organizational hierarchy
+        expr: hierarchy_depth
+        data_type: NUMBER
+    time_dimensions:
+      - name: last_activity_date
+        synonyms:
+          - last updated
+          - last activity
+        description: Date of most recent reconciliation activity
+        expr: last_activity_date
+        data_type: TIMESTAMP
+    metrics:
+      - name: total_entities
+        synonyms:
+          - entity count
+          - number of entities
+          - org count
+        description: Total count of entities
+        expr: COUNT(*)
+      - name: sum_total_gl_balance
+        synonyms:
+          - total gl
+          - aggregate gl balance
+        description: Sum of GL balances across all entities
+        expr: SUM(total_gl_balance)
+      - name: sum_total_bank_balance
+        synonyms:
+          - total bank
+          - aggregate bank balance
+        description: Sum of bank balances across all entities
+        expr: SUM(total_bank_balance)
+      - name: sum_total_variance
+        synonyms:
+          - total variance amount
+          - aggregate variance
+        description: Sum of variance amounts across all entities
+        expr: SUM(total_variance_amount)
+      - name: avg_completion_rate
+        synonyms:
+          - average completion
+          - mean completion rate
+        description: Average reconciliation completion percentage
+        expr: AVG(reconciliation_completion_pct)
+      - name: total_critical_variances
+        synonyms:
+          - critical count
+          - total critical issues
+        description: Total number of critical variances across all entities
+        expr: SUM(critical_variance_count)
+      - name: total_high_severity_variances
+        description: Total number of high severity variances across all entities
+        expr: SUM(high_severity_count)
+      - name: entities_at_risk
+        synonyms:
+          - at risk count
+          - risky entities
+        description: Count of entities with Critical or At Risk status
+        expr: COUNT(CASE WHEN entity_health_status IN ('Critical', 'At Risk') THEN 1 END)
+      - name: healthy_entities
+        synonyms:
+          - healthy count
+        description: Count of entities with Healthy status
+        expr: COUNT(CASE WHEN entity_health_status = 'Healthy' THEN 1 END)
+      - name: total_assignments_all
+        synonyms:
+          - all assignments
+        description: Total assignments across all entities
+        expr: SUM(total_assignments)
+      - name: total_reconciled_all
+        synonyms:
+          - all reconciled
+        description: Total reconciled assignments across all entities
+        expr: SUM(reconciled_count)
+    filters:
+      - name: critical_entities
+        synonyms:
+          - critical only
+          - critical status
+        description: Filter to only show entities with Critical health status
+        expr: entity_health_status = 'Critical'
+      - name: at_risk_entities
+        synonyms:
+          - at risk only
+        description: Filter to show entities with Critical or At Risk status
+        expr: entity_health_status IN ('Critical', 'At Risk')
+      - name: healthy_entities
+        synonyms:
+          - healthy only
+        description: Filter to only show healthy entities
+        expr: entity_health_status = 'Healthy'
+      - name: has_variance
+        synonyms:
+          - with variance
+        description: Filter to entities with non-zero variance
+        expr: total_variance_amount > 0
+      - name: parent_entities
+        synonyms:
+          - with children
+        description: Filter to parent entities that have children
+        expr: has_children = TRUE
+
+  - name: variance_summary
+    description: Period-by-period variance analysis by entity for trend analysis
+    base_table:
+      database: COCO_LIVE_DB
+      schema: PUBLIC
+      table: MART_VARIANCE_SUMMARY
+    dimensions:
+      - name: entity_id
+        description: Entity identifier
+        expr: entity_id
+        data_type: NUMBER
+      - name: entity_code
+        description: Entity code
+        expr: entity_code
+        data_type: VARCHAR
+      - name: entity_name
+        synonyms:
+          - org name
+          - company
+        description: Entity name
+        expr: entity_name
+        data_type: VARCHAR
+      - name: period_id
+        description: Period identifier
+        expr: period_id
+        data_type: NUMBER
+      - name: period_year
+        synonyms:
+          - year
+          - fiscal year
+        description: Year of the period
+        expr: period_year
+        data_type: NUMBER
+        is_enum: true
+      - name: period_quarter
+        synonyms:
+          - quarter
+          - fiscal quarter
+        description: Quarter of the period (1-4)
+        expr: period_quarter
+        data_type: NUMBER
+        is_enum: true
+        sample_values:
+          - 1
+          - 2
+          - 3
+          - 4
+      - name: period_risk_level
+        synonyms:
+          - risk level
+          - period risk
+        description: Risk classification for the period (Critical, High Risk, Medium Risk, Low Risk)
+        expr: period_risk_level
+        data_type: VARCHAR
+        is_enum: true
+        sample_values:
+          - Critical
+          - High Risk
+          - Medium Risk
+          - Low Risk
+    time_dimensions:
+      - name: period_end_date
+        synonyms:
+          - period date
+          - close date
+          - period end
+        description: End date of the reconciliation period
+        expr: period_end_date
+        data_type: DATE
+    facts:
+      - name: assignments_with_variance
+        description: Number of assignments with variance in the period
+        expr: assignments_with_variance
+        data_type: NUMBER
+      - name: total_variance
+        synonyms:
+          - variance amount
+          - period variance
+        description: Total variance amount for the period
+        expr: total_variance
+        data_type: NUMBER
+      - name: avg_variance
+        synonyms:
+          - average variance
+        description: Average variance per assignment
+        expr: avg_variance
+        data_type: NUMBER
+      - name: critical_count
+        synonyms:
+          - critical variances
+        description: Count of critical severity variances
+        expr: critical_count
+        data_type: NUMBER
+      - name: high_count
+        synonyms:
+          - high variances
+        description: Count of high severity variances
+        expr: high_count
+        data_type: NUMBER
+      - name: medium_count
+        synonyms:
+          - medium variances
+        description: Count of medium severity variances
+        expr: medium_count
+        data_type: NUMBER
+      - name: low_count
+        synonyms:
+          - low variances
+        description: Count of low severity variances
+        expr: low_count
+        data_type: NUMBER
+      - name: severe_variance_count
+        synonyms:
+          - severe variances
+          - serious variances
+        description: Combined count of critical and high variances
+        expr: severe_variance_count
+        data_type: NUMBER
+    metrics:
+      - name: period_count
+        synonyms:
+          - number of periods
+        description: Count of periods
+        expr: COUNT(DISTINCT period_id)
+      - name: sum_total_variance
+        synonyms:
+          - total variance all periods
+        description: Sum of variances across all periods
+        expr: SUM(total_variance)
+      - name: sum_critical_variances
+        description: Total critical variances across all periods
+        expr: SUM(critical_count)
+      - name: sum_severe_variances
+        description: Total severe variances (critical + high) across all periods
+        expr: SUM(severe_variance_count)
+      - name: avg_period_variance
+        description: Average variance per period
+        expr: AVG(total_variance)
+    filters:
+      - name: high_risk_periods
+        description: Filter to periods with Critical or High Risk level
+        expr: period_risk_level IN ('Critical', 'High Risk')
+      - name: current_year
+        description: Filter to current year periods
+        expr: period_year = YEAR(CURRENT_DATE())
+
+relationships:
+  - name: variance_to_entity
+    left_table: variance_summary
+    right_table: entities
+    relationship_columns:
+      - left_column: entity_id
+        right_column: entity_id
+
+verified_queries:
+  - name: entities_at_risk
+    question: Which entities are at risk or in critical status?
+    use_as_onboarding_question: true
+    sql: |
+      SELECT entity_name, entity_code, entity_health_status, 
+             critical_variance_count, high_variance_count, reconciliation_completion_pct
+      FROM COCO_LIVE_DB.PUBLIC.MART_ENTITY_360
+      WHERE entity_health_status IN ('Critical', 'At Risk')
+      ORDER BY critical_variance_count DESC
+
+  - name: top_variance_entities
+    question: Which entities have the highest variance amounts?
+    use_as_onboarding_question: true
+    sql: |
+      SELECT entity_name, entity_code, total_variance_amount, 
+             critical_variance_count, entity_health_status
+      FROM COCO_LIVE_DB.PUBLIC.MART_ENTITY_360
+      WHERE total_variance_amount > 0
+      ORDER BY total_variance_amount DESC
+      LIMIT 10
+
+  - name: reconciliation_completion_summary
+    question: What is the overall reconciliation completion rate by entity?
+    use_as_onboarding_question: true
+    sql: |
+      SELECT entity_name, entity_code, total_assignments, reconciled_count,
+             reconciliation_completion_pct, entity_health_status
+      FROM COCO_LIVE_DB.PUBLIC.MART_ENTITY_360
+      WHERE total_assignments > 0
+      ORDER BY reconciliation_completion_pct ASC
+
+  - name: variance_trend_by_quarter
+    question: How has variance changed over time by quarter?
+    sql: |
+      SELECT period_year, period_quarter, 
+             SUM(total_variance) as total_variance,
+             SUM(critical_count) as critical_variances,
+             COUNT(DISTINCT entity_id) as entities_affected
+      FROM COCO_LIVE_DB.PUBLIC.MART_VARIANCE_SUMMARY
+      GROUP BY period_year, period_quarter
+      ORDER BY period_year, period_quarter
+
+  - name: entity_health_distribution
+    question: How many entities are in each health status category?
+    sql: |
+      SELECT entity_health_status, COUNT(*) as entity_count,
+             SUM(total_assignments) as total_assignments,
+             AVG(reconciliation_completion_pct) as avg_completion_rate
+      FROM COCO_LIVE_DB.PUBLIC.MART_ENTITY_360
+      GROUP BY entity_health_status
+      ORDER BY entity_count DESC

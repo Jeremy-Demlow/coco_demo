@@ -1,0 +1,47 @@
+version: 2
+
+sources:
+  - name: coco_live
+    database: COCO_LIVE_DB
+    schema: CUSTOMER_A_DATA
+    tables:
+      - name: org_entities
+        description: Organization units (companies, cost centers, departments)
+      - name: rec_periods
+        description: Reconciliation periods (monthly close periods)
+      - name: rec_assignments
+        description: Reconciliation assignments to accounts/entities
+      - name: rec_reconciliations
+        description: Individual reconciliation records
+      - name: rec_items
+        description: Line items within reconciliations
+      - name: rec_period_information
+        description: Period-level metadata and status for each assignment
+      - name: users
+        description: System users
+      - name: comment_details
+        description: Comments and notes on reconciliations
+      - name: var_activity
+        description: Variance tracking and history
+      - name: os_currencies
+        description: Supported currencies
+
+models:
+  - name: stg_org_entities
+    description: Staged organization entities
+  - name: stg_rec_periods
+    description: Staged reconciliation periods
+  - name: stg_rec_assignments
+    description: Staged reconciliation assignments
+  - name: stg_rec_reconciliations
+    description: Staged reconciliation records
+  - name: stg_rec_items
+    description: Staged reconciliation line items
+  - name: stg_rec_period_information
+    description: Staged period information
+  - name: stg_users
+    description: Staged users
+  - name: stg_comment_details
+    description: Staged comment details
+  - name: stg_var_activity
+    description: Staged variance activity
