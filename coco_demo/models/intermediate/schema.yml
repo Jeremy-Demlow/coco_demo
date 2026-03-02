@@ -1,7 +1,0 @@
-version: 2
-
-models:
-  - name: int_assignment_period_balances
-    description: Assignment balances joined with period information for analysis
-  - name: int_variance_analysis
-    description: Variance activity with severity classifications
