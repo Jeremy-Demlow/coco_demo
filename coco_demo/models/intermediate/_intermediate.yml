@@ -1,0 +1,76 @@
+version: 2
+
+models:
+  - name: int_reconciliation_aggregates
+    description: >
+      Pre-aggregated reconciliation counts and unidentified amounts by assignment and period.
+      This intermediate model reduces computation in downstream marts.
+    columns:
+      - name: assignment_id
+        tests:
+          - not_null
+      - name: period_id
+        tests:
+          - not_null
+      - name: reconciliation_count
+        description: Count of reconciliation records
+      - name: total_unidentified_amount
+        description: Sum of unidentified amounts
+      - name: total_calculated_balance
+        description: Sum of calculated balances
+      - name: last_reconciliation_date
+        description: Most recent reconciliation timestamp
+
+  - name: int_variance_aggregates
+    description: >
+      Pre-aggregated variance metrics by assignment and period.
+      Includes GL, bank, subledger, and estimate variances.
+    columns:
+      - name: assignment_id
+        tests:
+          - not_null
+      - name: period_id
+        tests:
+          - not_null
+      - name: total_abs_variance
+        description: Sum of absolute variance amounts
+      - name: avg_variance
+        description: Average variance
+      - name: max_variance
+        description: Maximum absolute variance
+      - name: variance_record_count
+        description: Number of variance records
+
+  - name: int_assignment_entity
+    description: >
+      Denormalized assignment with entity attributes.
+      Joins assignments to their parent entities for dimensional context.
+    columns:
+      - name: assignment_id
+        tests:
+          - unique
+          - not_null
+      - name: entity_id
+        description: Foreign key to entity
+      - name: entity_name
+        description: Entity name from dimension
+
+  - name: int_period_info_enriched
+    description: >
+      Period information enriched with calculated differences and period attributes.
+      Pre-computes GL/bank/subledger differences and variance percentages.
+    columns:
+      - name: period_info_id
+        tests:
+          - unique
+          - not_null
+      - name: assignment_id
+        tests:
+          - not_null
+      - name: period_id
+        tests:
+          - not_null
+      - name: gl_bank_difference
+        description: Absolute difference between GL and bank balances
+      - name: gl_bank_variance_pct
+        description: GL-bank difference as percentage of GL balance

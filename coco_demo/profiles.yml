@@ -1,0 +1,12 @@
+default:
+  target: dev
+  outputs:
+    dev:
+      type: snowflake
+      account: trb65519
+      user: JDEMLOW
+      role: ACCOUNTADMIN
+      database: COCO_LIVE_DB
+      warehouse: SNOW_INTELLIGENCE_DEMO_WH
+      schema: DBT
+      threads: 4

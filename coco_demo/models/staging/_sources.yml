@@ -1,0 +1,118 @@
+version: 2
+
+sources:
+  - name: customer_a_data
+    description: Source data from Customer A reconciliation system
+    database: COCO_LIVE_DB
+    schema: CUSTOMER_A_DATA
+    
+    freshness:
+      warn_after: {count: 24, period: hour}
+      error_after: {count: 48, period: hour}
+    loaded_at_field: DB_UPDATE_DATE
+    
+    tags: ['source', 'reconciliation']
+    
+    tables:
+      - name: rec_periods
+        description: Reconciliation periods (monthly close periods)
+        columns:
+          - name: PKID
+            description: Primary key
+            tests:
+              - unique
+              - not_null
+          - name: PERIOD_END_DATE
+            description: End date of the period
+            tests:
+              - not_null
+              
+      - name: org_entities
+        description: Organization units (companies, cost centers, departments)
+        columns:
+          - name: ID
+            description: Primary key
+            tests:
+              - unique
+              - not_null
+          - name: CODE
+            description: Entity code
+            tests:
+              - not_null
+          - name: NAME
+            description: Entity name
+            
+      - name: rec_assignments
+        description: Reconciliation assignments to accounts/entities
+        columns:
+          - name: PKID
+            description: Primary key
+            tests:
+              - unique
+              - not_null
+          - name: ENTITY_ID
+            description: Foreign key to org_entities
+            tests:
+              - relationships:
+                  to: source('customer_a_data', 'org_entities')
+                  field: ID
+                  config:
+                    severity: warn
+                    
+      - name: rec_period_information
+        description: Period-level metadata and balances for each assignment
+        identifier: rec_period_information
+        freshness:
+          warn_after: {count: 12, period: hour}
+          error_after: {count: 24, period: hour}
+        columns:
+          - name: PKID
+            description: Primary key
+            tests:
+              - unique
+              - not_null
+          - name: ASSIGNMENT_ID
+            description: Foreign key to rec_assignments
+            tests:
+              - not_null
+          - name: PERIOD_ID
+            description: Foreign key to rec_periods
+            tests:
+              - not_null
+              
+      - name: rec_reconciliations
+        description: Individual reconciliation records
+        columns:
+          - name: PKID
+            description: Primary key
+            tests:
+              - unique
+              - not_null
+              
+      - name: users
+        description: System users
+        columns:
+          - name: PKID
+            description: Primary key
+            tests:
+              - unique
+              - not_null
+              
+      - name: var_activity
+        description: Variance tracking and history
+        columns:
+          - name: VAR_ACTIVITY_ID
+            description: Primary key
+            tests:
+              - not_null
+              
+      - name: comment_details
+        description: Comments and notes on reconciliations
+        
+      - name: os_currencies
+        description: Supported currencies
+        columns:
+          - name: PKID
+            description: Primary key
+            tests:
+              - unique

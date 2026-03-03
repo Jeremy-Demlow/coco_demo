@@ -1,0 +1,340 @@
+version: 2
+
+models:
+  - name: stg_rec_periods
+    description: >
+      Staged reconciliation periods with derived time dimensions.
+      Filters out soft-deleted records.
+    columns:
+      - name: period_id
+        description: Primary key for period (sourced from PKID)
+        tests:
+          - unique
+          - not_null
+      - name: period_end_date
+        description: End date of the reconciliation period
+        tests:
+          - not_null
+      - name: period_month
+        description: First day of the period month
+      - name: period_year
+        description: Year of the period (integer)
+        tests:
+          - not_null
+      - name: period_quarter
+        description: Quarter (1-4) of the period
+        tests:
+          - accepted_values:
+              values: [1, 2, 3, 4]
+      - name: period_month_name
+        description: Month name (January, February, etc.)
+      - name: created_at
+        description: Record creation timestamp
+      - name: updated_at
+        description: Record last update timestamp
+
+  - name: stg_org_entities
+    description: >
+      Staged organization entities hierarchy.
+      Filters out soft-deleted records (DELETE_FLAG).
+    columns:
+      - name: entity_id
+        description: Primary key for entity
+        tests:
+          - unique
+          - not_null
+      - name: entity_code
+        description: Unique entity code
+        tests:
+          - not_null
+      - name: entity_name
+        description: Entity display name
+        tests:
+          - not_null
+      - name: entity_description
+        description: Optional description
+      - name: entity_type
+        description: Type classification
+      - name: parent_id
+        description: Parent entity ID for hierarchy
+      - name: parent_name
+        description: Parent entity name
+      - name: hierarchy_depth
+        description: Depth level in org hierarchy (1=top)
+      - name: hierarchy_lineage
+        description: Full path from root
+      - name: has_children
+        description: Boolean - has child entities
+      - name: ownership
+        description: Ownership percentage
+      - name: consolidation_ownership
+        description: Consolidation ownership percentage
+      - name: consolidation_method_rule_id
+        description: FK to consolidation rules
+      - name: financial_review_required
+        description: Boolean - requires financial review
+      - name: include_in_intercompany
+        description: Boolean - included in IC eliminations
+      - name: created_at
+        description: Record creation timestamp
+      - name: updated_at
+        description: Record last update timestamp
+
+  - name: stg_rec_assignments
+    description: >
+      Staged reconciliation assignments linking accounts to entities.
+      Filters out soft-deleted records.
+    columns:
+      - name: assignment_id
+        description: Primary key for assignment
+        tests:
+          - unique
+          - not_null
+      - name: entity_id
+        description: Foreign key to org_entities
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_org_entities')
+              field: entity_id
+              config:
+                severity: warn
+      - name: financial_statement_id
+        description: FK to financial statement
+      - name: assignment_key
+        description: Business key for the assignment
+      - name: assignment_type
+        description: Type of assignment
+      - name: account_combination
+        description: GL account combination name (COMBO_NAME)
+      - name: segment1
+        description: Account segment 1
+      - name: segment2
+        description: Account segment 2
+      - name: segment3
+        description: Account segment 3
+      - name: segment4
+        description: Account segment 4
+      - name: segment5
+        description: Account segment 5
+      - name: currency
+        description: Assignment currency code
+      - name: team_id
+        description: Assigned team ID
+      - name: description
+        description: Assignment description
+      - name: is_group_assignment
+        description: Boolean - is a group assignment
+      - name: is_consolidated_account
+        description: Boolean - consolidated account flag
+      - name: variance_assignment_id
+        description: FK to variance assignment
+      - name: created_at
+        description: Record creation timestamp
+      - name: updated_at
+        description: Record last update timestamp
+
+  - name: stg_rec_period_information
+    description: >
+      Staged period information containing balances and metadata.
+      This is the core fact table for reconciliation analysis.
+      Filters out soft-deleted records.
+    columns:
+      - name: period_info_id
+        description: Primary key
+        tests:
+          - unique
+          - not_null
+      - name: assignment_id
+        description: Foreign key to rec_assignments
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_rec_assignments')
+              field: assignment_id
+      - name: period_id
+        description: Foreign key to rec_periods
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_rec_periods')
+              field: period_id
+      - name: consolidation_id
+        description: Consolidation identifier
+      - name: financial_statement_id
+        description: FK to financial statement
+      - name: is_active
+        description: Boolean - assignment is active for period
+      - name: has_activity
+        description: Boolean - has activity in period
+      - name: is_key_account
+        description: Boolean - designated as key account
+      - name: purpose
+        description: Reconciliation purpose
+      - name: reconciliation_procedure
+        description: Procedure description
+      - name: recon_frequency
+        description: Reconciliation frequency code
+      - name: balance_gl
+        description: General ledger balance (local currency)
+      - name: balance_gl_base
+        description: GL balance (base/reporting currency)
+      - name: balance_gl_func
+        description: GL balance (functional currency)
+      - name: balance_bank
+        description: Bank balance (local currency)
+      - name: balance_bank_base
+        description: Bank balance (base currency)
+      - name: balance_bank_func
+        description: Bank balance (functional currency)
+      - name: balance_subledger
+        description: Subledger balance (local currency)
+      - name: balance_subledger_base
+        description: Subledger balance (base currency)
+      - name: balance_subledger_func
+        description: Subledger balance (functional currency)
+      - name: balance_estimate
+        description: Estimated balance
+      - name: balance_estimate_base
+        description: Estimated balance (base currency)
+      - name: balance_estimate_func
+        description: Estimated balance (functional currency)
+      - name: balance_forecast
+        description: Forecasted balance
+      - name: balance_forecast_base
+        description: Forecasted balance (base currency)
+      - name: balance_forecast_func
+        description: Forecasted balance (functional currency)
+      - name: account_balance_last_update_date
+        description: Last balance update timestamp
+      - name: last_update_date
+        description: Last record update
+      - name: created_at
+        description: Record creation timestamp
+      - name: updated_at
+        description: Record last update timestamp
+
+  - name: stg_rec_reconciliations
+    description: >
+      Staged individual reconciliation records.
+      Contains calculated balances and unidentified amounts.
+    columns:
+      - name: reconciliation_id
+        description: Primary key
+        tests:
+          - unique
+          - not_null
+      - name: assignment_id
+        description: Foreign key to rec_assignments
+        tests:
+          - not_null
+      - name: period_id
+        description: Foreign key to rec_periods
+        tests:
+          - not_null
+      - name: activity_period_id
+        description: Activity period reference
+      - name: reconciliation_type
+        description: Type of reconciliation
+      - name: balance_bank
+        description: Bank balance
+      - name: balance_bank_base
+        description: Bank balance (base currency)
+      - name: balance_bank_func
+        description: Bank balance (functional currency)
+      - name: balance_subledger
+        description: Subledger balance
+      - name: balance_subledger_base
+        description: Subledger balance (base currency)
+      - name: balance_subledger_func
+        description: Subledger balance (functional currency)
+      - name: balance_calculated
+        description: Calculated balance
+      - name: balance_calculated_base
+        description: Calculated balance (base currency)
+      - name: balance_calculated_func
+        description: Calculated balance (functional currency)
+      - name: amount_unidentified
+        description: Unidentified/unreconciled amount
+        tests:
+          - dbt_utils.expression_is_true:
+              expression: ">= 0"
+              config:
+                severity: warn
+      - name: created_at
+        description: Record creation timestamp
+      - name: updated_at
+        description: Record last update timestamp
+
+  - name: stg_users
+    description: Staged user records for assignment tracking
+    columns:
+      - name: user_id
+        description: Primary key
+        tests:
+          - unique
+          - not_null
+      - name: user_name
+        description: Full name of user
+        tests:
+          - not_null
+      - name: user_email
+        description: User email address
+      - name: created_at
+        description: Record creation timestamp
+      - name: updated_at
+        description: Record last update timestamp
+
+  - name: stg_var_activity
+    description: >
+      Staged variance activity records tracking period-over-period changes.
+      Contains variance calculations across multiple balance types.
+    columns:
+      - name: variance_activity_id
+        description: Primary key
+        tests:
+          - not_null
+      - name: assignment_id
+        description: Foreign key to rec_assignments
+        tests:
+          - not_null
+      - name: period_id
+        description: Current period ID
+        tests:
+          - not_null
+      - name: prior_period_id
+        description: Prior period ID for comparison
+      - name: gl_variance
+        description: GL balance variance (local currency)
+      - name: gl_variance_base
+        description: GL variance (base currency)
+      - name: gl_variance_func
+        description: GL variance (functional currency)
+      - name: estimate_variance
+        description: Estimate variance
+      - name: estimate_variance_base
+        description: Estimate variance (base currency)
+      - name: estimate_variance_func
+        description: Estimate variance (functional currency)
+      - name: subledger_variance
+        description: Subledger variance
+      - name: subledger_variance_base
+        description: Subledger variance (base currency)
+      - name: subledger_variance_func
+        description: Subledger variance (functional currency)
+      - name: bank_variance
+        description: Bank balance variance
+      - name: bank_variance_base
+        description: Bank variance (base currency)
+      - name: bank_variance_func
+        description: Bank variance (functional currency)
+      - name: total_variance
+        description: Total calculated variance
+      - name: total_variance_base
+        description: Total variance (base currency)
+      - name: total_variance_func
+        description: Total variance (functional currency)
+      - name: created_at
+        description: Record creation timestamp
+      - name: updated_at
+        description: Record last update timestamp

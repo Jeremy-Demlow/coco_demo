@@ -1,0 +1,68 @@
+name: 'coco_demo'
+version: '1.0.0'
+config-version: 2
+
+profile: 'default'
+
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+vars:
+  variance_threshold_minor: 1000
+  variance_threshold_moderate: 10000
+  anomaly_percentile: 0.95
+
+models:
+  coco_demo:
+    +database: COCO_LIVE_DB
+    
+    staging:
+      +materialized: view
+      +schema: DBT_STAGING
+      +tags: ['staging', 'daily']
+      +docs:
+        node_color: '#4A90D9'
+        
+    intermediate:
+      +materialized: view
+      +schema: DBT_INTERMEDIATE
+      +tags: ['intermediate', 'daily']
+      +docs:
+        node_color: '#F5A623'
+      
+    marts:
+      +schema: DBT
+      +tags: ['marts', 'daily']
+      +post-hook:
+        - "GRANT SELECT ON {{ this }} TO ROLE PUBLIC"
+      
+      core:
+        +materialized: table
+        +tags: ['core', 'kimball']
+        +docs:
+          node_color: '#7ED321'
+          
+      +materialized: table
+      +docs:
+        node_color: '#50E3C2'
+        
+    semantic:
+      +materialized: semantic_view
+      +schema: DBT
+      +tags: ['semantic']
+      +docs:
+        node_color: '#9013FE'
+
+on-run-start:
+  - "{{ log('Starting dbt run at ' ~ modules.datetime.datetime.now(), info=True) }}"
+
+on-run-end:
+  - "{{ log('Completed dbt run at ' ~ modules.datetime.datetime.now(), info=True) }}"

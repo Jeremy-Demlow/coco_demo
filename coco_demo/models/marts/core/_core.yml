@@ -1,0 +1,192 @@
+version: 2
+
+models:
+  - name: dim_entity
+    description: >
+      **Kimball Dimension**: Organization entity dimension with hierarchy attributes.
+      Contains surrogate key, SCD Type 1 attributes, and derived hierarchy classifications.
+      
+      **Grain**: One row per entity.
+      **SCD Type**: Type 1 (overwrite)
+    config:
+      materialized: table
+    columns:
+      - name: entity_key
+        description: Surrogate key (MD5 hash of entity_id)
+        tests:
+          - unique
+          - not_null
+      - name: entity_id
+        description: Natural key from source
+        tests:
+          - unique
+          - not_null
+      - name: entity_code
+        tests:
+          - not_null
+      - name: entity_name
+        tests:
+          - not_null
+      - name: hierarchy_level_name
+        description: Derived level name (Corporate, Region, Business Unit, etc.)
+        tests:
+          - accepted_values:
+              values: ['Corporate', 'Region', 'Business Unit', 'Department', 'Sub-Department']
+      - name: node_type
+        description: Whether entity is a Parent or Leaf node
+        tests:
+          - accepted_values:
+              values: ['Parent', 'Leaf']
+      - name: is_current
+        description: SCD current record flag
+
+  - name: dim_period
+    description: >
+      **Kimball Dimension**: Time period dimension with fiscal and calendar attributes.
+      Contains surrogate key and derived time intelligence columns.
+      
+      **Grain**: One row per reconciliation period.
+      **Role-Playing**: Can be used for current period, prior period, YoY comparisons.
+    config:
+      materialized: table
+    columns:
+      - name: period_key
+        description: Surrogate key (MD5 hash of period_id)
+        tests:
+          - unique
+          - not_null
+      - name: period_id
+        description: Natural key from source
+        tests:
+          - unique
+          - not_null
+      - name: period_end_date
+        tests:
+          - unique
+          - not_null
+      - name: year_quarter_label
+        description: Formatted label like "2024-Q1"
+      - name: year_month_label
+        description: Formatted label like "2024-01"
+      - name: is_year_end
+        description: Boolean - December period
+      - name: is_quarter_end
+        description: Boolean - March, June, Sept, Dec
+      - name: period_sequence
+        description: Sequential order of periods for windowing
+      - name: prior_period_id
+        description: Link to prior period for PoP analysis
+      - name: same_period_prior_year_date
+        description: Date of same period last year for YoY analysis
+
+  - name: dim_assignment
+    description: >
+      **Kimball Dimension**: Assignment dimension denormalized with entity attributes.
+      Contains surrogate key and derived assignment classifications.
+      
+      **Grain**: One row per assignment.
+      **Outrigger**: Includes entity attributes for simplified star schema queries.
+    config:
+      materialized: table
+    columns:
+      - name: assignment_key
+        description: Surrogate key (MD5 hash of assignment_id)
+        tests:
+          - unique
+          - not_null
+      - name: assignment_id
+        description: Natural key from source
+        tests:
+          - unique
+          - not_null
+      - name: assignment_code
+        description: Business key
+      - name: account_hierarchy
+        description: Concatenated segment hierarchy
+      - name: assignment_category
+        description: Derived category (Consolidated, Group, Standard)
+        tests:
+          - accepted_values:
+              values: ['Consolidated', 'Group', 'Standard']
+      - name: review_priority
+        description: Derived priority (High, Medium, Standard)
+        tests:
+          - accepted_values:
+              values: ['High', 'Medium', 'Standard']
+
+  - name: fct_reconciliation
+    description: >
+      **Kimball Fact Table**: Reconciliation fact at assignment-period grain.
+      Contains all measures and foreign keys to dimensions.
+      
+      **Grain**: One row per assignment per period.
+      **Fact Type**: Periodic snapshot (balances are point-in-time).
+    config:
+      materialized: table
+    columns:
+      - name: reconciliation_fact_key
+        description: Surrogate key for fact row
+        tests:
+          - unique
+          - not_null
+      - name: assignment_key
+        description: FK to dim_assignment
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_assignment')
+              field: assignment_key
+      - name: period_key
+        description: FK to dim_period
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_period')
+              field: period_key
+      - name: reconciliation_status
+        description: Derived status based on variance thresholds
+        tests:
+          - accepted_values:
+              values: ['Fully Reconciled', 'Minor Variance', 'Moderate Variance', 'High Variance', 'Inactive']
+      - name: reconciliation_health_score
+        description: Numeric health score (0-100)
+        tests:
+          - dbt_utils.accepted_range:
+              min_value: 0
+              max_value: 100
+
+  - name: fct_variance
+    description: >
+      **Kimball Fact Table**: Variance fact at variance-activity grain.
+      Contains period-over-period variance measures.
+      
+      **Grain**: One row per variance activity record.
+      **Fact Type**: Transaction fact (each variance event).
+    config:
+      materialized: table
+    columns:
+      - name: variance_fact_key
+        description: Surrogate key for fact row
+        tests:
+          - unique
+          - not_null
+      - name: assignment_key
+        description: FK to dim_assignment
+        tests:
+          - not_null
+      - name: period_key
+        description: FK to dim_period (current period)
+        tests:
+          - not_null
+      - name: prior_period_key
+        description: FK to dim_period (prior period for comparison)
+      - name: variance_direction
+        description: Positive, Negative, or Zero
+        tests:
+          - accepted_values:
+              values: ['Positive', 'Negative', 'Zero']
+      - name: variance_severity
+        description: None, Minor, Moderate, or High
+        tests:
+          - accepted_values:
+              values: ['None', 'Minor', 'Moderate', 'High']

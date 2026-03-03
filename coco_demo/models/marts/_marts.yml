@@ -1,0 +1,336 @@
+version: 2
+
+models:
+  - name: reconciliation_360
+    description: >
+      Comprehensive 360-degree view of all reconciliation assignments, 
+      combining assignment details, entity information, period data, 
+      balances, and variance metrics for complete reconciliation analysis.
+      
+      **Grain**: One row per assignment per period.
+      
+      **Key Use Cases**:
+      - Reconciliation status dashboards
+      - Variance analysis and alerting
+      - Entity performance tracking
+      - Period close monitoring
+    
+    config:
+      materialized: table
+      unique_key: ['assignment_id', 'period_id']
+      
+    columns:
+      - name: assignment_id
+        description: Primary key for the reconciliation assignment
+        tests:
+          - not_null
+      - name: assignment_key
+        description: Business key for the assignment
+      - name: assignment_type
+        description: Type of assignment
+      - name: account_combination
+        description: GL account combination name
+      - name: currency
+        description: Assignment currency code
+      - name: assignment_description
+        description: Description of the assignment
+      - name: is_group_assignment
+        description: Boolean - is a group assignment
+      - name: is_consolidated_account
+        description: Boolean - consolidated account flag
+      - name: segment1
+        description: Account segment 1
+      - name: segment2
+        description: Account segment 2
+      - name: segment3
+        description: Account segment 3
+      - name: segment4
+        description: Account segment 4
+      - name: segment5
+        description: Account segment 5
+      - name: entity_id
+        description: Entity identifier
+      - name: entity_code
+        description: Entity code
+      - name: entity_name
+        description: Name of the organizational entity
+      - name: entity_type
+        description: Entity type classification
+      - name: hierarchy_depth
+        description: Depth in org hierarchy
+      - name: parent_entity_name
+        description: Parent entity name
+      - name: financial_review_required
+        description: Boolean - requires financial review
+      - name: period_id
+        description: Period identifier
+        tests:
+          - not_null
+      - name: period_end_date
+        description: End date of the reconciliation period
+        tests:
+          - not_null
+      - name: period_year
+        description: Year of the period
+      - name: period_quarter
+        description: Quarter of the period
+      - name: period_month_name
+        description: Month name
+      - name: is_active
+        description: Boolean - assignment active for this period
+      - name: has_activity
+        description: Boolean - has activity in period
+      - name: is_key_account
+        description: Boolean - designated key account
+      - name: purpose
+        description: Reconciliation purpose
+      - name: reconciliation_procedure
+        description: Procedure description
+      - name: recon_frequency
+        description: Reconciliation frequency
+      - name: balance_gl
+        description: General ledger balance
+      - name: balance_gl_base
+        description: GL balance (base currency)
+      - name: balance_bank
+        description: Bank balance
+      - name: balance_bank_base
+        description: Bank balance (base currency)
+      - name: balance_subledger
+        description: Subledger balance
+      - name: balance_subledger_base
+        description: Subledger balance (base currency)
+      - name: balance_estimate
+        description: Estimated balance
+      - name: balance_estimate_base
+        description: Estimated balance (base currency)
+      - name: balance_forecast
+        description: Forecasted balance
+      - name: balance_forecast_base
+        description: Forecasted balance (base currency)
+      - name: gl_bank_difference
+        description: Absolute difference between GL and bank balances
+        tests:
+          - dbt_utils.expression_is_true:
+              expression: ">= 0"
+      - name: gl_subledger_difference
+        description: Absolute difference between GL and subledger
+        tests:
+          - dbt_utils.expression_is_true:
+              expression: ">= 0"
+      - name: reconciliation_count
+        description: Count of reconciliation records
+      - name: total_unidentified_amount
+        description: Total unidentified/unreconciled amount
+      - name: total_abs_variance
+        description: Total absolute variance amount for the assignment-period
+      - name: avg_variance
+        description: Average variance
+      - name: max_variance
+        description: Maximum variance
+      - name: reconciliation_status
+        description: >
+          Computed status based on variance thresholds:
+          - Fully Reconciled: No variance
+          - Minor Variance: < $1,000
+          - Moderate Variance: < $10,000
+          - High Variance: >= $10,000
+          - Inactive: Assignment not active
+        tests:
+          - accepted_values:
+              values: ['Fully Reconciled', 'Minor Variance', 'Moderate Variance', 'High Variance', 'Inactive']
+      - name: last_update_date
+        description: Last update timestamp
+      - name: account_balance_last_update_date
+        description: Last balance update timestamp
+      - name: updated_at
+        description: Record update timestamp
+
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - assignment_id
+            - period_id
+
+  - name: entity_reconciliation_summary
+    description: >
+      Aggregated reconciliation metrics by entity and period.
+      Shows completion rates, variance totals, and balance summaries.
+      
+      **Grain**: One row per entity per period.
+      
+      **Key Use Cases**:
+      - Entity performance scorecards
+      - Organizational dashboards
+      - Compliance reporting
+    
+    config:
+      materialized: table
+      unique_key: ['entity_id', 'period_id']
+      
+    columns:
+      - name: entity_id
+        description: Primary key for entity
+        tests:
+          - not_null
+      - name: entity_code
+        description: Entity code
+      - name: entity_name
+        description: Name of the organizational entity
+        tests:
+          - not_null
+      - name: entity_type
+        description: Entity type
+      - name: parent_entity_name
+        description: Parent entity name
+      - name: hierarchy_depth
+        description: Hierarchy depth
+      - name: financial_review_required
+        description: Requires financial review
+      - name: period_id
+        description: Period identifier
+        tests:
+          - not_null
+      - name: period_end_date
+        description: Period end date
+        tests:
+          - not_null
+      - name: period_year
+        description: Year
+      - name: period_quarter
+        description: Quarter
+      - name: period_month_name
+        description: Month name
+      - name: total_assignments
+        description: Total assignments for entity-period
+      - name: active_assignments
+        description: Count of active assignments
+      - name: key_accounts
+        description: Count of key accounts
+      - name: total_gl_balance
+        description: Sum of GL balances
+      - name: total_bank_balance
+        description: Sum of bank balances
+      - name: total_subledger_balance
+        description: Sum of subledger balances
+      - name: total_gl_bank_difference
+        description: Sum of GL-bank differences
+      - name: total_gl_subledger_difference
+        description: Sum of GL-subledger differences
+      - name: total_variance
+        description: Sum of variances
+      - name: avg_variance_per_assignment
+        description: Average variance per assignment
+      - name: peak_variance
+        description: Maximum single variance
+      - name: total_reconciliations
+        description: Total reconciliation count
+      - name: total_unidentified
+        description: Total unidentified amounts
+      - name: fully_reconciled_count
+        description: Count fully reconciled
+      - name: high_variance_count
+        description: Count with high variance
+      - name: reconciliation_completion_rate
+        description: Percentage of assignments fully reconciled
+        tests:
+          - dbt_utils.expression_is_true:
+              expression: ">= 0 AND reconciliation_completion_rate <= 100"
+      - name: latest_activity_date
+        description: Most recent activity
+
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - entity_id
+            - period_id
+
+  - name: period_reconciliation_summary
+    description: >
+      Period-level dashboard metrics showing overall reconciliation 
+      health, status distribution, and variance trends.
+      
+      **Grain**: One row per period.
+      
+      **Key Use Cases**:
+      - Executive dashboards
+      - Period close tracking
+      - Trend analysis
+    
+    config:
+      materialized: table
+      unique_key: 'period_id'
+      
+    columns:
+      - name: period_id
+        description: Primary key for period
+        tests:
+          - unique
+          - not_null
+      - name: period_end_date
+        description: Period end date
+        tests:
+          - unique
+          - not_null
+      - name: period_year
+        description: Year
+      - name: period_quarter
+        description: Quarter
+      - name: period_month_name
+        description: Month name
+      - name: total_assignments
+        description: Total assignments
+      - name: entities_with_activity
+        description: Count of active entities
+      - name: active_assignments
+        description: Active assignment count
+      - name: key_accounts
+        description: Key account count
+      - name: assignments_with_activity
+        description: Assignments with activity
+      - name: total_gl_balance
+        description: Total GL balance
+      - name: total_bank_balance
+        description: Total bank balance
+      - name: total_estimate_balance
+        description: Total estimated balance
+      - name: total_forecast_balance
+        description: Total forecasted balance
+      - name: total_gl_bank_difference
+        description: Total GL-bank difference
+      - name: total_gl_subledger_difference
+        description: Total GL-subledger difference
+      - name: total_variance
+        description: Total variance
+      - name: avg_variance
+        description: Average variance
+      - name: max_variance
+        description: Maximum variance
+      - name: total_reconciliation_items
+        description: Total reconciliation items
+      - name: total_unidentified
+        description: Total unidentified
+      - name: fully_reconciled
+        description: Fully reconciled count
+      - name: minor_variance
+        description: Minor variance count
+      - name: moderate_variance
+        description: Moderate variance count
+      - name: high_variance
+        description: High variance count
+      - name: inactive
+        description: Inactive count
+      - name: completion_rate_pct
+        description: Overall completion percentage
+        tests:
+          - dbt_utils.expression_is_true:
+              expression: ">= 0 AND completion_rate_pct <= 100"
+              config:
+                severity: warn
+      - name: variance_alert_rate_pct
+        description: Percentage of assignments with material variances
+        tests:
+          - dbt_utils.expression_is_true:
+              expression: ">= 0 AND variance_alert_rate_pct <= 100"
+              config:
+                severity: warn

@@ -1,0 +1,21 @@
+version: 2
+
+models:
+  - name: sv_reconciliation_360
+    description: >
+      Native Snowflake Semantic View for the reconciliation 360 model.
+      Enables natural language queries via Cortex Analyst/Agent.
+    config:
+      materialized: semantic_view
+      
+  - name: sv_entity_summary
+    description: >
+      Native Snowflake Semantic View for entity-level reconciliation metrics.
+    config:
+      materialized: semantic_view
+      
+  - name: sv_period_summary
+    description: >
+      Native Snowflake Semantic View for period-level dashboard metrics.
+    config:
+      materialized: semantic_view

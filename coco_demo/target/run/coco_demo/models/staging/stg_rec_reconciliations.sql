@@ -1,0 +1,30 @@
+
+  create or replace   view COCO_LIVE_DB.DBT.stg_rec_reconciliations
+  
+   as (
+    WITH source AS (
+    SELECT * FROM COCO_LIVE_DB.CUSTOMER_A_DATA.rec_reconciliations
+    WHERE DELETE_FLAG = FALSE OR DELETE_FLAG IS NULL
+)
+
+SELECT
+    PKID AS reconciliation_id,
+    ACCOUNT_ASSIGNMENT_ID AS assignment_id,
+    PERIOD_ID,
+    ACTIVITY_PERIOD_ID,
+    RECONCILIATION_TYPE,
+    BALANCE_BANK,
+    BALANCE_BANK_BASE,
+    BALANCE_BANK_FUNC,
+    BALANCE_SUBLEDGER,
+    BALANCE_SUBLEDGER_BASE,
+    BALANCE_SUBLEDGER_FUNC,
+    BALANCE_CALCULATED,
+    BALANCE_CALCULATED_BASE,
+    BALANCE_CALCULATED_FUNC,
+    AMOUNT_UNIDENTIFIED,
+    DB_INSERT_DATE AS created_at,
+    DB_UPDATE_DATE AS updated_at
+FROM source
+  );
+
